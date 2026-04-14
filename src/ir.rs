@@ -126,11 +126,13 @@ pub enum IrConstValue {
     List(Vec<IrConstValue>),
 }
 
+// 将语义程序降低为 IR
 pub fn lower_program(program: &SemanticProgram) -> Result<IrProgram, String> {
     let mut lowerer = Lowerer::new(&program.symbols);
     lowerer.lower_program(program)
 }
 
+// 格式化整个 IR 程序
 pub fn format_program(program: &IrProgram) -> String {
     let mut out = String::new();
 
@@ -172,6 +174,7 @@ pub fn format_program(program: &IrProgram) -> String {
     out
 }
 
+// 格式化全局变量初值
 fn format_global_init(global: &IrGlobal) -> String {
     match &global.init {
         Some(init) => format!(" = {}", format_const_value(init)),
@@ -179,6 +182,7 @@ fn format_global_init(global: &IrGlobal) -> String {
     }
 }
 
+// 格式化常量值
 fn format_const_value(value: &IrConstValue) -> String {
     match value {
         IrConstValue::Int(value) => value.to_string(),
@@ -190,6 +194,7 @@ fn format_const_value(value: &IrConstValue) -> String {
     }
 }
 
+// 格式化单条 IR 指令
 pub fn format_instruction(instruction: &IrInstr) -> String {
     match instruction {
         IrInstr::Label(label) => format!("{}:", label),
@@ -301,6 +306,7 @@ pub fn format_instruction(instruction: &IrInstr) -> String {
     }
 }
 
+// 格式化操作数
 pub fn format_operand(operand: &IrOperand) -> String {
     match operand {
         IrOperand::Temp(temp) => format!("%t{}", temp.0),
@@ -310,6 +316,7 @@ pub fn format_operand(operand: &IrOperand) -> String {
     }
 }
 
+// 格式化数组下标
 fn format_indices(indices: &[IrOperand]) -> String {
     let mut out = String::new();
     for index in indices {
@@ -318,6 +325,7 @@ fn format_indices(indices: &[IrOperand]) -> String {
     out
 }
 
+// 格式化类型名称
 fn format_type_name(ty: TypeName) -> &'static str {
     match ty {
         TypeName::Int => "int",
@@ -326,6 +334,7 @@ fn format_type_name(ty: TypeName) -> &'static str {
     }
 }
 
+// 格式化语义类型
 pub fn format_semantic_type(ty: &SemanticType) -> String {
     match ty {
         SemanticType::Int => "int".to_string(),
@@ -349,6 +358,7 @@ pub fn format_semantic_type(ty: &SemanticType) -> String {
     }
 }
 
+// 格式化浮点数
 fn format_float(value: f32) -> String {
     format!("{:.6}", value)
 }
@@ -387,6 +397,7 @@ enum LValue {
 }
 
 impl<'a> Lowerer<'a> {
+    // 创建 IR 降低器
     fn new(symbols: &'a [Symbol]) -> Self {
         Self {
             symbols,
@@ -394,6 +405,7 @@ impl<'a> Lowerer<'a> {
         }
     }
 
+    // 降低整个程序
     fn lower_program(&mut self, program: &SemanticProgram) -> Result<IrProgram, String> {
         let mut globals = Vec::new();
         let mut functions = Vec::new();
@@ -414,6 +426,7 @@ impl<'a> Lowerer<'a> {
         Ok(IrProgram { globals, functions })
     }
 
+    // 降低全局变量声明
     fn lower_global(&mut self, decl: &SemanticVarDecl) -> Result<IrGlobal, String> {
         let symbol_id = decl
             .symbol_id
@@ -440,6 +453,7 @@ impl<'a> Lowerer<'a> {
         })
     }
 
+    // 降低函数定义
     fn lower_function(
         &mut self,
         function: &crate::semantic::SemanticFunction,
@@ -497,6 +511,7 @@ impl<'a> Lowerer<'a> {
         })
     }
 
+    // 计算数组维度值
     fn dimensions_to_usize(&self, dimensions: &[Option<SemanticExpr>]) -> Result<Vec<usize>, String> {
         dimensions
             .iter()
@@ -510,6 +525,7 @@ impl<'a> Lowerer<'a> {
             .collect()
     }
 
+    // 降低常量初始化器
     fn lower_const_initializer(&self, init: &SemanticInitializer) -> Result<IrConstValue, String> {
         match init {
             SemanticInitializer::Expr(expr) => self.eval_const_expr(expr),
@@ -521,6 +537,7 @@ impl<'a> Lowerer<'a> {
         }
     }
 
+    // 计算常量表达式
     fn eval_const_expr(&self, expr: &SemanticExpr) -> Result<IrConstValue, String> {
         match &expr.kind {
             SemanticExprKind::IntLiteral(value) => value
@@ -567,6 +584,7 @@ impl<'a> Lowerer<'a> {
 }
 
 impl<'a> FunctionLowerer<'a> {
+    // 降低语句块
     fn lower_block(&mut self, block: &SemanticBlock) -> Result<(), String> {
         for stmt in &block.statements {
             if self.is_terminated() {
@@ -577,6 +595,7 @@ impl<'a> FunctionLowerer<'a> {
         Ok(())
     }
 
+    // 降低单条语句
     fn lower_stmt(&mut self, stmt: &SemanticStmt) -> Result<(), String> {
         match stmt {
             SemanticStmt::VarDecl(decls) => {
@@ -742,6 +761,7 @@ impl<'a> FunctionLowerer<'a> {
         Ok(())
     }
 
+    // 降低变量声明
     fn lower_decl(&mut self, decl: &SemanticVarDecl) -> Result<(), String> {
         let symbol_id = decl
             .symbol_id
@@ -782,6 +802,7 @@ impl<'a> FunctionLowerer<'a> {
         Ok(())
     }
 
+    // 降低初始化器内容
     fn lower_initializer(
         &mut self,
         decl: &SemanticVarDecl,
@@ -824,6 +845,7 @@ impl<'a> FunctionLowerer<'a> {
         Ok(())
     }
 
+    // 降低表达式
     fn lower_expr(&mut self, expr: &SemanticExpr) -> Result<IrOperand, String> {
         if let Ok(constant) = self.eval_const_expr(expr) {
             return const_to_operand(&constant);
@@ -947,6 +969,7 @@ impl<'a> FunctionLowerer<'a> {
         }
     }
 
+    // 生成二元运算指令
     fn emit_binary(
         &mut self,
         op: BinaryOp,
@@ -965,6 +988,7 @@ impl<'a> FunctionLowerer<'a> {
         IrOperand::Temp(dest)
     }
 
+    // 解析左值信息
     fn resolve_lvalue(&mut self, expr: &SemanticExpr) -> Result<LValue, String> {
         match &expr.kind {
             SemanticExprKind::Ident { name, symbol_id } => Ok(LValue::Var {
@@ -976,6 +1000,7 @@ impl<'a> FunctionLowerer<'a> {
         }
     }
 
+    // 解析数组左值
     fn resolve_index_lvalue(&mut self, expr: &SemanticExpr) -> Result<LValue, String> {
         let mut indices = Vec::new();
         let mut current = expr;
@@ -1006,6 +1031,7 @@ impl<'a> FunctionLowerer<'a> {
         }
     }
 
+    // 加载左值内容
     fn load_lvalue(&mut self, lvalue: &LValue) -> Result<IrOperand, String> {
         match lvalue {
             LValue::Var { symbol_id, name } => {
@@ -1043,6 +1069,7 @@ impl<'a> FunctionLowerer<'a> {
         }
     }
 
+    // 写回左值内容
     fn store_lvalue(&mut self, lvalue: &LValue, value: IrOperand) {
         match lvalue {
             LValue::Var { symbol_id, name } => self.instructions.push(IrInstr::StoreVar {
@@ -1064,18 +1091,21 @@ impl<'a> FunctionLowerer<'a> {
         }
     }
 
+    // 创建新的临时变量
     fn new_temp(&mut self) -> TempId {
         let temp = TempId(self.temp_counter);
         self.temp_counter += 1;
         temp
     }
 
+    // 创建新的标签
     fn new_label(&mut self, prefix: &str) -> String {
         let label = format!("{}.{}", prefix, self.label_counter);
         self.label_counter += 1;
         label
     }
 
+    // 判断当前块是否已终结
     fn is_terminated(&self) -> bool {
         matches!(
             self.instructions.last(),
@@ -1083,6 +1113,7 @@ impl<'a> FunctionLowerer<'a> {
         )
     }
 
+    // 在函数级别计算常量表达式
     fn eval_const_expr(&self, expr: &SemanticExpr) -> Result<IrConstValue, String> {
         match &expr.kind {
             SemanticExprKind::IntLiteral(value) => value
@@ -1127,6 +1158,7 @@ impl<'a> FunctionLowerer<'a> {
         }
     }
 
+    // 在函数级别降低常量初始化器
     fn lower_const_initializer(&self, init: &SemanticInitializer) -> Result<IrConstValue, String> {
         match init {
             SemanticInitializer::Expr(expr) => self.eval_const_expr(expr),
@@ -1139,6 +1171,7 @@ impl<'a> FunctionLowerer<'a> {
     }
 }
 
+// 将常量值转换为操作数
 fn const_to_operand(value: &IrConstValue) -> Result<IrOperand, String> {
     match value {
         IrConstValue::Int(value) => Ok(IrOperand::Int(*value)),
@@ -1147,6 +1180,7 @@ fn const_to_operand(value: &IrConstValue) -> Result<IrOperand, String> {
     }
 }
 
+// 将常量转为无符号尺寸
 fn as_usize_const(value: IrConstValue) -> Result<usize, String> {
     match value {
         IrConstValue::Int(value) if value >= 0 => Ok(value as usize),
@@ -1154,6 +1188,7 @@ fn as_usize_const(value: IrConstValue) -> Result<usize, String> {
     }
 }
 
+// 获取类型对应的单位值
 fn one_for_type(ty: &SemanticType) -> IrOperand {
     match ty {
         SemanticType::Float => IrOperand::Float(1.0),
@@ -1161,6 +1196,7 @@ fn one_for_type(ty: &SemanticType) -> IrOperand {
     }
 }
 
+// 折叠一元常量表达式
 fn fold_unary_const(op: UnaryOp, value: IrConstValue) -> Result<IrConstValue, String> {
     match (op, value) {
         (UnaryOp::Plus, value) => Ok(value),
@@ -1172,6 +1208,7 @@ fn fold_unary_const(op: UnaryOp, value: IrConstValue) -> Result<IrConstValue, St
     }
 }
 
+// 折叠二元常量表达式
 fn fold_binary_const(
     op: BinaryOp,
     left: IrConstValue,
@@ -1190,6 +1227,7 @@ fn fold_binary_const(
     }
 }
 
+// 计算整型二元常量
 fn fold_int_binary(op: BinaryOp, left: i32, right: i32) -> Result<IrConstValue, String> {
     let value = match op {
         BinaryOp::Add => IrConstValue::Int(left + right),
@@ -1209,6 +1247,7 @@ fn fold_int_binary(op: BinaryOp, left: i32, right: i32) -> Result<IrConstValue, 
     Ok(value)
 }
 
+// 计算浮点二元常量
 fn fold_float_binary(op: BinaryOp, left: f32, right: f32) -> Result<IrConstValue, String> {
     let value = match op {
         BinaryOp::Add => IrConstValue::Float(left + right),
@@ -1229,6 +1268,7 @@ fn fold_float_binary(op: BinaryOp, left: f32, right: f32) -> Result<IrConstValue
 }
 
 impl fmt::Display for IrProgram {
+    // 以字符串形式输出 IR
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.write_str(&format_program(self))
     }

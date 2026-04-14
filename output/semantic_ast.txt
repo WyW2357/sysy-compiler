@@ -2987,17 +2987,11 @@ SemanticProgram {
             ),
             parent: None,
             symbols: {
-                "getfloat": SymbolId(
-                    2,
-                ),
-                "getch": SymbolId(
-                    1,
-                ),
-                "scale": SymbolId(
-                    13,
-                ),
                 "putint": SymbolId(
                     5,
+                ),
+                "getarray": SymbolId(
+                    3,
                 ),
                 "putarray": SymbolId(
                     8,
@@ -3008,50 +3002,56 @@ SemanticProgram {
                 "putch": SymbolId(
                     6,
                 ),
-                "add": SymbolId(
-                    18,
-                ),
-                "getint": SymbolId(
-                    0,
-                ),
-                "numbers": SymbolId(
-                    17,
-                ),
-                "main": SymbolId(
-                    21,
-                ),
-                "offsets": SymbolId(
-                    16,
+                "putfarray": SymbolId(
+                    9,
                 ),
                 "starttime": SymbolId(
                     10,
                 ),
+                "add": SymbolId(
+                    18,
+                ),
+                "main": SymbolId(
+                    21,
+                ),
+                "global_count": SymbolId(
+                    12,
+                ),
                 "default_bias": SymbolId(
                     15,
                 ),
-                "stoptime": SymbolId(
-                    11,
-                ),
-                "max_value": SymbolId(
-                    14,
-                ),
-                "getarray": SymbolId(
-                    3,
-                ),
-                "sum_array": SymbolId(
-                    19,
-                ),
-                "putfarray": SymbolId(
-                    9,
+                "numbers": SymbolId(
+                    17,
                 ),
                 "fill": SymbolId(
                     20,
                 ),
+                "max_value": SymbolId(
+                    14,
+                ),
+                "getint": SymbolId(
+                    0,
+                ),
+                "scale": SymbolId(
+                    13,
+                ),
+                "stoptime": SymbolId(
+                    11,
+                ),
+                "getfloat": SymbolId(
+                    2,
+                ),
                 "putfloat": SymbolId(
                     7,
                 ),
-                "global_count": SymbolId(
-                    12,
+                "offsets": SymbolId(
+                    16,
+                ),
+                "sum_array": SymbolId(
+                    19,
+                ),
+                "getch": SymbolId(
+                    1,
                 ),
             },
         },
@@ -3086,14 +3086,14 @@ SemanticProgram {
                 "total": SymbolId(
                     27,
                 ),
+                "n": SymbolId(
+                    25,
+                ),
                 "i": SymbolId(
                     26,
                 ),
                 "arr": SymbolId(
                     24,
-                ),
-                "n": SymbolId(
-                    25,
                 ),
             },
         },
@@ -3118,14 +3118,14 @@ SemanticProgram {
                 ),
             ),
             symbols: {
-                "i": SymbolId(
-                    30,
+                "arr": SymbolId(
+                    28,
                 ),
                 "n": SymbolId(
                     29,
                 ),
-                "arr": SymbolId(
-                    28,
+                "i": SymbolId(
+                    30,
                 ),
             },
         },
@@ -3183,6 +3183,9 @@ SemanticProgram {
                 ),
             ),
             symbols: {
+                "local": SymbolId(
+                    31,
+                ),
                 "local_limit": SymbolId(
                     32,
                 ),
@@ -3192,14 +3195,11 @@ SemanticProgram {
                 "base": SymbolId(
                     34,
                 ),
-                "total": SymbolId(
-                    36,
-                ),
                 "i": SymbolId(
                     35,
                 ),
-                "local": SymbolId(
-                    31,
+                "total": SymbolId(
+                    36,
                 ),
             },
         },

@@ -191,6 +191,7 @@ pub struct SemanticError {
     pub message: String,
 }
 
+// 执行语义分析
 pub fn analyze(program: &Program) -> SemanticAnalysis {
     let mut analyzer = Analyzer::new();
     analyzer.register_builtins();
@@ -223,6 +224,7 @@ struct Analyzer {
 }
 
 impl Analyzer {
+    // 创建语义分析器
     fn new() -> Self {
         let global_scope = ScopeInfo {
             id: ScopeId(0),
@@ -240,6 +242,7 @@ impl Analyzer {
         }
     }
 
+    // 注册内置函数
     fn register_builtins(&mut self) {
         let builtins = [
             ("getint", TypeName::Int, vec![]),
@@ -305,6 +308,7 @@ impl Analyzer {
         }
     }
 
+    // 预声明顶层符号
     fn predeclare_program(&mut self, program: &Program) -> Vec<PredeclaredItem> {
         let mut predeclared = Vec::with_capacity(program.items.len());
 
@@ -355,6 +359,7 @@ impl Analyzer {
         predeclared
     }
 
+    // 分析整个程序
     fn analyze_program(
         &mut self,
         program: &Program,
@@ -383,6 +388,7 @@ impl Analyzer {
         items
     }
 
+    // 分析函数定义
     fn analyze_function(
         &mut self,
         function: &FunctionDef,
@@ -412,6 +418,7 @@ impl Analyzer {
         }
     }
 
+    // 分析函数参数
     fn analyze_param(&mut self, param: &Param) -> SemanticParam {
         let dimensions = self.analyze_dimensions(&param.dimensions, param.location);
         let ty = self.declared_type(param.ty, param.dimensions.len());
@@ -439,6 +446,7 @@ impl Analyzer {
         }
     }
 
+    // 分析全局变量声明
     fn analyze_global_decl(&mut self, decl: &VarDecl, symbol_id: Option<SymbolId>) -> SemanticVarDecl {
         let dimensions = self.analyze_dimensions(&decl.dimensions, decl.location);
         let ty = self.declared_type(decl.ty, decl.dimensions.len());
@@ -465,6 +473,7 @@ impl Analyzer {
         }
     }
 
+    // 分析局部变量声明
     fn analyze_local_decl(&mut self, decl: &VarDecl) -> SemanticVarDecl {
         let dimensions = self.analyze_dimensions(&decl.dimensions, decl.location);
         let ty = self.declared_type(decl.ty, decl.dimensions.len());
@@ -500,6 +509,7 @@ impl Analyzer {
         }
     }
 
+    // 在当前作用域分析语句块
     fn analyze_block_in_current_scope(&mut self, block: &Block) -> SemanticBlock {
         let scope_id = self.current_scope();
         let statements = block
@@ -511,6 +521,7 @@ impl Analyzer {
         SemanticBlock { scope_id, statements }
     }
 
+    // 在新作用域分析语句块
     fn analyze_block_with_new_scope(&mut self, block: &Block) -> SemanticBlock {
         self.push_scope();
         let analyzed = self.analyze_block_in_current_scope(block);
@@ -518,6 +529,7 @@ impl Analyzer {
         analyzed
     }
 
+    // 分析一条语句
     fn analyze_stmt(&mut self, stmt: &Stmt) -> SemanticStmt {
         match stmt {
             Stmt::VarDecl { decls, .. } => SemanticStmt::VarDecl(
@@ -629,6 +641,7 @@ impl Analyzer {
         }
     }
 
+    // 分析初始化器
     fn analyze_initializer(
         &mut self,
         initializer: &Initializer,
@@ -680,6 +693,7 @@ impl Analyzer {
         }
     }
 
+    // 分析表达式
     fn analyze_expr(&mut self, expr: &Expr) -> SemanticExpr {
         match &expr.kind {
             ExprKind::Ident(name) => {
@@ -722,6 +736,7 @@ impl Analyzer {
         }
     }
 
+    // 分析一元表达式
     fn analyze_unary(&mut self, location: SourceLocation, op: UnaryOp, expr: &Expr) -> SemanticExpr {
         let expr = self.analyze_expr(expr);
         let ty = match op {
@@ -785,6 +800,7 @@ impl Analyzer {
         }
     }
 
+    // 分析二元表达式
     fn analyze_binary(&mut self, location: SourceLocation, op: BinaryOp, left: &Expr, right: &Expr) -> SemanticExpr {
         let left = self.analyze_expr(left);
         let right = self.analyze_expr(right);
@@ -867,6 +883,7 @@ impl Analyzer {
         }
     }
 
+    // 分析赋值表达式
     fn analyze_assign(&mut self, location: SourceLocation, target: &Expr, value: &Expr) -> SemanticExpr {
         let target = self.analyze_expr(target);
         let value = self.analyze_expr(value);
@@ -901,6 +918,7 @@ impl Analyzer {
         }
     }
 
+    // 分析函数调用
     fn analyze_call(&mut self, location: SourceLocation, callee: &Expr, args: &[Expr]) -> SemanticExpr {
         let callee = self.analyze_expr(callee);
         let args: Vec<_> = args.iter().map(|arg| self.analyze_expr(arg)).collect();
@@ -960,6 +978,7 @@ impl Analyzer {
         }
     }
 
+    // 分析数组下标访问
     fn analyze_index(&mut self, location: SourceLocation, array: &Expr, index: &Expr) -> SemanticExpr {
         let array = self.analyze_expr(array);
         let index = self.analyze_expr(index);
@@ -997,6 +1016,7 @@ impl Analyzer {
         }
     }
 
+    // 分析后缀表达式
     fn analyze_postfix(&mut self, location: SourceLocation, op: PostfixOp, expr: &Expr) -> SemanticExpr {
         let expr = self.analyze_expr(expr);
         let ty = if !self.is_mutable_lvalue(&expr) {
@@ -1028,6 +1048,7 @@ impl Analyzer {
         }
     }
 
+    // 分析数组维度
     fn analyze_dimensions(
         &mut self,
         dimensions: &[Option<Expr>],
@@ -1053,6 +1074,7 @@ impl Analyzer {
             .collect()
     }
 
+    // 检查返回语句
     fn check_return(&mut self, location: SourceLocation, expr: Option<&SemanticExpr>) {
         match (self.current_return_type, expr) {
             (Some(TypeName::Void), Some(expr)) => self.report_error(
@@ -1087,6 +1109,7 @@ impl Analyzer {
         }
     }
 
+    // 检查条件表达式
     fn require_condition(&mut self, expr: &SemanticExpr) {
         if !self.is_scalar(&expr.ty) && expr.ty != SemanticType::Error {
             self.report_error(
@@ -1099,6 +1122,7 @@ impl Analyzer {
         }
     }
 
+    // 计算声明类型
     fn declared_type(&self, base: TypeName, rank: usize) -> SemanticType {
         if rank == 0 {
             self.scalar_type(base)
@@ -1107,6 +1131,7 @@ impl Analyzer {
         }
     }
 
+    // 转换为标量类型
     fn scalar_type(&self, ty: TypeName) -> SemanticType {
         match ty {
             TypeName::Int => SemanticType::Int,
@@ -1115,6 +1140,7 @@ impl Analyzer {
         }
     }
 
+    // 推导数值提升结果
     fn promote_numeric(&self, left: &SemanticType, right: &SemanticType) -> SemanticType {
         if left == &SemanticType::Float || right == &SemanticType::Float {
             SemanticType::Float
@@ -1125,14 +1151,17 @@ impl Analyzer {
         }
     }
 
+    // 判断是否为标量类型
     fn is_scalar(&self, ty: &SemanticType) -> bool {
         matches!(ty, SemanticType::Int | SemanticType::Float)
     }
 
+    // 判断是否为数值标量
     fn is_numeric_scalar(&self, ty: &SemanticType) -> bool {
         self.is_scalar(ty)
     }
 
+    // 判断类型是否可赋值
     fn is_assignable(&self, expected: &SemanticType, actual: &SemanticType) -> bool {
         match (expected, actual) {
             (SemanticType::Error, _) | (_, SemanticType::Error) => true,
@@ -1154,6 +1183,7 @@ impl Analyzer {
         }
     }
 
+    // 判断是否为可修改左值
     fn is_mutable_lvalue(&self, expr: &SemanticExpr) -> bool {
         match &expr.kind {
             SemanticExprKind::Ident { symbol_id, .. } => symbol_id
@@ -1167,6 +1197,7 @@ impl Analyzer {
         }
     }
 
+    // 检查常量声明是否合法
     fn check_const_declaration(
         &mut self,
         is_const: bool,
@@ -1193,6 +1224,7 @@ impl Analyzer {
         }
     }
 
+    // 判断是否为常量初始化器
     fn is_const_initializer(&self, initializer: &SemanticInitializer) -> bool {
         match initializer {
             SemanticInitializer::Expr(expr) => self.is_const_expr(expr),
@@ -1200,6 +1232,7 @@ impl Analyzer {
         }
     }
 
+    // 判断是否为常量表达式
     fn is_const_expr(&self, expr: &SemanticExpr) -> bool {
         match &expr.kind {
             SemanticExprKind::Ident { symbol_id, .. } => symbol_id
@@ -1222,6 +1255,7 @@ impl Analyzer {
         }
     }
 
+    // 格式化语义类型
     fn type_to_string(&self, ty: &SemanticType) -> String {
         match ty {
             SemanticType::Int => "int".to_string(),
@@ -1243,6 +1277,7 @@ impl Analyzer {
         }
     }
 
+    // 格式化基础类型名
     fn type_name_to_string(&self, ty: TypeName) -> &'static str {
         match ty {
             TypeName::Int => "int",
@@ -1251,6 +1286,7 @@ impl Analyzer {
         }
     }
 
+    // 声明符号
     fn declare_symbol(
         &mut self,
         name: String,
@@ -1282,6 +1318,7 @@ impl Analyzer {
         Some(id)
     }
 
+    // 查找符号
     fn lookup_symbol(&self, name: &str) -> Option<SymbolId> {
         for scope_id in self.scope_stack.iter().rev() {
             if let Some(symbol_id) = self.scopes[scope_id.0].symbols.get(name) {
@@ -1291,6 +1328,7 @@ impl Analyzer {
         None
     }
 
+    // 进入新作用域
     fn push_scope(&mut self) -> ScopeId {
         let parent = Some(self.current_scope());
         let scope_id = ScopeId(self.scopes.len());
@@ -1303,16 +1341,19 @@ impl Analyzer {
         scope_id
     }
 
+    // 退出当前作用域
     fn pop_scope(&mut self) {
         if self.scope_stack.len() > 1 {
             self.scope_stack.pop();
         }
     }
 
+    // 获取当前作用域
     fn current_scope(&self) -> ScopeId {
         *self.scope_stack.last().expect("scope stack should not be empty")
     }
 
+    // 记录语义错误
     fn report_error(&mut self, location: SourceLocation, message: String) {
         self.errors.push(SemanticError { location, message });
     }

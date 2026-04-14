@@ -56,6 +56,7 @@ pub struct Scanner {
 }
 
 impl Scanner {
+    // 创建词法扫描器
     pub fn new(src: &str) -> Self {
         let keywords: HashSet<&'static str> = [
             "int", "float", "void", "const", "if", "else", "while", "for", "return",
@@ -72,14 +73,17 @@ impl Scanner {
         }
     }
 
+    // 查看当前字符
     fn peek_byte(&self) -> Option<u8> {
         if self.pos < self.len { Some(self.src[self.pos]) } else { None }
     }
 
+    // 查看下一个字符
     fn peek_next_byte(&self) -> Option<u8> {
         if self.pos + 1 < self.len { Some(self.src[self.pos + 1]) } else { None }
     }
 
+    // 读取并前进一个字符
     fn bump(&mut self) -> Option<u8> {
         if self.pos >= self.len { return None; }
         let b = self.src[self.pos];
@@ -88,11 +92,13 @@ impl Scanner {
         Some(b)
     }
 
+    // 构造一个词法单元
     fn make_token(&self, kind: TokenKind, start: usize, end: usize, line: usize, column: usize) -> Token {
         let lexeme = String::from_utf8_lossy(&self.src[start..end]).to_string();
         Token { kind, lexeme, line, column }
     }
 
+    // 跳过空白和注释
     fn skip_whitespace_and_comments(&mut self) {
         loop {
             match self.peek_byte() {
@@ -119,6 +125,7 @@ impl Scanner {
         }
     }
 
+    // 读取下一个词法单元
     pub fn next_token(&mut self) -> Token {
         self.skip_whitespace_and_comments();
 
@@ -208,6 +215,7 @@ impl Scanner {
     }
 }
 
+// 将源码切分为词法单元序列
 pub fn tokenize(src: &str) -> Vec<Token> {
     let mut scanner = Scanner::new(src);
     let mut tokens = Vec::new();
@@ -222,6 +230,9 @@ pub fn tokenize(src: &str) -> Vec<Token> {
     tokens
 }
 
+// 判断字符是否为字母
 fn is_alpha(b: u8) -> bool { (b'A' <= b && b <= b'Z') || (b'a' <= b && b <= b'z') }
+// 判断字符是否为数字
 fn is_digit(b: u8) -> bool { b'0' <= b && b <= b'9' }
+// 判断字符是否为字母或数字
 fn is_alnum(b: u8) -> bool { is_alpha(b) || is_digit(b) }

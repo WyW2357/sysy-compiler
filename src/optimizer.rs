@@ -12,6 +12,7 @@ pub struct OptimizationReport {
     pub instructions_after: usize,
 }
 
+// 优化整个中间表示程序
 pub fn optimize_program(program: &IrProgram) -> (IrProgram, OptimizationReport) {
     let mut report = OptimizationReport {
         instructions_before: count_instructions(program),
@@ -33,6 +34,7 @@ pub fn optimize_program(program: &IrProgram) -> (IrProgram, OptimizationReport) 
     (optimized, report)
 }
 
+// 优化单个函数
 fn optimize_function(function: &IrFunction, report: &mut OptimizationReport) -> IrFunction {
     let mut instructions = Vec::new();
     let mut block = Vec::new();
@@ -67,6 +69,7 @@ fn optimize_function(function: &IrFunction, report: &mut OptimizationReport) -> 
     }
 }
 
+// 优化一个基本块
 fn optimize_block(block: &[IrInstr], report: &mut OptimizationReport) -> Vec<IrInstr> {
     let mut replacements = HashMap::<TempId, IrOperand>::new();
     let mut expr_cache = HashMap::<String, TempId>::new();
@@ -103,6 +106,7 @@ fn optimize_block(block: &[IrInstr], report: &mut OptimizationReport) -> Vec<IrI
     eliminate_dead_code(&rewritten, report)
 }
 
+// 重写指令中的操作数
 fn rewrite_instruction(instruction: &IrInstr, replacements: &HashMap<TempId, IrOperand>) -> IrInstr {
     match instruction {
         IrInstr::StoreVar {
@@ -198,6 +202,7 @@ fn rewrite_instruction(instruction: &IrInstr, replacements: &HashMap<TempId, IrO
     }
 }
 
+// 替换操作数引用
 fn rewrite_operand(operand: &IrOperand, replacements: &HashMap<TempId, IrOperand>) -> IrOperand {
     match operand {
         IrOperand::Temp(temp) => match replacements.get(temp) {
@@ -208,6 +213,7 @@ fn rewrite_operand(operand: &IrOperand, replacements: &HashMap<TempId, IrOperand
     }
 }
 
+// 尝试进行常量折叠
 fn fold_instruction(instruction: &IrInstr) -> Option<(TempId, IrOperand)> {
     match instruction {
         IrInstr::Unary { dest, op, operand, .. } => match (op, operand) {
@@ -232,6 +238,7 @@ fn fold_instruction(instruction: &IrInstr) -> Option<(TempId, IrOperand)> {
     }
 }
 
+// 折叠二元常量表达式
 fn fold_binary(dest: TempId, op: BinaryOp, left: &IrOperand, right: &IrOperand) -> Option<(TempId, IrOperand)> {
     match (left, right) {
         (IrOperand::Int(left), IrOperand::Int(right)) => {
@@ -274,6 +281,7 @@ fn fold_binary(dest: TempId, op: BinaryOp, left: &IrOperand, right: &IrOperand) 
     }
 }
 
+// 生成公共子表达式键值
 fn cse_key(instruction: &IrInstr) -> String {
     match instruction {
         IrInstr::LoadVar { symbol_id, .. } => format!("load:{}", symbol_id.0),
@@ -308,6 +316,7 @@ fn cse_key(instruction: &IrInstr) -> String {
     }
 }
 
+// 格式化操作数键名
 fn format_operand_key(operand: &IrOperand) -> String {
     match operand {
         IrOperand::Temp(temp) => format!("t{}", temp.0),
@@ -317,6 +326,7 @@ fn format_operand_key(operand: &IrOperand) -> String {
     }
 }
 
+// 获取指令的目标临时变量
 fn instruction_dest(instruction: &IrInstr) -> Option<TempId> {
     match instruction {
         IrInstr::LoadVar { dest, .. }
@@ -328,6 +338,7 @@ fn instruction_dest(instruction: &IrInstr) -> Option<TempId> {
     }
 }
 
+// 判断指令是否无副作用
 fn is_pure_instruction(instruction: &IrInstr) -> bool {
     matches!(
         instruction,
@@ -338,6 +349,7 @@ fn is_pure_instruction(instruction: &IrInstr) -> bool {
     )
 }
 
+// 判断指令是否有副作用
 fn has_side_effects(instruction: &IrInstr) -> bool {
     matches!(
         instruction,
@@ -350,6 +362,7 @@ fn has_side_effects(instruction: &IrInstr) -> bool {
     )
 }
 
+// 删除无用代码
 fn eliminate_dead_code(block: &[IrInstr], report: &mut OptimizationReport) -> Vec<IrInstr> {
     let mut live_temps = HashSet::<TempId>::new();
     let mut keep = vec![true; block.len()];
@@ -377,6 +390,7 @@ fn eliminate_dead_code(block: &[IrInstr], report: &mut OptimizationReport) -> Ve
         .collect()
 }
 
+// 收集指令使用的临时变量
 fn used_temps(instruction: &IrInstr) -> Vec<TempId> {
     match instruction {
         IrInstr::StoreVar { value, .. } => operand_temps(value),
@@ -399,6 +413,7 @@ fn used_temps(instruction: &IrInstr) -> Vec<TempId> {
     }
 }
 
+// 提取操作数中的临时变量
 fn operand_temps(operand: &IrOperand) -> Vec<TempId> {
     match operand {
         IrOperand::Temp(temp) => vec![*temp],
@@ -406,6 +421,7 @@ fn operand_temps(operand: &IrOperand) -> Vec<TempId> {
     }
 }
 
+// 统计程序中的指令数量
 fn count_instructions(program: &IrProgram) -> usize {
     program
         .functions
@@ -422,6 +438,7 @@ mod tests {
     use super::optimize_program;
 
     #[test]
+    // 测试常量折叠
     fn folds_constants() {
         let program = IrProgram {
             globals: Vec::new(),
@@ -452,6 +469,7 @@ mod tests {
     }
 
     #[test]
+    // 测试公共子表达式消除
     fn eliminates_common_subexpressions() {
         let program = IrProgram {
             globals: Vec::new(),
@@ -485,6 +503,7 @@ mod tests {
     }
 
     #[test]
+    // 测试死代码消除
     fn eliminates_dead_code() {
         let program = IrProgram {
             globals: Vec::new(),

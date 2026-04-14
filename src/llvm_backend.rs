@@ -25,7 +25,9 @@ pub struct BackendArtifacts {
     pub assembly_path: String,
 }
 
+// 生成 LLVM 后端产物
 pub fn generate_backend_artifacts(program: &IrProgram) -> Result<BackendArtifacts, String> {
+    std::fs::create_dir_all("output").map_err(|err| err.to_string())?;
     Target::initialize_aarch64(&InitializationConfig::default());
 
     let triple = TargetTriple::create("aarch64-unknown-linux-gnu");
@@ -55,7 +57,7 @@ pub fn generate_backend_artifacts(program: &IrProgram) -> Result<BackendArtifact
 
     module.verify().map_err(|err| err.to_string())?;
 
-    let assembly_path = Path::new("output_aarch64.s");
+    let assembly_path = Path::new("output/output_aarch64.s");
     machine
         .write_to_file(&module, FileType::Assembly, assembly_path)
         .map_err(|err| err.to_string())?;
@@ -105,6 +107,7 @@ enum Storage<'ctx> {
 }
 
 impl<'ctx, 'm> Codegen<'ctx, 'm> {
+    // 创建 LLVM 代码生成器
     fn new(context: &'ctx Context, module: &'m Module<'ctx>, _target_data: &'m TargetData) -> Self {
         Self {
             context,
@@ -115,6 +118,7 @@ impl<'ctx, 'm> Codegen<'ctx, 'm> {
         }
     }
 
+    // 声明运行时函数
     fn declare_runtime(&mut self) {
         let i32_type = self.context.i32_type();
         let f32_type = self.context.f32_type();
@@ -141,12 +145,14 @@ impl<'ctx, 'm> Codegen<'ctx, 'm> {
         self.add_runtime("stoptime", void_type.fn_type(&[], false));
     }
 
+    // 注册单个运行时函数
     fn add_runtime(&mut self, name: &str, ty: inkwell::types::FunctionType<'ctx>) {
         let function = self.module.add_function(name, ty, None);
         self.runtime.insert(name.to_string(), function);
         self.functions.insert(name.to_string(), function);
     }
 
+    // 预声明程序中的函数
     fn declare_program(&mut self, program: &IrProgram) -> Result<(), String> {
         for function in &program.functions {
             let fn_type = self.function_type(function)?;
@@ -156,6 +162,7 @@ impl<'ctx, 'm> Codegen<'ctx, 'm> {
         Ok(())
     }
 
+    // 生成全局变量代码
     fn emit_globals(&mut self, program: &IrProgram) -> Result<(), String> {
         for global in &program.globals {
             let global_value = match &global.ty {
@@ -212,6 +219,7 @@ impl<'ctx, 'm> Codegen<'ctx, 'm> {
         Ok(())
     }
 
+    // 生成所有函数代码
     fn emit_functions(&self, program: &IrProgram) -> Result<(), String> {
         for function in &program.functions {
             let llvm_fn = *self
@@ -229,6 +237,7 @@ impl<'ctx, 'm> Codegen<'ctx, 'm> {
         Ok(())
     }
 
+    // 构造函数类型
     fn function_type(&self, function: &IrFunction) -> Result<inkwell::types::FunctionType<'ctx>, String> {
         let params = function
             .params
@@ -248,6 +257,7 @@ impl<'ctx, 'm> Codegen<'ctx, 'm> {
         }
     }
 
+    // 获取参数对应的 LLVM 类型
     fn param_type(&self, ty: &SemanticType) -> Result<BasicTypeEnum<'ctx>, String> {
         match ty {
             SemanticType::Int => Ok(self.context.i32_type().into()),
@@ -257,6 +267,7 @@ impl<'ctx, 'm> Codegen<'ctx, 'm> {
         }
     }
 
+    // 获取元素基础类型
     fn element_basic_type(&self, ty: TypeName) -> BasicTypeEnum<'ctx> {
         match ty {
             TypeName::Int => self.context.i32_type().into(),
@@ -265,6 +276,7 @@ impl<'ctx, 'm> Codegen<'ctx, 'm> {
         }
     }
 
+    // 构造数组 LLVM 类型
     fn array_type(&self, element: TypeName, dimensions: &[usize]) -> Result<inkwell::types::ArrayType<'ctx>, String> {
         let first = *dimensions.first().ok_or_else(|| "array dimensions missing".to_string())? as u32;
         let mut any = AnyTypeEnum::ArrayType(self.element_basic_type(element).array_type(first));
@@ -280,6 +292,7 @@ impl<'ctx, 'm> Codegen<'ctx, 'm> {
         }
     }
 
+    // 构造数组常量初值
     fn const_array_initializer(
         &self,
         element: TypeName,
@@ -290,6 +303,7 @@ impl<'ctx, 'm> Codegen<'ctx, 'm> {
         self.const_array_recursive(elem_ty, dimensions, init)
     }
 
+    // 递归构造数组常量
     fn const_array_recursive(
         &self,
         element_type: BasicTypeEnum<'ctx>,
@@ -339,6 +353,7 @@ impl<'ctx, 'm> Codegen<'ctx, 'm> {
         }
     }
 
+    // 从基础类型构造数组类型
     fn array_type_from_basic(
         &self,
         element_type: BasicTypeEnum<'ctx>,
@@ -358,6 +373,7 @@ impl<'ctx, 'm> Codegen<'ctx, 'm> {
         }
     }
 
+    // 构造标量常量
     fn const_scalar(
         &self,
         value: &IrConstValue,
@@ -373,6 +389,7 @@ impl<'ctx, 'm> Codegen<'ctx, 'm> {
 }
 
 impl<'ctx, 'm> FunctionCodegen<'ctx, 'm> {
+    // 创建函数级代码生成器
     fn new(
         context: &'ctx Context,
         function: FunctionValue<'ctx>,
@@ -401,6 +418,7 @@ impl<'ctx, 'm> FunctionCodegen<'ctx, 'm> {
         }
     }
 
+    // 生成单个函数代码
     fn emit(&mut self, function: &IrFunction) -> Result<(), String> {
         self.create_blocks(function);
         self.bind_params(function)?;
@@ -412,6 +430,7 @@ impl<'ctx, 'm> FunctionCodegen<'ctx, 'm> {
         Ok(())
     }
 
+    // 创建基本块映射
     fn create_blocks(&mut self, function: &IrFunction) {
         for instruction in &function.instructions {
             if let IrInstr::Label(label) = instruction {
@@ -423,6 +442,7 @@ impl<'ctx, 'm> FunctionCodegen<'ctx, 'm> {
         }
     }
 
+    // 绑定函数参数
     fn bind_params(&mut self, function: &IrFunction) -> Result<(), String> {
         for (index, param) in function.params.iter().enumerate() {
             let value = self
@@ -457,6 +477,7 @@ impl<'ctx, 'm> FunctionCodegen<'ctx, 'm> {
         Ok(())
     }
 
+    // 生成单条 IR 指令
     fn emit_instr(&mut self, instruction: &IrInstr) -> Result<(), String> {
         match instruction {
             IrInstr::Label(label) => {
@@ -641,6 +662,7 @@ impl<'ctx, 'm> FunctionCodegen<'ctx, 'm> {
         Ok(())
     }
 
+    // 获取操作数对应的 LLVM 值
     fn operand_value(&self, operand: &IrOperand) -> Result<BasicValueEnum<'ctx>, String> {
         match operand {
             IrOperand::Temp(temp) => self
@@ -654,6 +676,7 @@ impl<'ctx, 'm> FunctionCodegen<'ctx, 'm> {
         }
     }
 
+    // 获取符号地址
     fn symbol_pointer(&self, symbol_id: SymbolId) -> Result<PointerValue<'ctx>, String> {
         match self.lookup_storage(symbol_id)? {
             Storage::Array {
@@ -666,6 +689,7 @@ impl<'ctx, 'm> FunctionCodegen<'ctx, 'm> {
         }
     }
 
+    // 获取数组退化指针
     fn array_decay_ptr(
         &self,
         ptr: PointerValue<'ctx>,
@@ -681,6 +705,7 @@ impl<'ctx, 'm> FunctionCodegen<'ctx, 'm> {
         }
     }
 
+    // 计算数组元素地址
     fn index_ptr(
         &self,
         symbol_id: SymbolId,
@@ -716,6 +741,7 @@ impl<'ctx, 'm> FunctionCodegen<'ctx, 'm> {
         }
     }
 
+    // 生成一元运算
     fn emit_unary(
         &self,
         op: UnaryOp,
@@ -747,6 +773,7 @@ impl<'ctx, 'm> FunctionCodegen<'ctx, 'm> {
         }
     }
 
+    // 生成二元运算
     fn emit_binary(
         &self,
         op: BinaryOp,
@@ -833,6 +860,7 @@ impl<'ctx, 'm> FunctionCodegen<'ctx, 'm> {
         }
     }
 
+    // 转换元数据参数类型
     fn coerce_metadata(
         &self,
         value: BasicValueEnum<'ctx>,
@@ -850,6 +878,7 @@ impl<'ctx, 'm> FunctionCodegen<'ctx, 'm> {
         Ok(value)
     }
 
+    // 转换标量类型
     fn coerce_scalar(
         &self,
         value: BasicValueEnum<'ctx>,
@@ -862,6 +891,7 @@ impl<'ctx, 'm> FunctionCodegen<'ctx, 'm> {
         }
     }
 
+    // 转换为布尔值
     fn to_bool(&self, value: BasicValueEnum<'ctx>) -> Result<inkwell::values::IntValue<'ctx>, String> {
         match value {
             BasicValueEnum::IntValue(value) => self
@@ -876,6 +906,7 @@ impl<'ctx, 'm> FunctionCodegen<'ctx, 'm> {
         }
     }
 
+    // 转换为 i32
     fn as_i32(&self, value: BasicValueEnum<'ctx>) -> Result<inkwell::values::IntValue<'ctx>, String> {
         match value {
             BasicValueEnum::IntValue(value) if value.get_type().get_bit_width() == 32 => Ok(value),
@@ -891,6 +922,7 @@ impl<'ctx, 'm> FunctionCodegen<'ctx, 'm> {
         }
     }
 
+    // 转换为 f32
     fn as_f32(&self, value: BasicValueEnum<'ctx>) -> Result<inkwell::values::FloatValue<'ctx>, String> {
         match value {
             BasicValueEnum::FloatValue(value) => Ok(value),
@@ -902,6 +934,7 @@ impl<'ctx, 'm> FunctionCodegen<'ctx, 'm> {
         }
     }
 
+    // 查找符号存储位置
     fn lookup_storage(&self, symbol_id: SymbolId) -> Result<Storage<'ctx>, String> {
         self.storage
             .get(&symbol_id)
@@ -910,6 +943,7 @@ impl<'ctx, 'm> FunctionCodegen<'ctx, 'm> {
             .ok_or_else(|| format!("missing storage for symbol {}", symbol_id.0))
     }
 
+    // 获取元素类型
     fn lookup_element_type(&self, symbol_id: SymbolId) -> Result<TypeName, String> {
         match self.lookup_storage(symbol_id)? {
             Storage::Array { element, .. } | Storage::ArrayParam { element, .. } => Ok(element),
@@ -921,10 +955,12 @@ impl<'ctx, 'm> FunctionCodegen<'ctx, 'm> {
         }
     }
 
+    // 在入口块分配空间
     fn alloca_in_entry<T: BasicType<'ctx>>(&self, ty: T, name: &str) -> Result<PointerValue<'ctx>, String> {
         self.entry_builder.build_alloca(ty, name).map_err(|err| err.to_string())
     }
 
+    // 获取标量 LLVM 类型
     fn scalar_type(&self, ty: &SemanticType) -> Result<BasicTypeEnum<'ctx>, String> {
         match ty {
             SemanticType::Int => Ok(self.context.i32_type().into()),
@@ -933,6 +969,7 @@ impl<'ctx, 'm> FunctionCodegen<'ctx, 'm> {
         }
     }
 
+    // 获取元素基础类型
     fn element_basic_type(&self, ty: TypeName) -> BasicTypeEnum<'ctx> {
         match ty {
             TypeName::Int => self.context.i32_type().into(),
@@ -941,6 +978,7 @@ impl<'ctx, 'm> FunctionCodegen<'ctx, 'm> {
         }
     }
 
+    // 构造数组 LLVM 类型
     fn array_type(&self, element: TypeName, dimensions: &[usize]) -> Result<inkwell::types::ArrayType<'ctx>, String> {
         let first = *dimensions.first().ok_or_else(|| "array dimensions missing".to_string())? as u32;
         let mut any = AnyTypeEnum::ArrayType(self.element_basic_type(element).array_type(first));
@@ -957,6 +995,7 @@ impl<'ctx, 'm> FunctionCodegen<'ctx, 'm> {
     }
 }
 
+// 将类型名转换为语义类型
 fn semantic_from_type(ty: TypeName) -> SemanticType {
     match ty {
         TypeName::Int => SemanticType::Int,
@@ -965,6 +1004,7 @@ fn semantic_from_type(ty: TypeName) -> SemanticType {
     }
 }
 
+// 构造零初始化列表
 fn zero_list(depth: usize) -> IrConstValue {
     if depth <= 1 {
         IrConstValue::List(Vec::new())

@@ -19,8 +19,11 @@ use std::fs;
 use std::fs::File;
 use std::io::{BufWriter, Write};
 
+// 主程序入口，串联完整编译流程
 fn main() {
-    let src = fs::read_to_string("sysy.c").expect("failed to read sysy.c");
+    fs::create_dir_all("input").expect("failed to create input directory");
+    fs::create_dir_all("output").expect("failed to create output directory");
+    let src = fs::read_to_string("input/sysy.c").expect("failed to read input/sysy.c");
 
     let tokens = tokenize(&src);
     write_tokens(&tokens);
@@ -53,6 +56,7 @@ fn main() {
     }
 }
 
+// 调用 LLVM 后端生成目标代码
 #[cfg(feature = "llvm-backend")]
 fn run_llvm_backend(program: &IrProgram) {
     match generate_backend_artifacts(program) {
@@ -64,13 +68,15 @@ fn run_llvm_backend(program: &IrProgram) {
     }
 }
 
+// 在未启用后端时写入状态说明
 #[cfg(not(feature = "llvm-backend"))]
 fn run_llvm_backend(_program: &IrProgram) {
     write_codegen_status(None);
 }
 
+// 将词法分析结果写入文件
 fn write_tokens(tokens: &[Token]) {
-    let out_file = File::create("tokens.txt").expect("failed to create tokens.txt");
+    let out_file = File::create("output/tokens.txt").expect("failed to create output/tokens.txt");
     let mut out = BufWriter::new(out_file);
 
     writeln!(out, "{:<15} {:<30} {:<6} {:<6}", "Kind", "Lexeme", "Line", "Col").expect("failed to write header");
@@ -84,14 +90,16 @@ fn write_tokens(tokens: &[Token]) {
     }
 }
 
+// 将语法树内容输出到文件
 fn write_ast(program: &Program) {
-    let out_file = File::create("ast.txt").expect("failed to create ast.txt");
+    let out_file = File::create("output/ast.txt").expect("failed to create output/ast.txt");
     let mut out = BufWriter::new(out_file);
     writeln!(out, "{:#?}", program).expect("failed to write ast");
 }
 
+// 记录语法分析阶段的错误信息
 fn write_parse_errors(errors: &[ParseError]) {
-    let out_file = File::create("parse_errors.txt").expect("failed to create parse_errors.txt");
+    let out_file = File::create("output/parse_errors.txt").expect("failed to create output/parse_errors.txt");
     let mut out = BufWriter::new(out_file);
 
     if errors.is_empty() {
@@ -111,14 +119,16 @@ fn write_parse_errors(errors: &[ParseError]) {
     }
 }
 
+// 将语义分析后的结果树写入文件
 fn write_semantic_ast(program: &SemanticProgram) {
-    let out_file = File::create("semantic_ast.txt").expect("failed to create semantic_ast.txt");
+    let out_file = File::create("output/semantic_ast.txt").expect("failed to create output/semantic_ast.txt");
     let mut out = BufWriter::new(out_file);
     writeln!(out, "{:#?}", program).expect("failed to write semantic ast");
 }
 
+// 记录语义分析阶段的错误信息
 fn write_semantic_errors(errors: &[SemanticError]) {
-    let out_file = File::create("semantic_errors.txt").expect("failed to create semantic_errors.txt");
+    let out_file = File::create("output/semantic_errors.txt").expect("failed to create output/semantic_errors.txt");
     let mut out = BufWriter::new(out_file);
 
     if errors.is_empty() {
@@ -138,35 +148,37 @@ fn write_semantic_errors(errors: &[SemanticError]) {
     }
 }
 
+// 记录 LLVM 后端执行状态
 #[cfg(feature = "llvm-backend")]
 fn write_codegen_status(artifacts: Option<&BackendArtifacts>) {
-    let out_file = File::create("codegen_status.txt").expect("failed to create codegen_status.txt");
+    let out_file = File::create("output/codegen_status.txt").expect("failed to create output/codegen_status.txt");
     let mut out = BufWriter::new(out_file);
 
     writeln!(out, "Selected backend: LLVM/inkwell").expect("failed to write backend header");
     writeln!(out, "Current repository now lowers semantic AST into a structured internal IR and optimizes it before LLVM lowering.")
         .expect("failed to write pipeline status");
-    writeln!(out, "Generated files: ir.txt, optimized_ir.txt, optimization_report.txt.")
+    writeln!(out, "Generated files: output/ir.txt, output/optimized_ir.txt, output/optimization_report.txt")
         .expect("failed to write generated files status");
     if let Some(artifacts) = artifacts {
         writeln!(out, "LLVM backend succeeded.").expect("failed to write backend success");
         writeln!(out, "target_triple: {}", artifacts.triple).expect("failed to write triple");
-        writeln!(out, "generated_llvm_ir: output.ll").expect("failed to write llvm ir path");
+        writeln!(out, "generated_llvm_ir: output/output.ll").expect("failed to write llvm ir path");
         writeln!(out, "generated_assembly: {}", artifacts.assembly_path).expect("failed to write assembly path");
     } else {
         writeln!(out, "LLVM backend was not executed.").expect("failed to write backend pending");
     }
 }
 
+// 在默认构建下写入后端禁用信息
 #[cfg(not(feature = "llvm-backend"))]
 fn write_codegen_status(_artifacts: Option<&()>) {
-    let out_file = File::create("codegen_status.txt").expect("failed to create codegen_status.txt");
+    let out_file = File::create("output/codegen_status.txt").expect("failed to create output/codegen_status.txt");
     let mut out = BufWriter::new(out_file);
 
     writeln!(out, "Selected backend: LLVM/inkwell").expect("failed to write backend header");
     writeln!(out, "Current repository now lowers semantic AST into a structured internal IR and optimizes it before LLVM lowering.")
         .expect("failed to write pipeline status");
-    writeln!(out, "Generated files: ir.txt, optimized_ir.txt, optimization_report.txt.")
+    writeln!(out, "Generated files: output/ir.txt, output/optimized_ir.txt, output/optimization_report.txt")
         .expect("failed to write generated files status");
     writeln!(out, "LLVM backend code is present but disabled in the default build.")
         .expect("failed to write backend disabled status");
@@ -175,9 +187,10 @@ fn write_codegen_status(_artifacts: Option<&()>) {
         .expect("failed to write environment note");
 }
 
+// 记录 LLVM 后端失败原因
 #[cfg(feature = "llvm-backend")]
 fn write_codegen_failure(error: &str) {
-    let out_file = File::create("codegen_status.txt").expect("failed to create codegen_status.txt");
+    let out_file = File::create("output/codegen_status.txt").expect("failed to create output/codegen_status.txt");
     let mut out = BufWriter::new(out_file);
 
     writeln!(out, "Selected backend: LLVM/inkwell").expect("failed to write backend header");
@@ -188,27 +201,31 @@ fn write_codegen_failure(error: &str) {
         .expect("failed to write troubleshooting hint");
 }
 
+// 将中间表示输出到文件
 fn write_ir(program: &IrProgram) {
-    let out_file = File::create("ir.txt").expect("failed to create ir.txt");
+    let out_file = File::create("output/ir.txt").expect("failed to create output/ir.txt");
     let mut out = BufWriter::new(out_file);
     writeln!(out, "{}", format_program(program)).expect("failed to write ir");
 }
 
+// 将优化后的中间表示输出到文件
 fn write_optimized_ir(program: &IrProgram) {
-    let out_file = File::create("optimized_ir.txt").expect("failed to create optimized_ir.txt");
+    let out_file = File::create("output/optimized_ir.txt").expect("failed to create output/optimized_ir.txt");
     let mut out = BufWriter::new(out_file);
     writeln!(out, "{}", format_program(program)).expect("failed to write optimized ir");
 }
 
+// 将生成的 LLVM IR 写入文件
 #[cfg(feature = "llvm-backend")]
 fn write_llvm_ir(ir: &str) {
-    let out_file = File::create("output.ll").expect("failed to create output.ll");
+    let out_file = File::create("output/output.ll").expect("failed to create output/output.ll");
     let mut out = BufWriter::new(out_file);
     writeln!(out, "{}", ir).expect("failed to write llvm ir");
 }
 
+// 输出优化过程的统计报告
 fn write_optimization_report(report: &OptimizationReport) {
-    let out_file = File::create("optimization_report.txt").expect("failed to create optimization_report.txt");
+    let out_file = File::create("output/optimization_report.txt").expect("failed to create output/optimization_report.txt");
     let mut out = BufWriter::new(out_file);
 
     writeln!(out, "IR optimization report").expect("failed to write report title");
