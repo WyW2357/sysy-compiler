@@ -1,0 +1,7 @@
+Selected backend: LLVM/inkwell
+Current repository now lowers semantic AST into a structured internal IR and optimizes it before LLVM lowering.
+Generated files: ir.txt, optimized_ir.txt, optimization_report.txt.
+LLVM backend succeeded.
+target_triple: aarch64-unknown-linux-gnu
+generated_llvm_ir: output.ll
+generated_assembly: output_aarch64.s

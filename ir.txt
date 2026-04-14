@@ -1,0 +1,156 @@
+globals:
+  @global_count : int = 3
+  @scale : float = 1.500000
+  @max_value : int const = 100
+  @default_bias : float const = 0.250000
+  @offsets : int[rank=1] const = [2, 4, 6]
+  @numbers : int[rank=1] = [1, 2, 3, 4, 5]
+
+fn add(int lhs, int rhs) -> int {
+entry:
+  %t0 = load lhs
+  %t1 = load rhs
+  %t2 = Add %t0, %t1
+  return %t2
+}
+
+fn sum_array(int[rank=1] arr, int n) -> int {
+entry:
+  decl int i
+  store 0 -> i
+  decl int total
+  store 0 -> total
+  jump while_cond.0
+while_cond.0:
+  %t0 = load i
+  %t1 = load n
+  %t2 = Lt %t0, %t1
+  branch %t2 ? while_body.1 : while_end.2
+while_body.1:
+  %t3 = load total
+  %t4 = load i
+  %t5 = load arr[%t4]
+  %t6 = Add %t3, %t5
+  store %t6 -> total
+  %t7 = load i
+  %t8 = Add %t7, 1
+  store %t8 -> i
+  jump while_cond.0
+while_end.2:
+  %t9 = load total
+  return %t9
+}
+
+fn fill(int[rank=1] arr, int n) -> void {
+entry:
+  decl int i
+  store 0 -> i
+  jump for_cond.0
+for_cond.0:
+  %t0 = load i
+  %t1 = load n
+  %t2 = Lt %t0, %t1
+  branch %t2 ? for_body.1 : for_end.3
+for_body.1:
+  %t3 = load i
+  %t4 = Mod %t3, 2
+  %t5 = Eq %t4, 0
+  branch %t5 ? if_then.4 : if_else.5
+if_then.4:
+  %t6 = load i
+  %t7 = call getint()
+  store %t7 -> arr[%t6]
+  jump if_end.6
+if_else.5:
+  %t8 = load i
+  %t9 = load i
+  %t10 = Sub %t9, 1
+  %t11 = load arr[%t10]
+  %t12 = call add(%t11, 1)
+  store %t12 -> arr[%t8]
+  jump if_end.6
+if_end.6:
+  %t13 = load i
+  %t14 = load arr[%t13]
+  %t15 = Gt %t14, 100
+  branch %t15 ? if_then.7 : if_else.8
+if_then.7:
+  jump for_end.3
+if_else.8:
+  jump if_end.9
+if_end.9:
+  jump for_update.2
+for_update.2:
+  %t16 = load i
+  %t17 = Add %t16, 1
+  store %t17 -> i
+  jump for_cond.0
+for_end.3:
+  return
+}
+
+fn main() -> int {
+entry:
+  decl int[rank=1] local[3]
+  store 0 -> local[0]
+  store 1 -> local[1]
+  store 2 -> local[2]
+  decl const int local_limit
+  store 3 -> local_limit
+  decl const int[rank=1] adjust[3]
+  store 1 -> adjust[0]
+  store 0 -> adjust[1]
+  store -1 -> adjust[2]
+  decl const int base
+  store 4 -> base
+  decl int i
+  store 0 -> i
+  decl int total
+  store 0 -> total
+  call fill(&local, 3)
+  %t0 = load local[0]
+  %t1 = Add %t0, 4
+  store 0 -> i
+  jump for_cond.0
+for_cond.0:
+  %t2 = load i
+  %t3 = Lt %t2, 3
+  branch %t3 ? for_body.1 : for_end.3
+for_body.1:
+  %t4 = load i
+  %t5 = load local[%t4]
+  %t6 = Gt %t5, 10
+  branch %t6 ? if_then.4 : if_else.5
+if_then.4:
+  jump for_update.2
+if_else.5:
+  %t7 = load total
+  %t8 = load i
+  %t9 = load local[%t8]
+  %t10 = Add %t7, %t9
+  %t11 = load i
+  %t12 = load adjust[%t11]
+  %t13 = Add %t10, %t12
+  %t14 = Add %t13, 4
+  store %t14 -> total
+  jump if_end.6
+if_end.6:
+  jump for_update.2
+for_update.2:
+  %t15 = load i
+  %t16 = Add %t15, 1
+  store %t16 -> i
+  jump for_cond.0
+for_end.3:
+  %t17 = load total
+  call putint(%t17)
+  %t18 = load scale
+  %t19 = Add %t18, 0.250000
+  call putfloat(%t19)
+  %t20 = call sum_array(&numbers, 3)
+  %t21 = load global_count
+  %t22 = Add %t20, %t21
+  return %t22
+}
+
+

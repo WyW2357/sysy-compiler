@@ -1,0 +1,513 @@
+use std::collections::{HashMap, HashSet};
+
+use crate::ast::{BinaryOp, UnaryOp};
+use crate::ir::{IrFunction, IrInstr, IrOperand, IrProgram, TempId};
+
+#[derive(Debug, Default, Clone)]
+pub struct OptimizationReport {
+    pub constant_folds: usize,
+    pub cse_eliminations: usize,
+    pub dead_code_eliminations: usize,
+    pub instructions_before: usize,
+    pub instructions_after: usize,
+}
+
+pub fn optimize_program(program: &IrProgram) -> (IrProgram, OptimizationReport) {
+    let mut report = OptimizationReport {
+        instructions_before: count_instructions(program),
+        ..OptimizationReport::default()
+    };
+
+    let functions = program
+        .functions
+        .iter()
+        .map(|function| optimize_function(function, &mut report))
+        .collect::<Vec<_>>();
+
+    let optimized = IrProgram {
+        globals: program.globals.clone(),
+        functions,
+    };
+    report.instructions_after = count_instructions(&optimized);
+
+    (optimized, report)
+}
+
+fn optimize_function(function: &IrFunction, report: &mut OptimizationReport) -> IrFunction {
+    let mut instructions = Vec::new();
+    let mut block = Vec::new();
+
+    for instruction in &function.instructions {
+        match instruction {
+            IrInstr::Label(_) => {
+                if !block.is_empty() {
+                    instructions.extend(optimize_block(&block, report));
+                    block.clear();
+                }
+                instructions.push(instruction.clone());
+            }
+            IrInstr::Jump { .. } | IrInstr::Branch { .. } | IrInstr::Return(_) => {
+                block.push(instruction.clone());
+                instructions.extend(optimize_block(&block, report));
+                block.clear();
+            }
+            _ => block.push(instruction.clone()),
+        }
+    }
+
+    if !block.is_empty() {
+        instructions.extend(optimize_block(&block, report));
+    }
+
+    IrFunction {
+        name: function.name.clone(),
+        return_type: function.return_type,
+        params: function.params.clone(),
+        instructions,
+    }
+}
+
+fn optimize_block(block: &[IrInstr], report: &mut OptimizationReport) -> Vec<IrInstr> {
+    let mut replacements = HashMap::<TempId, IrOperand>::new();
+    let mut expr_cache = HashMap::<String, TempId>::new();
+    let mut rewritten = Vec::new();
+
+    for instruction in block {
+        let instruction = rewrite_instruction(instruction, &replacements);
+
+        if let Some((dest, constant)) = fold_instruction(&instruction) {
+            replacements.insert(dest, constant);
+            report.constant_folds += 1;
+            continue;
+        }
+
+        if let Some(dest) = instruction_dest(&instruction) {
+            if is_pure_instruction(&instruction) {
+                let key = cse_key(&instruction);
+                if let Some(existing) = expr_cache.get(&key) {
+                    replacements.insert(dest, IrOperand::Temp(*existing));
+                    report.cse_eliminations += 1;
+                    continue;
+                }
+                expr_cache.insert(key, dest);
+            }
+        }
+
+        if has_side_effects(&instruction) {
+            expr_cache.clear();
+        }
+
+        rewritten.push(instruction);
+    }
+
+    eliminate_dead_code(&rewritten, report)
+}
+
+fn rewrite_instruction(instruction: &IrInstr, replacements: &HashMap<TempId, IrOperand>) -> IrInstr {
+    match instruction {
+        IrInstr::StoreVar {
+            symbol_id,
+            name,
+            value,
+        } => IrInstr::StoreVar {
+            symbol_id: *symbol_id,
+            name: name.clone(),
+            value: rewrite_operand(value, replacements),
+        },
+        IrInstr::StoreIndex {
+            symbol_id,
+            name,
+            indices,
+            value,
+        } => IrInstr::StoreIndex {
+            symbol_id: *symbol_id,
+            name: name.clone(),
+            indices: indices
+                .iter()
+                .map(|operand| rewrite_operand(operand, replacements))
+                .collect(),
+            value: rewrite_operand(value, replacements),
+        },
+        IrInstr::LoadIndex {
+            dest,
+            symbol_id,
+            name,
+            indices,
+            element_type,
+        } => IrInstr::LoadIndex {
+            dest: *dest,
+            symbol_id: *symbol_id,
+            name: name.clone(),
+            indices: indices
+                .iter()
+                .map(|operand| rewrite_operand(operand, replacements))
+                .collect(),
+            element_type: *element_type,
+        },
+        IrInstr::Unary {
+            dest,
+            op,
+            operand,
+            ty,
+        } => IrInstr::Unary {
+            dest: *dest,
+            op: *op,
+            operand: rewrite_operand(operand, replacements),
+            ty: ty.clone(),
+        },
+        IrInstr::Binary {
+            dest,
+            op,
+            left,
+            right,
+            ty,
+        } => IrInstr::Binary {
+            dest: *dest,
+            op: *op,
+            left: rewrite_operand(left, replacements),
+            right: rewrite_operand(right, replacements),
+            ty: ty.clone(),
+        },
+        IrInstr::Call {
+            dest,
+            function,
+            args,
+            return_type,
+        } => IrInstr::Call {
+            dest: *dest,
+            function: function.clone(),
+            args: args
+                .iter()
+                .map(|operand| rewrite_operand(operand, replacements))
+                .collect(),
+            return_type: return_type.clone(),
+        },
+        IrInstr::Branch {
+            condition,
+            then_label,
+            else_label,
+        } => IrInstr::Branch {
+            condition: rewrite_operand(condition, replacements),
+            then_label: then_label.clone(),
+            else_label: else_label.clone(),
+        },
+        IrInstr::Return(value) => {
+            IrInstr::Return(value.as_ref().map(|operand| rewrite_operand(operand, replacements)))
+        }
+        other => other.clone(),
+    }
+}
+
+fn rewrite_operand(operand: &IrOperand, replacements: &HashMap<TempId, IrOperand>) -> IrOperand {
+    match operand {
+        IrOperand::Temp(temp) => match replacements.get(temp) {
+            Some(replacement) => rewrite_operand(replacement, replacements),
+            None => IrOperand::Temp(*temp),
+        },
+        other => other.clone(),
+    }
+}
+
+fn fold_instruction(instruction: &IrInstr) -> Option<(TempId, IrOperand)> {
+    match instruction {
+        IrInstr::Unary { dest, op, operand, .. } => match (op, operand) {
+            (UnaryOp::Plus, IrOperand::Int(value)) => Some((*dest, IrOperand::Int(*value))),
+            (UnaryOp::Plus, IrOperand::Float(value)) => Some((*dest, IrOperand::Float(*value))),
+            (UnaryOp::Minus, IrOperand::Int(value)) => Some((*dest, IrOperand::Int(-*value))),
+            (UnaryOp::Minus, IrOperand::Float(value)) => Some((*dest, IrOperand::Float(-*value))),
+            (UnaryOp::Not, IrOperand::Int(value)) => Some((*dest, IrOperand::Int((*value == 0) as i32))),
+            (UnaryOp::Not, IrOperand::Float(value)) => {
+                Some((*dest, IrOperand::Int((*value == 0.0) as i32)))
+            }
+            _ => None,
+        },
+        IrInstr::Binary {
+            dest,
+            op,
+            left,
+            right,
+            ..
+        } => fold_binary(*dest, *op, left, right),
+        _ => None,
+    }
+}
+
+fn fold_binary(dest: TempId, op: BinaryOp, left: &IrOperand, right: &IrOperand) -> Option<(TempId, IrOperand)> {
+    match (left, right) {
+        (IrOperand::Int(left), IrOperand::Int(right)) => {
+            let value = match op {
+                BinaryOp::Add => IrOperand::Int(left.checked_add(*right)?),
+                BinaryOp::Sub => IrOperand::Int(left.checked_sub(*right)?),
+                BinaryOp::Mul => IrOperand::Int(left.checked_mul(*right)?),
+                BinaryOp::Div => IrOperand::Int(left.checked_div(*right)?),
+                BinaryOp::Mod => IrOperand::Int(left.checked_rem(*right)?),
+                BinaryOp::Eq => IrOperand::Int((left == right) as i32),
+                BinaryOp::Neq => IrOperand::Int((left != right) as i32),
+                BinaryOp::Lt => IrOperand::Int((left < right) as i32),
+                BinaryOp::Le => IrOperand::Int((left <= right) as i32),
+                BinaryOp::Gt => IrOperand::Int((left > right) as i32),
+                BinaryOp::Ge => IrOperand::Int((left >= right) as i32),
+                BinaryOp::And => IrOperand::Int(((*left != 0) && (*right != 0)) as i32),
+                BinaryOp::Or => IrOperand::Int(((*left != 0) || (*right != 0)) as i32),
+            };
+            Some((dest, value))
+        }
+        (IrOperand::Float(left), IrOperand::Float(right)) => {
+            let value = match op {
+                BinaryOp::Add => IrOperand::Float(*left + *right),
+                BinaryOp::Sub => IrOperand::Float(*left - *right),
+                BinaryOp::Mul => IrOperand::Float(*left * *right),
+                BinaryOp::Div => IrOperand::Float(*left / *right),
+                BinaryOp::Eq => IrOperand::Int((left == right) as i32),
+                BinaryOp::Neq => IrOperand::Int((left != right) as i32),
+                BinaryOp::Lt => IrOperand::Int((left < right) as i32),
+                BinaryOp::Le => IrOperand::Int((left <= right) as i32),
+                BinaryOp::Gt => IrOperand::Int((left > right) as i32),
+                BinaryOp::Ge => IrOperand::Int((left >= right) as i32),
+                BinaryOp::And => IrOperand::Int(((*left != 0.0) && (*right != 0.0)) as i32),
+                BinaryOp::Or => IrOperand::Int(((*left != 0.0) || (*right != 0.0)) as i32),
+                BinaryOp::Mod => return None,
+            };
+            Some((dest, value))
+        }
+        _ => None,
+    }
+}
+
+fn cse_key(instruction: &IrInstr) -> String {
+    match instruction {
+        IrInstr::LoadVar { symbol_id, .. } => format!("load:{}", symbol_id.0),
+        IrInstr::LoadIndex {
+            symbol_id,
+            indices,
+            ..
+        } => format!(
+            "load_index:{}:{}",
+            symbol_id.0,
+            indices
+                .iter()
+                .map(format_operand_key)
+                .collect::<Vec<_>>()
+                .join(",")
+        ),
+        IrInstr::Unary { op, operand, .. } => {
+            format!("unary:{:?}:{}", op, format_operand_key(operand))
+        }
+        IrInstr::Binary {
+            op,
+            left,
+            right,
+            ..
+        } => format!(
+            "binary:{:?}:{}:{}",
+            op,
+            format_operand_key(left),
+            format_operand_key(right)
+        ),
+        _ => String::new(),
+    }
+}
+
+fn format_operand_key(operand: &IrOperand) -> String {
+    match operand {
+        IrOperand::Temp(temp) => format!("t{}", temp.0),
+        IrOperand::Int(value) => format!("i{}", value),
+        IrOperand::Float(value) => format!("f{:e}", value),
+        IrOperand::Symbol { symbol_id, .. } => format!("s{}", symbol_id.0),
+    }
+}
+
+fn instruction_dest(instruction: &IrInstr) -> Option<TempId> {
+    match instruction {
+        IrInstr::LoadVar { dest, .. }
+        | IrInstr::LoadIndex { dest, .. }
+        | IrInstr::Unary { dest, .. }
+        | IrInstr::Binary { dest, .. } => Some(*dest),
+        IrInstr::Call { dest, .. } => *dest,
+        _ => None,
+    }
+}
+
+fn is_pure_instruction(instruction: &IrInstr) -> bool {
+    matches!(
+        instruction,
+        IrInstr::LoadVar { .. }
+            | IrInstr::LoadIndex { .. }
+            | IrInstr::Unary { .. }
+            | IrInstr::Binary { .. }
+    )
+}
+
+fn has_side_effects(instruction: &IrInstr) -> bool {
+    matches!(
+        instruction,
+        IrInstr::StoreVar { .. }
+            | IrInstr::StoreIndex { .. }
+            | IrInstr::Call { .. }
+            | IrInstr::Jump { .. }
+            | IrInstr::Branch { .. }
+            | IrInstr::Return(_)
+    )
+}
+
+fn eliminate_dead_code(block: &[IrInstr], report: &mut OptimizationReport) -> Vec<IrInstr> {
+    let mut live_temps = HashSet::<TempId>::new();
+    let mut keep = vec![true; block.len()];
+
+    for index in (0..block.len()).rev() {
+        let instruction = &block[index];
+        if let Some(dest) = instruction_dest(instruction) {
+            if is_pure_instruction(instruction) && !live_temps.contains(&dest) {
+                keep[index] = false;
+                report.dead_code_eliminations += 1;
+                continue;
+            }
+            live_temps.remove(&dest);
+        }
+
+        for used in used_temps(instruction) {
+            live_temps.insert(used);
+        }
+    }
+
+    block
+        .iter()
+        .zip(keep)
+        .filter_map(|(instruction, keep)| keep.then_some(instruction.clone()))
+        .collect()
+}
+
+fn used_temps(instruction: &IrInstr) -> Vec<TempId> {
+    match instruction {
+        IrInstr::StoreVar { value, .. } => operand_temps(value),
+        IrInstr::LoadIndex { indices, .. } => indices.iter().flat_map(operand_temps).collect(),
+        IrInstr::StoreIndex { indices, value, .. } => {
+            let mut temps = indices.iter().flat_map(operand_temps).collect::<Vec<_>>();
+            temps.extend(operand_temps(value));
+            temps
+        }
+        IrInstr::Unary { operand, .. } => operand_temps(operand),
+        IrInstr::Binary { left, right, .. } => {
+            let mut temps = operand_temps(left);
+            temps.extend(operand_temps(right));
+            temps
+        }
+        IrInstr::Call { args, .. } => args.iter().flat_map(operand_temps).collect(),
+        IrInstr::Branch { condition, .. } => operand_temps(condition),
+        IrInstr::Return(Some(value)) => operand_temps(value),
+        _ => Vec::new(),
+    }
+}
+
+fn operand_temps(operand: &IrOperand) -> Vec<TempId> {
+    match operand {
+        IrOperand::Temp(temp) => vec![*temp],
+        _ => Vec::new(),
+    }
+}
+
+fn count_instructions(program: &IrProgram) -> usize {
+    program
+        .functions
+        .iter()
+        .map(|function| function.instructions.len())
+        .sum()
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::ast::{BinaryOp, TypeName};
+    use crate::ir::{IrFunction, IrInstr, IrOperand, IrProgram, TempId};
+
+    use super::optimize_program;
+
+    #[test]
+    fn folds_constants() {
+        let program = IrProgram {
+            globals: Vec::new(),
+            functions: vec![IrFunction {
+                name: "demo".to_string(),
+                return_type: TypeName::Int,
+                params: Vec::new(),
+                instructions: vec![
+                    IrInstr::Label("entry".to_string()),
+                    IrInstr::Binary {
+                        dest: TempId(0),
+                        op: BinaryOp::Sub,
+                        left: IrOperand::Int(0),
+                        right: IrOperand::Int(1),
+                        ty: crate::semantic::SemanticType::Int,
+                    },
+                    IrInstr::Return(Some(IrOperand::Temp(TempId(0)))),
+                ],
+            }],
+        };
+
+        let (optimized, report) = optimize_program(&program);
+        assert!(report.constant_folds >= 1);
+        assert!(matches!(
+            optimized.functions[0].instructions.last(),
+            Some(IrInstr::Return(Some(IrOperand::Int(-1))))
+        ));
+    }
+
+    #[test]
+    fn eliminates_common_subexpressions() {
+        let program = IrProgram {
+            globals: Vec::new(),
+            functions: vec![IrFunction {
+                name: "demo".to_string(),
+                return_type: TypeName::Int,
+                params: Vec::new(),
+                instructions: vec![
+                    IrInstr::Label("entry".to_string()),
+                    IrInstr::Binary {
+                        dest: TempId(0),
+                        op: BinaryOp::Add,
+                        left: IrOperand::Int(1),
+                        right: IrOperand::Int(2),
+                        ty: crate::semantic::SemanticType::Int,
+                    },
+                    IrInstr::Binary {
+                        dest: TempId(1),
+                        op: BinaryOp::Add,
+                        left: IrOperand::Int(1),
+                        right: IrOperand::Int(2),
+                        ty: crate::semantic::SemanticType::Int,
+                    },
+                    IrInstr::Return(Some(IrOperand::Temp(TempId(1)))),
+                ],
+            }],
+        };
+
+        let (_optimized, report) = optimize_program(&program);
+        assert!(report.cse_eliminations >= 1 || report.constant_folds >= 2);
+    }
+
+    #[test]
+    fn eliminates_dead_code() {
+        let program = IrProgram {
+            globals: Vec::new(),
+            functions: vec![IrFunction {
+                name: "demo".to_string(),
+                return_type: TypeName::Int,
+                params: Vec::new(),
+                instructions: vec![
+                    IrInstr::Label("entry".to_string()),
+                    IrInstr::Binary {
+                        dest: TempId(0),
+                        op: BinaryOp::Add,
+                        left: IrOperand::Int(4),
+                        right: IrOperand::Int(5),
+                        ty: crate::semantic::SemanticType::Int,
+                    },
+                    IrInstr::Return(Some(IrOperand::Int(0))),
+                ],
+            }],
+        };
+
+        let (optimized, report) = optimize_program(&program);
+        assert!(report.dead_code_eliminations >= 1 || report.constant_folds >= 1);
+        assert_eq!(optimized.functions[0].instructions.len(), 2);
+    }
+}

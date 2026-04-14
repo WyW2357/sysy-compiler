@@ -1,0 +1,1981 @@
+Program {
+    items: [
+        GlobalDecl(
+            [
+                VarDecl {
+                    location: SourceLocation {
+                        line: 1,
+                        column: 5,
+                    },
+                    is_const: false,
+                    ty: Int,
+                    name: "global_count",
+                    dimensions: [],
+                    init: Some(
+                        Expr(
+                            Expr {
+                                location: SourceLocation {
+                                    line: 1,
+                                    column: 20,
+                                },
+                                kind: IntLiteral(
+                                    "3",
+                                ),
+                            },
+                        ),
+                    ),
+                },
+            ],
+        ),
+        GlobalDecl(
+            [
+                VarDecl {
+                    location: SourceLocation {
+                        line: 2,
+                        column: 7,
+                    },
+                    is_const: false,
+                    ty: Float,
+                    name: "scale",
+                    dimensions: [],
+                    init: Some(
+                        Expr(
+                            Expr {
+                                location: SourceLocation {
+                                    line: 2,
+                                    column: 15,
+                                },
+                                kind: FloatLiteral(
+                                    "1.5",
+                                ),
+                            },
+                        ),
+                    ),
+                },
+            ],
+        ),
+        GlobalDecl(
+            [
+                VarDecl {
+                    location: SourceLocation {
+                        line: 3,
+                        column: 11,
+                    },
+                    is_const: true,
+                    ty: Int,
+                    name: "max_value",
+                    dimensions: [],
+                    init: Some(
+                        Expr(
+                            Expr {
+                                location: SourceLocation {
+                                    line: 3,
+                                    column: 23,
+                                },
+                                kind: IntLiteral(
+                                    "100",
+                                ),
+                            },
+                        ),
+                    ),
+                },
+            ],
+        ),
+        GlobalDecl(
+            [
+                VarDecl {
+                    location: SourceLocation {
+                        line: 4,
+                        column: 13,
+                    },
+                    is_const: true,
+                    ty: Float,
+                    name: "default_bias",
+                    dimensions: [],
+                    init: Some(
+                        Expr(
+                            Expr {
+                                location: SourceLocation {
+                                    line: 4,
+                                    column: 28,
+                                },
+                                kind: FloatLiteral(
+                                    "0.25",
+                                ),
+                            },
+                        ),
+                    ),
+                },
+            ],
+        ),
+        GlobalDecl(
+            [
+                VarDecl {
+                    location: SourceLocation {
+                        line: 5,
+                        column: 11,
+                    },
+                    is_const: true,
+                    ty: Int,
+                    name: "offsets",
+                    dimensions: [
+                        Some(
+                            Expr {
+                                location: SourceLocation {
+                                    line: 5,
+                                    column: 19,
+                                },
+                                kind: IntLiteral(
+                                    "3",
+                                ),
+                            },
+                        ),
+                    ],
+                    init: Some(
+                        List(
+                            [
+                                Expr(
+                                    Expr {
+                                        location: SourceLocation {
+                                            line: 5,
+                                            column: 25,
+                                        },
+                                        kind: IntLiteral(
+                                            "2",
+                                        ),
+                                    },
+                                ),
+                                Expr(
+                                    Expr {
+                                        location: SourceLocation {
+                                            line: 5,
+                                            column: 28,
+                                        },
+                                        kind: IntLiteral(
+                                            "4",
+                                        ),
+                                    },
+                                ),
+                                Expr(
+                                    Expr {
+                                        location: SourceLocation {
+                                            line: 5,
+                                            column: 31,
+                                        },
+                                        kind: IntLiteral(
+                                            "6",
+                                        ),
+                                    },
+                                ),
+                            ],
+                        ),
+                    ),
+                },
+            ],
+        ),
+        GlobalDecl(
+            [
+                VarDecl {
+                    location: SourceLocation {
+                        line: 6,
+                        column: 5,
+                    },
+                    is_const: false,
+                    ty: Int,
+                    name: "numbers",
+                    dimensions: [
+                        Some(
+                            Expr {
+                                location: SourceLocation {
+                                    line: 6,
+                                    column: 13,
+                                },
+                                kind: IntLiteral(
+                                    "5",
+                                ),
+                            },
+                        ),
+                    ],
+                    init: Some(
+                        List(
+                            [
+                                Expr(
+                                    Expr {
+                                        location: SourceLocation {
+                                            line: 6,
+                                            column: 19,
+                                        },
+                                        kind: IntLiteral(
+                                            "1",
+                                        ),
+                                    },
+                                ),
+                                Expr(
+                                    Expr {
+                                        location: SourceLocation {
+                                            line: 6,
+                                            column: 22,
+                                        },
+                                        kind: IntLiteral(
+                                            "2",
+                                        ),
+                                    },
+                                ),
+                                Expr(
+                                    Expr {
+                                        location: SourceLocation {
+                                            line: 6,
+                                            column: 25,
+                                        },
+                                        kind: IntLiteral(
+                                            "3",
+                                        ),
+                                    },
+                                ),
+                                Expr(
+                                    Expr {
+                                        location: SourceLocation {
+                                            line: 6,
+                                            column: 28,
+                                        },
+                                        kind: IntLiteral(
+                                            "4",
+                                        ),
+                                    },
+                                ),
+                                Expr(
+                                    Expr {
+                                        location: SourceLocation {
+                                            line: 6,
+                                            column: 31,
+                                        },
+                                        kind: IntLiteral(
+                                            "5",
+                                        ),
+                                    },
+                                ),
+                            ],
+                        ),
+                    ),
+                },
+            ],
+        ),
+        Function(
+            FunctionDef {
+                location: SourceLocation {
+                    line: 8,
+                    column: 5,
+                },
+                return_type: Int,
+                name: "add",
+                params: [
+                    Param {
+                        location: SourceLocation {
+                            line: 8,
+                            column: 13,
+                        },
+                        ty: Int,
+                        name: "lhs",
+                        dimensions: [],
+                    },
+                    Param {
+                        location: SourceLocation {
+                            line: 8,
+                            column: 22,
+                        },
+                        ty: Int,
+                        name: "rhs",
+                        dimensions: [],
+                    },
+                ],
+                body: Block {
+                    location: SourceLocation {
+                        line: 8,
+                        column: 27,
+                    },
+                    statements: [
+                        Return {
+                            location: SourceLocation {
+                                line: 9,
+                                column: 5,
+                            },
+                            expr: Some(
+                                Expr {
+                                    location: SourceLocation {
+                                        line: 9,
+                                        column: 16,
+                                    },
+                                    kind: Binary {
+                                        op: Add,
+                                        left: Expr {
+                                            location: SourceLocation {
+                                                line: 9,
+                                                column: 12,
+                                            },
+                                            kind: Ident(
+                                                "lhs",
+                                            ),
+                                        },
+                                        right: Expr {
+                                            location: SourceLocation {
+                                                line: 9,
+                                                column: 18,
+                                            },
+                                            kind: Ident(
+                                                "rhs",
+                                            ),
+                                        },
+                                    },
+                                },
+                            ),
+                        },
+                    ],
+                },
+            },
+        ),
+        Function(
+            FunctionDef {
+                location: SourceLocation {
+                    line: 12,
+                    column: 5,
+                },
+                return_type: Int,
+                name: "sum_array",
+                params: [
+                    Param {
+                        location: SourceLocation {
+                            line: 12,
+                            column: 19,
+                        },
+                        ty: Int,
+                        name: "arr",
+                        dimensions: [
+                            None,
+                        ],
+                    },
+                    Param {
+                        location: SourceLocation {
+                            line: 12,
+                            column: 30,
+                        },
+                        ty: Int,
+                        name: "n",
+                        dimensions: [],
+                    },
+                ],
+                body: Block {
+                    location: SourceLocation {
+                        line: 12,
+                        column: 33,
+                    },
+                    statements: [
+                        VarDecl {
+                            location: SourceLocation {
+                                line: 13,
+                                column: 9,
+                            },
+                            decls: [
+                                VarDecl {
+                                    location: SourceLocation {
+                                        line: 13,
+                                        column: 9,
+                                    },
+                                    is_const: false,
+                                    ty: Int,
+                                    name: "i",
+                                    dimensions: [],
+                                    init: Some(
+                                        Expr(
+                                            Expr {
+                                                location: SourceLocation {
+                                                    line: 13,
+                                                    column: 13,
+                                                },
+                                                kind: IntLiteral(
+                                                    "0",
+                                                ),
+                                            },
+                                        ),
+                                    ),
+                                },
+                            ],
+                        },
+                        VarDecl {
+                            location: SourceLocation {
+                                line: 14,
+                                column: 9,
+                            },
+                            decls: [
+                                VarDecl {
+                                    location: SourceLocation {
+                                        line: 14,
+                                        column: 9,
+                                    },
+                                    is_const: false,
+                                    ty: Int,
+                                    name: "total",
+                                    dimensions: [],
+                                    init: Some(
+                                        Expr(
+                                            Expr {
+                                                location: SourceLocation {
+                                                    line: 14,
+                                                    column: 17,
+                                                },
+                                                kind: IntLiteral(
+                                                    "0",
+                                                ),
+                                            },
+                                        ),
+                                    ),
+                                },
+                            ],
+                        },
+                        While {
+                            location: SourceLocation {
+                                line: 15,
+                                column: 5,
+                            },
+                            condition: Expr {
+                                location: SourceLocation {
+                                    line: 15,
+                                    column: 14,
+                                },
+                                kind: Binary {
+                                    op: Lt,
+                                    left: Expr {
+                                        location: SourceLocation {
+                                            line: 15,
+                                            column: 12,
+                                        },
+                                        kind: Ident(
+                                            "i",
+                                        ),
+                                    },
+                                    right: Expr {
+                                        location: SourceLocation {
+                                            line: 15,
+                                            column: 16,
+                                        },
+                                        kind: Ident(
+                                            "n",
+                                        ),
+                                    },
+                                },
+                            },
+                            body: Block(
+                                Block {
+                                    location: SourceLocation {
+                                        line: 15,
+                                        column: 19,
+                                    },
+                                    statements: [
+                                        Expr {
+                                            location: SourceLocation {
+                                                line: 16,
+                                                column: 9,
+                                            },
+                                            expr: Expr {
+                                                location: SourceLocation {
+                                                    line: 16,
+                                                    column: 9,
+                                                },
+                                                kind: Assign {
+                                                    target: Expr {
+                                                        location: SourceLocation {
+                                                            line: 16,
+                                                            column: 9,
+                                                        },
+                                                        kind: Ident(
+                                                            "total",
+                                                        ),
+                                                    },
+                                                    value: Expr {
+                                                        location: SourceLocation {
+                                                            line: 16,
+                                                            column: 23,
+                                                        },
+                                                        kind: Binary {
+                                                            op: Add,
+                                                            left: Expr {
+                                                                location: SourceLocation {
+                                                                    line: 16,
+                                                                    column: 17,
+                                                                },
+                                                                kind: Ident(
+                                                                    "total",
+                                                                ),
+                                                            },
+                                                            right: Expr {
+                                                                location: SourceLocation {
+                                                                    line: 16,
+                                                                    column: 25,
+                                                                },
+                                                                kind: Index {
+                                                                    array: Expr {
+                                                                        location: SourceLocation {
+                                                                            line: 16,
+                                                                            column: 25,
+                                                                        },
+                                                                        kind: Ident(
+                                                                            "arr",
+                                                                        ),
+                                                                    },
+                                                                    index: Expr {
+                                                                        location: SourceLocation {
+                                                                            line: 16,
+                                                                            column: 29,
+                                                                        },
+                                                                        kind: Ident(
+                                                                            "i",
+                                                                        ),
+                                                                    },
+                                                                },
+                                                            },
+                                                        },
+                                                    },
+                                                },
+                                            },
+                                        },
+                                        Expr {
+                                            location: SourceLocation {
+                                                line: 17,
+                                                column: 9,
+                                            },
+                                            expr: Expr {
+                                                location: SourceLocation {
+                                                    line: 17,
+                                                    column: 9,
+                                                },
+                                                kind: Assign {
+                                                    target: Expr {
+                                                        location: SourceLocation {
+                                                            line: 17,
+                                                            column: 9,
+                                                        },
+                                                        kind: Ident(
+                                                            "i",
+                                                        ),
+                                                    },
+                                                    value: Expr {
+                                                        location: SourceLocation {
+                                                            line: 17,
+                                                            column: 15,
+                                                        },
+                                                        kind: Binary {
+                                                            op: Add,
+                                                            left: Expr {
+                                                                location: SourceLocation {
+                                                                    line: 17,
+                                                                    column: 13,
+                                                                },
+                                                                kind: Ident(
+                                                                    "i",
+                                                                ),
+                                                            },
+                                                            right: Expr {
+                                                                location: SourceLocation {
+                                                                    line: 17,
+                                                                    column: 17,
+                                                                },
+                                                                kind: IntLiteral(
+                                                                    "1",
+                                                                ),
+                                                            },
+                                                        },
+                                                    },
+                                                },
+                                            },
+                                        },
+                                    ],
+                                },
+                            ),
+                        },
+                        Return {
+                            location: SourceLocation {
+                                line: 19,
+                                column: 5,
+                            },
+                            expr: Some(
+                                Expr {
+                                    location: SourceLocation {
+                                        line: 19,
+                                        column: 12,
+                                    },
+                                    kind: Ident(
+                                        "total",
+                                    ),
+                                },
+                            ),
+                        },
+                    ],
+                },
+            },
+        ),
+        Function(
+            FunctionDef {
+                location: SourceLocation {
+                    line: 22,
+                    column: 6,
+                },
+                return_type: Void,
+                name: "fill",
+                params: [
+                    Param {
+                        location: SourceLocation {
+                            line: 22,
+                            column: 15,
+                        },
+                        ty: Int,
+                        name: "arr",
+                        dimensions: [
+                            None,
+                        ],
+                    },
+                    Param {
+                        location: SourceLocation {
+                            line: 22,
+                            column: 26,
+                        },
+                        ty: Int,
+                        name: "n",
+                        dimensions: [],
+                    },
+                ],
+                body: Block {
+                    location: SourceLocation {
+                        line: 22,
+                        column: 29,
+                    },
+                    statements: [
+                        VarDecl {
+                            location: SourceLocation {
+                                line: 23,
+                                column: 9,
+                            },
+                            decls: [
+                                VarDecl {
+                                    location: SourceLocation {
+                                        line: 23,
+                                        column: 9,
+                                    },
+                                    is_const: false,
+                                    ty: Int,
+                                    name: "i",
+                                    dimensions: [],
+                                    init: None,
+                                },
+                            ],
+                        },
+                        For {
+                            location: SourceLocation {
+                                line: 24,
+                                column: 5,
+                            },
+                            init: Some(
+                                Expr(
+                                    Expr {
+                                        location: SourceLocation {
+                                            line: 24,
+                                            column: 10,
+                                        },
+                                        kind: Assign {
+                                            target: Expr {
+                                                location: SourceLocation {
+                                                    line: 24,
+                                                    column: 10,
+                                                },
+                                                kind: Ident(
+                                                    "i",
+                                                ),
+                                            },
+                                            value: Expr {
+                                                location: SourceLocation {
+                                                    line: 24,
+                                                    column: 14,
+                                                },
+                                                kind: IntLiteral(
+                                                    "0",
+                                                ),
+                                            },
+                                        },
+                                    },
+                                ),
+                            ),
+                            condition: Some(
+                                Expr {
+                                    location: SourceLocation {
+                                        line: 24,
+                                        column: 19,
+                                    },
+                                    kind: Binary {
+                                        op: Lt,
+                                        left: Expr {
+                                            location: SourceLocation {
+                                                line: 24,
+                                                column: 17,
+                                            },
+                                            kind: Ident(
+                                                "i",
+                                            ),
+                                        },
+                                        right: Expr {
+                                            location: SourceLocation {
+                                                line: 24,
+                                                column: 21,
+                                            },
+                                            kind: Ident(
+                                                "n",
+                                            ),
+                                        },
+                                    },
+                                },
+                            ),
+                            update: Some(
+                                Expr {
+                                    location: SourceLocation {
+                                        line: 24,
+                                        column: 24,
+                                    },
+                                    kind: Assign {
+                                        target: Expr {
+                                            location: SourceLocation {
+                                                line: 24,
+                                                column: 24,
+                                            },
+                                            kind: Ident(
+                                                "i",
+                                            ),
+                                        },
+                                        value: Expr {
+                                            location: SourceLocation {
+                                                line: 24,
+                                                column: 30,
+                                            },
+                                            kind: Binary {
+                                                op: Add,
+                                                left: Expr {
+                                                    location: SourceLocation {
+                                                        line: 24,
+                                                        column: 28,
+                                                    },
+                                                    kind: Ident(
+                                                        "i",
+                                                    ),
+                                                },
+                                                right: Expr {
+                                                    location: SourceLocation {
+                                                        line: 24,
+                                                        column: 32,
+                                                    },
+                                                    kind: IntLiteral(
+                                                        "1",
+                                                    ),
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            ),
+                            body: Block(
+                                Block {
+                                    location: SourceLocation {
+                                        line: 24,
+                                        column: 35,
+                                    },
+                                    statements: [
+                                        If {
+                                            location: SourceLocation {
+                                                line: 25,
+                                                column: 9,
+                                            },
+                                            condition: Expr {
+                                                location: SourceLocation {
+                                                    line: 25,
+                                                    column: 19,
+                                                },
+                                                kind: Binary {
+                                                    op: Eq,
+                                                    left: Expr {
+                                                        location: SourceLocation {
+                                                            line: 25,
+                                                            column: 15,
+                                                        },
+                                                        kind: Binary {
+                                                            op: Mod,
+                                                            left: Expr {
+                                                                location: SourceLocation {
+                                                                    line: 25,
+                                                                    column: 13,
+                                                                },
+                                                                kind: Ident(
+                                                                    "i",
+                                                                ),
+                                                            },
+                                                            right: Expr {
+                                                                location: SourceLocation {
+                                                                    line: 25,
+                                                                    column: 17,
+                                                                },
+                                                                kind: IntLiteral(
+                                                                    "2",
+                                                                ),
+                                                            },
+                                                        },
+                                                    },
+                                                    right: Expr {
+                                                        location: SourceLocation {
+                                                            line: 25,
+                                                            column: 22,
+                                                        },
+                                                        kind: IntLiteral(
+                                                            "0",
+                                                        ),
+                                                    },
+                                                },
+                                            },
+                                            then_branch: Block(
+                                                Block {
+                                                    location: SourceLocation {
+                                                        line: 25,
+                                                        column: 25,
+                                                    },
+                                                    statements: [
+                                                        Expr {
+                                                            location: SourceLocation {
+                                                                line: 26,
+                                                                column: 13,
+                                                            },
+                                                            expr: Expr {
+                                                                location: SourceLocation {
+                                                                    line: 26,
+                                                                    column: 13,
+                                                                },
+                                                                kind: Assign {
+                                                                    target: Expr {
+                                                                        location: SourceLocation {
+                                                                            line: 26,
+                                                                            column: 13,
+                                                                        },
+                                                                        kind: Index {
+                                                                            array: Expr {
+                                                                                location: SourceLocation {
+                                                                                    line: 26,
+                                                                                    column: 13,
+                                                                                },
+                                                                                kind: Ident(
+                                                                                    "arr",
+                                                                                ),
+                                                                            },
+                                                                            index: Expr {
+                                                                                location: SourceLocation {
+                                                                                    line: 26,
+                                                                                    column: 17,
+                                                                                },
+                                                                                kind: Ident(
+                                                                                    "i",
+                                                                                ),
+                                                                            },
+                                                                        },
+                                                                    },
+                                                                    value: Expr {
+                                                                        location: SourceLocation {
+                                                                            line: 26,
+                                                                            column: 22,
+                                                                        },
+                                                                        kind: Call {
+                                                                            callee: Expr {
+                                                                                location: SourceLocation {
+                                                                                    line: 26,
+                                                                                    column: 22,
+                                                                                },
+                                                                                kind: Ident(
+                                                                                    "getint",
+                                                                                ),
+                                                                            },
+                                                                            args: [],
+                                                                        },
+                                                                    },
+                                                                },
+                                                            },
+                                                        },
+                                                    ],
+                                                },
+                                            ),
+                                            else_branch: Some(
+                                                Block(
+                                                    Block {
+                                                        location: SourceLocation {
+                                                            line: 27,
+                                                            column: 16,
+                                                        },
+                                                        statements: [
+                                                            Expr {
+                                                                location: SourceLocation {
+                                                                    line: 28,
+                                                                    column: 13,
+                                                                },
+                                                                expr: Expr {
+                                                                    location: SourceLocation {
+                                                                        line: 28,
+                                                                        column: 13,
+                                                                    },
+                                                                    kind: Assign {
+                                                                        target: Expr {
+                                                                            location: SourceLocation {
+                                                                                line: 28,
+                                                                                column: 13,
+                                                                            },
+                                                                            kind: Index {
+                                                                                array: Expr {
+                                                                                    location: SourceLocation {
+                                                                                        line: 28,
+                                                                                        column: 13,
+                                                                                    },
+                                                                                    kind: Ident(
+                                                                                        "arr",
+                                                                                    ),
+                                                                                },
+                                                                                index: Expr {
+                                                                                    location: SourceLocation {
+                                                                                        line: 28,
+                                                                                        column: 17,
+                                                                                    },
+                                                                                    kind: Ident(
+                                                                                        "i",
+                                                                                    ),
+                                                                                },
+                                                                            },
+                                                                        },
+                                                                        value: Expr {
+                                                                            location: SourceLocation {
+                                                                                line: 28,
+                                                                                column: 22,
+                                                                            },
+                                                                            kind: Call {
+                                                                                callee: Expr {
+                                                                                    location: SourceLocation {
+                                                                                        line: 28,
+                                                                                        column: 22,
+                                                                                    },
+                                                                                    kind: Ident(
+                                                                                        "add",
+                                                                                    ),
+                                                                                },
+                                                                                args: [
+                                                                                    Expr {
+                                                                                        location: SourceLocation {
+                                                                                            line: 28,
+                                                                                            column: 26,
+                                                                                        },
+                                                                                        kind: Index {
+                                                                                            array: Expr {
+                                                                                                location: SourceLocation {
+                                                                                                    line: 28,
+                                                                                                    column: 26,
+                                                                                                },
+                                                                                                kind: Ident(
+                                                                                                    "arr",
+                                                                                                ),
+                                                                                            },
+                                                                                            index: Expr {
+                                                                                                location: SourceLocation {
+                                                                                                    line: 28,
+                                                                                                    column: 32,
+                                                                                                },
+                                                                                                kind: Binary {
+                                                                                                    op: Sub,
+                                                                                                    left: Expr {
+                                                                                                        location: SourceLocation {
+                                                                                                            line: 28,
+                                                                                                            column: 30,
+                                                                                                        },
+                                                                                                        kind: Ident(
+                                                                                                            "i",
+                                                                                                        ),
+                                                                                                    },
+                                                                                                    right: Expr {
+                                                                                                        location: SourceLocation {
+                                                                                                            line: 28,
+                                                                                                            column: 34,
+                                                                                                        },
+                                                                                                        kind: IntLiteral(
+                                                                                                            "1",
+                                                                                                        ),
+                                                                                                    },
+                                                                                                },
+                                                                                            },
+                                                                                        },
+                                                                                    },
+                                                                                    Expr {
+                                                                                        location: SourceLocation {
+                                                                                            line: 28,
+                                                                                            column: 38,
+                                                                                        },
+                                                                                        kind: IntLiteral(
+                                                                                            "1",
+                                                                                        ),
+                                                                                    },
+                                                                                ],
+                                                                            },
+                                                                        },
+                                                                    },
+                                                                },
+                                                            },
+                                                        ],
+                                                    },
+                                                ),
+                                            ),
+                                        },
+                                        If {
+                                            location: SourceLocation {
+                                                line: 31,
+                                                column: 9,
+                                            },
+                                            condition: Expr {
+                                                location: SourceLocation {
+                                                    line: 31,
+                                                    column: 20,
+                                                },
+                                                kind: Binary {
+                                                    op: Gt,
+                                                    left: Expr {
+                                                        location: SourceLocation {
+                                                            line: 31,
+                                                            column: 13,
+                                                        },
+                                                        kind: Index {
+                                                            array: Expr {
+                                                                location: SourceLocation {
+                                                                    line: 31,
+                                                                    column: 13,
+                                                                },
+                                                                kind: Ident(
+                                                                    "arr",
+                                                                ),
+                                                            },
+                                                            index: Expr {
+                                                                location: SourceLocation {
+                                                                    line: 31,
+                                                                    column: 17,
+                                                                },
+                                                                kind: Ident(
+                                                                    "i",
+                                                                ),
+                                                            },
+                                                        },
+                                                    },
+                                                    right: Expr {
+                                                        location: SourceLocation {
+                                                            line: 31,
+                                                            column: 22,
+                                                        },
+                                                        kind: Ident(
+                                                            "max_value",
+                                                        ),
+                                                    },
+                                                },
+                                            },
+                                            then_branch: Block(
+                                                Block {
+                                                    location: SourceLocation {
+                                                        line: 31,
+                                                        column: 33,
+                                                    },
+                                                    statements: [
+                                                        Break {
+                                                            location: SourceLocation {
+                                                                line: 32,
+                                                                column: 13,
+                                                            },
+                                                        },
+                                                    ],
+                                                },
+                                            ),
+                                            else_branch: None,
+                                        },
+                                    ],
+                                },
+                            ),
+                        },
+                        Return {
+                            location: SourceLocation {
+                                line: 35,
+                                column: 5,
+                            },
+                            expr: None,
+                        },
+                    ],
+                },
+            },
+        ),
+        Function(
+            FunctionDef {
+                location: SourceLocation {
+                    line: 38,
+                    column: 5,
+                },
+                return_type: Int,
+                name: "main",
+                params: [],
+                body: Block {
+                    location: SourceLocation {
+                        line: 38,
+                        column: 12,
+                    },
+                    statements: [
+                        VarDecl {
+                            location: SourceLocation {
+                                line: 39,
+                                column: 9,
+                            },
+                            decls: [
+                                VarDecl {
+                                    location: SourceLocation {
+                                        line: 39,
+                                        column: 9,
+                                    },
+                                    is_const: false,
+                                    ty: Int,
+                                    name: "local",
+                                    dimensions: [
+                                        Some(
+                                            Expr {
+                                                location: SourceLocation {
+                                                    line: 39,
+                                                    column: 15,
+                                                },
+                                                kind: IntLiteral(
+                                                    "3",
+                                                ),
+                                            },
+                                        ),
+                                    ],
+                                    init: Some(
+                                        List(
+                                            [
+                                                Expr(
+                                                    Expr {
+                                                        location: SourceLocation {
+                                                            line: 39,
+                                                            column: 21,
+                                                        },
+                                                        kind: IntLiteral(
+                                                            "0",
+                                                        ),
+                                                    },
+                                                ),
+                                                Expr(
+                                                    Expr {
+                                                        location: SourceLocation {
+                                                            line: 39,
+                                                            column: 24,
+                                                        },
+                                                        kind: IntLiteral(
+                                                            "1",
+                                                        ),
+                                                    },
+                                                ),
+                                                Expr(
+                                                    Expr {
+                                                        location: SourceLocation {
+                                                            line: 39,
+                                                            column: 27,
+                                                        },
+                                                        kind: IntLiteral(
+                                                            "2",
+                                                        ),
+                                                    },
+                                                ),
+                                            ],
+                                        ),
+                                    ),
+                                },
+                            ],
+                        },
+                        VarDecl {
+                            location: SourceLocation {
+                                line: 40,
+                                column: 15,
+                            },
+                            decls: [
+                                VarDecl {
+                                    location: SourceLocation {
+                                        line: 40,
+                                        column: 15,
+                                    },
+                                    is_const: true,
+                                    ty: Int,
+                                    name: "local_limit",
+                                    dimensions: [],
+                                    init: Some(
+                                        Expr(
+                                            Expr {
+                                                location: SourceLocation {
+                                                    line: 40,
+                                                    column: 29,
+                                                },
+                                                kind: IntLiteral(
+                                                    "3",
+                                                ),
+                                            },
+                                        ),
+                                    ),
+                                },
+                            ],
+                        },
+                        VarDecl {
+                            location: SourceLocation {
+                                line: 41,
+                                column: 15,
+                            },
+                            decls: [
+                                VarDecl {
+                                    location: SourceLocation {
+                                        line: 41,
+                                        column: 15,
+                                    },
+                                    is_const: true,
+                                    ty: Int,
+                                    name: "adjust",
+                                    dimensions: [
+                                        Some(
+                                            Expr {
+                                                location: SourceLocation {
+                                                    line: 41,
+                                                    column: 22,
+                                                },
+                                                kind: IntLiteral(
+                                                    "3",
+                                                ),
+                                            },
+                                        ),
+                                    ],
+                                    init: Some(
+                                        List(
+                                            [
+                                                Expr(
+                                                    Expr {
+                                                        location: SourceLocation {
+                                                            line: 41,
+                                                            column: 28,
+                                                        },
+                                                        kind: IntLiteral(
+                                                            "1",
+                                                        ),
+                                                    },
+                                                ),
+                                                Expr(
+                                                    Expr {
+                                                        location: SourceLocation {
+                                                            line: 41,
+                                                            column: 31,
+                                                        },
+                                                        kind: IntLiteral(
+                                                            "0",
+                                                        ),
+                                                    },
+                                                ),
+                                                Expr(
+                                                    Expr {
+                                                        location: SourceLocation {
+                                                            line: 41,
+                                                            column: 34,
+                                                        },
+                                                        kind: Unary {
+                                                            op: Minus,
+                                                            expr: Expr {
+                                                                location: SourceLocation {
+                                                                    line: 41,
+                                                                    column: 35,
+                                                                },
+                                                                kind: IntLiteral(
+                                                                    "1",
+                                                                ),
+                                                            },
+                                                        },
+                                                    },
+                                                ),
+                                            ],
+                                        ),
+                                    ),
+                                },
+                            ],
+                        },
+                        VarDecl {
+                            location: SourceLocation {
+                                line: 42,
+                                column: 15,
+                            },
+                            decls: [
+                                VarDecl {
+                                    location: SourceLocation {
+                                        line: 42,
+                                        column: 15,
+                                    },
+                                    is_const: true,
+                                    ty: Int,
+                                    name: "base",
+                                    dimensions: [],
+                                    init: Some(
+                                        Expr(
+                                            Expr {
+                                                location: SourceLocation {
+                                                    line: 42,
+                                                    column: 22,
+                                                },
+                                                kind: Index {
+                                                    array: Expr {
+                                                        location: SourceLocation {
+                                                            line: 42,
+                                                            column: 22,
+                                                        },
+                                                        kind: Ident(
+                                                            "offsets",
+                                                        ),
+                                                    },
+                                                    index: Expr {
+                                                        location: SourceLocation {
+                                                            line: 42,
+                                                            column: 30,
+                                                        },
+                                                        kind: IntLiteral(
+                                                            "1",
+                                                        ),
+                                                    },
+                                                },
+                                            },
+                                        ),
+                                    ),
+                                },
+                            ],
+                        },
+                        VarDecl {
+                            location: SourceLocation {
+                                line: 43,
+                                column: 9,
+                            },
+                            decls: [
+                                VarDecl {
+                                    location: SourceLocation {
+                                        line: 43,
+                                        column: 9,
+                                    },
+                                    is_const: false,
+                                    ty: Int,
+                                    name: "i",
+                                    dimensions: [],
+                                    init: Some(
+                                        Expr(
+                                            Expr {
+                                                location: SourceLocation {
+                                                    line: 43,
+                                                    column: 13,
+                                                },
+                                                kind: IntLiteral(
+                                                    "0",
+                                                ),
+                                            },
+                                        ),
+                                    ),
+                                },
+                            ],
+                        },
+                        VarDecl {
+                            location: SourceLocation {
+                                line: 44,
+                                column: 9,
+                            },
+                            decls: [
+                                VarDecl {
+                                    location: SourceLocation {
+                                        line: 44,
+                                        column: 9,
+                                    },
+                                    is_const: false,
+                                    ty: Int,
+                                    name: "total",
+                                    dimensions: [],
+                                    init: Some(
+                                        Expr(
+                                            Expr {
+                                                location: SourceLocation {
+                                                    line: 44,
+                                                    column: 17,
+                                                },
+                                                kind: IntLiteral(
+                                                    "0",
+                                                ),
+                                            },
+                                        ),
+                                    ),
+                                },
+                            ],
+                        },
+                        Expr {
+                            location: SourceLocation {
+                                line: 46,
+                                column: 5,
+                            },
+                            expr: Expr {
+                                location: SourceLocation {
+                                    line: 46,
+                                    column: 5,
+                                },
+                                kind: Call {
+                                    callee: Expr {
+                                        location: SourceLocation {
+                                            line: 46,
+                                            column: 5,
+                                        },
+                                        kind: Ident(
+                                            "fill",
+                                        ),
+                                    },
+                                    args: [
+                                        Expr {
+                                            location: SourceLocation {
+                                                line: 46,
+                                                column: 10,
+                                            },
+                                            kind: Ident(
+                                                "local",
+                                            ),
+                                        },
+                                        Expr {
+                                            location: SourceLocation {
+                                                line: 46,
+                                                column: 17,
+                                            },
+                                            kind: Ident(
+                                                "local_limit",
+                                            ),
+                                        },
+                                    ],
+                                },
+                            },
+                        },
+                        Expr {
+                            location: SourceLocation {
+                                line: 48,
+                                column: 14,
+                            },
+                            expr: Expr {
+                                location: SourceLocation {
+                                    line: 48,
+                                    column: 14,
+                                },
+                                kind: Binary {
+                                    op: Add,
+                                    left: Expr {
+                                        location: SourceLocation {
+                                            line: 48,
+                                            column: 5,
+                                        },
+                                        kind: Index {
+                                            array: Expr {
+                                                location: SourceLocation {
+                                                    line: 48,
+                                                    column: 5,
+                                                },
+                                                kind: Ident(
+                                                    "local",
+                                                ),
+                                            },
+                                            index: Expr {
+                                                location: SourceLocation {
+                                                    line: 48,
+                                                    column: 11,
+                                                },
+                                                kind: IntLiteral(
+                                                    "0",
+                                                ),
+                                            },
+                                        },
+                                    },
+                                    right: Expr {
+                                        location: SourceLocation {
+                                            line: 48,
+                                            column: 16,
+                                        },
+                                        kind: Ident(
+                                            "base",
+                                        ),
+                                    },
+                                },
+                            },
+                        },
+                        For {
+                            location: SourceLocation {
+                                line: 50,
+                                column: 5,
+                            },
+                            init: Some(
+                                Expr(
+                                    Expr {
+                                        location: SourceLocation {
+                                            line: 50,
+                                            column: 10,
+                                        },
+                                        kind: Assign {
+                                            target: Expr {
+                                                location: SourceLocation {
+                                                    line: 50,
+                                                    column: 10,
+                                                },
+                                                kind: Ident(
+                                                    "i",
+                                                ),
+                                            },
+                                            value: Expr {
+                                                location: SourceLocation {
+                                                    line: 50,
+                                                    column: 14,
+                                                },
+                                                kind: IntLiteral(
+                                                    "0",
+                                                ),
+                                            },
+                                        },
+                                    },
+                                ),
+                            ),
+                            condition: Some(
+                                Expr {
+                                    location: SourceLocation {
+                                        line: 50,
+                                        column: 19,
+                                    },
+                                    kind: Binary {
+                                        op: Lt,
+                                        left: Expr {
+                                            location: SourceLocation {
+                                                line: 50,
+                                                column: 17,
+                                            },
+                                            kind: Ident(
+                                                "i",
+                                            ),
+                                        },
+                                        right: Expr {
+                                            location: SourceLocation {
+                                                line: 50,
+                                                column: 21,
+                                            },
+                                            kind: Ident(
+                                                "local_limit",
+                                            ),
+                                        },
+                                    },
+                                },
+                            ),
+                            update: Some(
+                                Expr {
+                                    location: SourceLocation {
+                                        line: 50,
+                                        column: 34,
+                                    },
+                                    kind: Assign {
+                                        target: Expr {
+                                            location: SourceLocation {
+                                                line: 50,
+                                                column: 34,
+                                            },
+                                            kind: Ident(
+                                                "i",
+                                            ),
+                                        },
+                                        value: Expr {
+                                            location: SourceLocation {
+                                                line: 50,
+                                                column: 40,
+                                            },
+                                            kind: Binary {
+                                                op: Add,
+                                                left: Expr {
+                                                    location: SourceLocation {
+                                                        line: 50,
+                                                        column: 38,
+                                                    },
+                                                    kind: Ident(
+                                                        "i",
+                                                    ),
+                                                },
+                                                right: Expr {
+                                                    location: SourceLocation {
+                                                        line: 50,
+                                                        column: 42,
+                                                    },
+                                                    kind: IntLiteral(
+                                                        "1",
+                                                    ),
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            ),
+                            body: Block(
+                                Block {
+                                    location: SourceLocation {
+                                        line: 50,
+                                        column: 45,
+                                    },
+                                    statements: [
+                                        If {
+                                            location: SourceLocation {
+                                                line: 51,
+                                                column: 9,
+                                            },
+                                            condition: Expr {
+                                                location: SourceLocation {
+                                                    line: 51,
+                                                    column: 22,
+                                                },
+                                                kind: Binary {
+                                                    op: Gt,
+                                                    left: Expr {
+                                                        location: SourceLocation {
+                                                            line: 51,
+                                                            column: 13,
+                                                        },
+                                                        kind: Index {
+                                                            array: Expr {
+                                                                location: SourceLocation {
+                                                                    line: 51,
+                                                                    column: 13,
+                                                                },
+                                                                kind: Ident(
+                                                                    "local",
+                                                                ),
+                                                            },
+                                                            index: Expr {
+                                                                location: SourceLocation {
+                                                                    line: 51,
+                                                                    column: 19,
+                                                                },
+                                                                kind: Ident(
+                                                                    "i",
+                                                                ),
+                                                            },
+                                                        },
+                                                    },
+                                                    right: Expr {
+                                                        location: SourceLocation {
+                                                            line: 51,
+                                                            column: 24,
+                                                        },
+                                                        kind: IntLiteral(
+                                                            "10",
+                                                        ),
+                                                    },
+                                                },
+                                            },
+                                            then_branch: Block(
+                                                Block {
+                                                    location: SourceLocation {
+                                                        line: 51,
+                                                        column: 28,
+                                                    },
+                                                    statements: [
+                                                        Continue {
+                                                            location: SourceLocation {
+                                                                line: 52,
+                                                                column: 13,
+                                                            },
+                                                        },
+                                                    ],
+                                                },
+                                            ),
+                                            else_branch: Some(
+                                                Block(
+                                                    Block {
+                                                        location: SourceLocation {
+                                                            line: 53,
+                                                            column: 16,
+                                                        },
+                                                        statements: [
+                                                            Expr {
+                                                                location: SourceLocation {
+                                                                    line: 54,
+                                                                    column: 13,
+                                                                },
+                                                                expr: Expr {
+                                                                    location: SourceLocation {
+                                                                        line: 54,
+                                                                        column: 13,
+                                                                    },
+                                                                    kind: Assign {
+                                                                        target: Expr {
+                                                                            location: SourceLocation {
+                                                                                line: 54,
+                                                                                column: 13,
+                                                                            },
+                                                                            kind: Ident(
+                                                                                "total",
+                                                                            ),
+                                                                        },
+                                                                        value: Expr {
+                                                                            location: SourceLocation {
+                                                                                line: 54,
+                                                                                column: 50,
+                                                                            },
+                                                                            kind: Binary {
+                                                                                op: Add,
+                                                                                left: Expr {
+                                                                                    location: SourceLocation {
+                                                                                        line: 54,
+                                                                                        column: 38,
+                                                                                    },
+                                                                                    kind: Binary {
+                                                                                        op: Add,
+                                                                                        left: Expr {
+                                                                                            location: SourceLocation {
+                                                                                                line: 54,
+                                                                                                column: 27,
+                                                                                            },
+                                                                                            kind: Binary {
+                                                                                                op: Add,
+                                                                                                left: Expr {
+                                                                                                    location: SourceLocation {
+                                                                                                        line: 54,
+                                                                                                        column: 21,
+                                                                                                    },
+                                                                                                    kind: Ident(
+                                                                                                        "total",
+                                                                                                    ),
+                                                                                                },
+                                                                                                right: Expr {
+                                                                                                    location: SourceLocation {
+                                                                                                        line: 54,
+                                                                                                        column: 29,
+                                                                                                    },
+                                                                                                    kind: Index {
+                                                                                                        array: Expr {
+                                                                                                            location: SourceLocation {
+                                                                                                                line: 54,
+                                                                                                                column: 29,
+                                                                                                            },
+                                                                                                            kind: Ident(
+                                                                                                                "local",
+                                                                                                            ),
+                                                                                                        },
+                                                                                                        index: Expr {
+                                                                                                            location: SourceLocation {
+                                                                                                                line: 54,
+                                                                                                                column: 35,
+                                                                                                            },
+                                                                                                            kind: Ident(
+                                                                                                                "i",
+                                                                                                            ),
+                                                                                                        },
+                                                                                                    },
+                                                                                                },
+                                                                                            },
+                                                                                        },
+                                                                                        right: Expr {
+                                                                                            location: SourceLocation {
+                                                                                                line: 54,
+                                                                                                column: 40,
+                                                                                            },
+                                                                                            kind: Index {
+                                                                                                array: Expr {
+                                                                                                    location: SourceLocation {
+                                                                                                        line: 54,
+                                                                                                        column: 40,
+                                                                                                    },
+                                                                                                    kind: Ident(
+                                                                                                        "adjust",
+                                                                                                    ),
+                                                                                                },
+                                                                                                index: Expr {
+                                                                                                    location: SourceLocation {
+                                                                                                        line: 54,
+                                                                                                        column: 47,
+                                                                                                    },
+                                                                                                    kind: Ident(
+                                                                                                        "i",
+                                                                                                    ),
+                                                                                                },
+                                                                                            },
+                                                                                        },
+                                                                                    },
+                                                                                },
+                                                                                right: Expr {
+                                                                                    location: SourceLocation {
+                                                                                        line: 54,
+                                                                                        column: 52,
+                                                                                    },
+                                                                                    kind: Ident(
+                                                                                        "base",
+                                                                                    ),
+                                                                                },
+                                                                            },
+                                                                        },
+                                                                    },
+                                                                },
+                                                            },
+                                                        ],
+                                                    },
+                                                ),
+                                            ),
+                                        },
+                                    ],
+                                },
+                            ),
+                        },
+                        Expr {
+                            location: SourceLocation {
+                                line: 58,
+                                column: 5,
+                            },
+                            expr: Expr {
+                                location: SourceLocation {
+                                    line: 58,
+                                    column: 5,
+                                },
+                                kind: Call {
+                                    callee: Expr {
+                                        location: SourceLocation {
+                                            line: 58,
+                                            column: 5,
+                                        },
+                                        kind: Ident(
+                                            "putint",
+                                        ),
+                                    },
+                                    args: [
+                                        Expr {
+                                            location: SourceLocation {
+                                                line: 58,
+                                                column: 12,
+                                            },
+                                            kind: Ident(
+                                                "total",
+                                            ),
+                                        },
+                                    ],
+                                },
+                            },
+                        },
+                        Expr {
+                            location: SourceLocation {
+                                line: 59,
+                                column: 5,
+                            },
+                            expr: Expr {
+                                location: SourceLocation {
+                                    line: 59,
+                                    column: 5,
+                                },
+                                kind: Call {
+                                    callee: Expr {
+                                        location: SourceLocation {
+                                            line: 59,
+                                            column: 5,
+                                        },
+                                        kind: Ident(
+                                            "putfloat",
+                                        ),
+                                    },
+                                    args: [
+                                        Expr {
+                                            location: SourceLocation {
+                                                line: 59,
+                                                column: 20,
+                                            },
+                                            kind: Binary {
+                                                op: Add,
+                                                left: Expr {
+                                                    location: SourceLocation {
+                                                        line: 59,
+                                                        column: 14,
+                                                    },
+                                                    kind: Ident(
+                                                        "scale",
+                                                    ),
+                                                },
+                                                right: Expr {
+                                                    location: SourceLocation {
+                                                        line: 59,
+                                                        column: 22,
+                                                    },
+                                                    kind: Ident(
+                                                        "default_bias",
+                                                    ),
+                                                },
+                                            },
+                                        },
+                                    ],
+                                },
+                            },
+                        },
+                        Return {
+                            location: SourceLocation {
+                                line: 60,
+                                column: 5,
+                            },
+                            expr: Some(
+                                Expr {
+                                    location: SourceLocation {
+                                        line: 60,
+                                        column: 34,
+                                    },
+                                    kind: Binary {
+                                        op: Add,
+                                        left: Expr {
+                                            location: SourceLocation {
+                                                line: 60,
+                                                column: 12,
+                                            },
+                                            kind: Call {
+                                                callee: Expr {
+                                                    location: SourceLocation {
+                                                        line: 60,
+                                                        column: 12,
+                                                    },
+                                                    kind: Ident(
+                                                        "sum_array",
+                                                    ),
+                                                },
+                                                args: [
+                                                    Expr {
+                                                        location: SourceLocation {
+                                                            line: 60,
+                                                            column: 22,
+                                                        },
+                                                        kind: Ident(
+                                                            "numbers",
+                                                        ),
+                                                    },
+                                                    Expr {
+                                                        location: SourceLocation {
+                                                            line: 60,
+                                                            column: 31,
+                                                        },
+                                                        kind: IntLiteral(
+                                                            "3",
+                                                        ),
+                                                    },
+                                                ],
+                                            },
+                                        },
+                                        right: Expr {
+                                            location: SourceLocation {
+                                                line: 60,
+                                                column: 36,
+                                            },
+                                            kind: Ident(
+                                                "global_count",
+                                            ),
+                                        },
+                                    },
+                                },
+                            ),
+                        },
+                    ],
+                },
+            },
+        ),
+    ],
+}

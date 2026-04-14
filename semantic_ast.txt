@@ -1,0 +1,3240 @@
+SemanticProgram {
+    items: [
+        GlobalDecl(
+            [
+                SemanticVarDecl {
+                    symbol_id: Some(
+                        SymbolId(
+                            12,
+                        ),
+                    ),
+                    is_const: false,
+                    ty: Int,
+                    name: "global_count",
+                    dimensions: [],
+                    init: Some(
+                        Expr(
+                            SemanticExpr {
+                                location: SourceLocation {
+                                    line: 1,
+                                    column: 20,
+                                },
+                                ty: Int,
+                                kind: IntLiteral(
+                                    "3",
+                                ),
+                            },
+                        ),
+                    ),
+                },
+            ],
+        ),
+        GlobalDecl(
+            [
+                SemanticVarDecl {
+                    symbol_id: Some(
+                        SymbolId(
+                            13,
+                        ),
+                    ),
+                    is_const: false,
+                    ty: Float,
+                    name: "scale",
+                    dimensions: [],
+                    init: Some(
+                        Expr(
+                            SemanticExpr {
+                                location: SourceLocation {
+                                    line: 2,
+                                    column: 15,
+                                },
+                                ty: Float,
+                                kind: FloatLiteral(
+                                    "1.5",
+                                ),
+                            },
+                        ),
+                    ),
+                },
+            ],
+        ),
+        GlobalDecl(
+            [
+                SemanticVarDecl {
+                    symbol_id: Some(
+                        SymbolId(
+                            14,
+                        ),
+                    ),
+                    is_const: true,
+                    ty: Int,
+                    name: "max_value",
+                    dimensions: [],
+                    init: Some(
+                        Expr(
+                            SemanticExpr {
+                                location: SourceLocation {
+                                    line: 3,
+                                    column: 23,
+                                },
+                                ty: Int,
+                                kind: IntLiteral(
+                                    "100",
+                                ),
+                            },
+                        ),
+                    ),
+                },
+            ],
+        ),
+        GlobalDecl(
+            [
+                SemanticVarDecl {
+                    symbol_id: Some(
+                        SymbolId(
+                            15,
+                        ),
+                    ),
+                    is_const: true,
+                    ty: Float,
+                    name: "default_bias",
+                    dimensions: [],
+                    init: Some(
+                        Expr(
+                            SemanticExpr {
+                                location: SourceLocation {
+                                    line: 4,
+                                    column: 28,
+                                },
+                                ty: Float,
+                                kind: FloatLiteral(
+                                    "0.25",
+                                ),
+                            },
+                        ),
+                    ),
+                },
+            ],
+        ),
+        GlobalDecl(
+            [
+                SemanticVarDecl {
+                    symbol_id: Some(
+                        SymbolId(
+                            16,
+                        ),
+                    ),
+                    is_const: true,
+                    ty: Array {
+                        element: Int,
+                        rank: 1,
+                    },
+                    name: "offsets",
+                    dimensions: [
+                        Some(
+                            SemanticExpr {
+                                location: SourceLocation {
+                                    line: 5,
+                                    column: 19,
+                                },
+                                ty: Int,
+                                kind: IntLiteral(
+                                    "3",
+                                ),
+                            },
+                        ),
+                    ],
+                    init: Some(
+                        List(
+                            [
+                                Expr(
+                                    SemanticExpr {
+                                        location: SourceLocation {
+                                            line: 5,
+                                            column: 25,
+                                        },
+                                        ty: Int,
+                                        kind: IntLiteral(
+                                            "2",
+                                        ),
+                                    },
+                                ),
+                                Expr(
+                                    SemanticExpr {
+                                        location: SourceLocation {
+                                            line: 5,
+                                            column: 28,
+                                        },
+                                        ty: Int,
+                                        kind: IntLiteral(
+                                            "4",
+                                        ),
+                                    },
+                                ),
+                                Expr(
+                                    SemanticExpr {
+                                        location: SourceLocation {
+                                            line: 5,
+                                            column: 31,
+                                        },
+                                        ty: Int,
+                                        kind: IntLiteral(
+                                            "6",
+                                        ),
+                                    },
+                                ),
+                            ],
+                        ),
+                    ),
+                },
+            ],
+        ),
+        GlobalDecl(
+            [
+                SemanticVarDecl {
+                    symbol_id: Some(
+                        SymbolId(
+                            17,
+                        ),
+                    ),
+                    is_const: false,
+                    ty: Array {
+                        element: Int,
+                        rank: 1,
+                    },
+                    name: "numbers",
+                    dimensions: [
+                        Some(
+                            SemanticExpr {
+                                location: SourceLocation {
+                                    line: 6,
+                                    column: 13,
+                                },
+                                ty: Int,
+                                kind: IntLiteral(
+                                    "5",
+                                ),
+                            },
+                        ),
+                    ],
+                    init: Some(
+                        List(
+                            [
+                                Expr(
+                                    SemanticExpr {
+                                        location: SourceLocation {
+                                            line: 6,
+                                            column: 19,
+                                        },
+                                        ty: Int,
+                                        kind: IntLiteral(
+                                            "1",
+                                        ),
+                                    },
+                                ),
+                                Expr(
+                                    SemanticExpr {
+                                        location: SourceLocation {
+                                            line: 6,
+                                            column: 22,
+                                        },
+                                        ty: Int,
+                                        kind: IntLiteral(
+                                            "2",
+                                        ),
+                                    },
+                                ),
+                                Expr(
+                                    SemanticExpr {
+                                        location: SourceLocation {
+                                            line: 6,
+                                            column: 25,
+                                        },
+                                        ty: Int,
+                                        kind: IntLiteral(
+                                            "3",
+                                        ),
+                                    },
+                                ),
+                                Expr(
+                                    SemanticExpr {
+                                        location: SourceLocation {
+                                            line: 6,
+                                            column: 28,
+                                        },
+                                        ty: Int,
+                                        kind: IntLiteral(
+                                            "4",
+                                        ),
+                                    },
+                                ),
+                                Expr(
+                                    SemanticExpr {
+                                        location: SourceLocation {
+                                            line: 6,
+                                            column: 31,
+                                        },
+                                        ty: Int,
+                                        kind: IntLiteral(
+                                            "5",
+                                        ),
+                                    },
+                                ),
+                            ],
+                        ),
+                    ),
+                },
+            ],
+        ),
+        Function(
+            SemanticFunction {
+                symbol_id: Some(
+                    SymbolId(
+                        18,
+                    ),
+                ),
+                return_type: Int,
+                name: "add",
+                params: [
+                    SemanticParam {
+                        symbol_id: Some(
+                            SymbolId(
+                                22,
+                            ),
+                        ),
+                        ty: Int,
+                        name: "lhs",
+                        dimensions: [],
+                    },
+                    SemanticParam {
+                        symbol_id: Some(
+                            SymbolId(
+                                23,
+                            ),
+                        ),
+                        ty: Int,
+                        name: "rhs",
+                        dimensions: [],
+                    },
+                ],
+                scope_id: ScopeId(
+                    1,
+                ),
+                body: SemanticBlock {
+                    scope_id: ScopeId(
+                        1,
+                    ),
+                    statements: [
+                        Return(
+                            Some(
+                                SemanticExpr {
+                                    location: SourceLocation {
+                                        line: 9,
+                                        column: 16,
+                                    },
+                                    ty: Int,
+                                    kind: Binary {
+                                        op: Add,
+                                        left: SemanticExpr {
+                                            location: SourceLocation {
+                                                line: 9,
+                                                column: 12,
+                                            },
+                                            ty: Int,
+                                            kind: Ident {
+                                                name: "lhs",
+                                                symbol_id: Some(
+                                                    SymbolId(
+                                                        22,
+                                                    ),
+                                                ),
+                                            },
+                                        },
+                                        right: SemanticExpr {
+                                            location: SourceLocation {
+                                                line: 9,
+                                                column: 18,
+                                            },
+                                            ty: Int,
+                                            kind: Ident {
+                                                name: "rhs",
+                                                symbol_id: Some(
+                                                    SymbolId(
+                                                        23,
+                                                    ),
+                                                ),
+                                            },
+                                        },
+                                    },
+                                },
+                            ),
+                        ),
+                    ],
+                },
+            },
+        ),
+        Function(
+            SemanticFunction {
+                symbol_id: Some(
+                    SymbolId(
+                        19,
+                    ),
+                ),
+                return_type: Int,
+                name: "sum_array",
+                params: [
+                    SemanticParam {
+                        symbol_id: Some(
+                            SymbolId(
+                                24,
+                            ),
+                        ),
+                        ty: Array {
+                            element: Int,
+                            rank: 1,
+                        },
+                        name: "arr",
+                        dimensions: [
+                            None,
+                        ],
+                    },
+                    SemanticParam {
+                        symbol_id: Some(
+                            SymbolId(
+                                25,
+                            ),
+                        ),
+                        ty: Int,
+                        name: "n",
+                        dimensions: [],
+                    },
+                ],
+                scope_id: ScopeId(
+                    2,
+                ),
+                body: SemanticBlock {
+                    scope_id: ScopeId(
+                        2,
+                    ),
+                    statements: [
+                        VarDecl(
+                            [
+                                SemanticVarDecl {
+                                    symbol_id: Some(
+                                        SymbolId(
+                                            26,
+                                        ),
+                                    ),
+                                    is_const: false,
+                                    ty: Int,
+                                    name: "i",
+                                    dimensions: [],
+                                    init: Some(
+                                        Expr(
+                                            SemanticExpr {
+                                                location: SourceLocation {
+                                                    line: 13,
+                                                    column: 13,
+                                                },
+                                                ty: Int,
+                                                kind: IntLiteral(
+                                                    "0",
+                                                ),
+                                            },
+                                        ),
+                                    ),
+                                },
+                            ],
+                        ),
+                        VarDecl(
+                            [
+                                SemanticVarDecl {
+                                    symbol_id: Some(
+                                        SymbolId(
+                                            27,
+                                        ),
+                                    ),
+                                    is_const: false,
+                                    ty: Int,
+                                    name: "total",
+                                    dimensions: [],
+                                    init: Some(
+                                        Expr(
+                                            SemanticExpr {
+                                                location: SourceLocation {
+                                                    line: 14,
+                                                    column: 17,
+                                                },
+                                                ty: Int,
+                                                kind: IntLiteral(
+                                                    "0",
+                                                ),
+                                            },
+                                        ),
+                                    ),
+                                },
+                            ],
+                        ),
+                        While {
+                            condition: SemanticExpr {
+                                location: SourceLocation {
+                                    line: 15,
+                                    column: 14,
+                                },
+                                ty: Int,
+                                kind: Binary {
+                                    op: Lt,
+                                    left: SemanticExpr {
+                                        location: SourceLocation {
+                                            line: 15,
+                                            column: 12,
+                                        },
+                                        ty: Int,
+                                        kind: Ident {
+                                            name: "i",
+                                            symbol_id: Some(
+                                                SymbolId(
+                                                    26,
+                                                ),
+                                            ),
+                                        },
+                                    },
+                                    right: SemanticExpr {
+                                        location: SourceLocation {
+                                            line: 15,
+                                            column: 16,
+                                        },
+                                        ty: Int,
+                                        kind: Ident {
+                                            name: "n",
+                                            symbol_id: Some(
+                                                SymbolId(
+                                                    25,
+                                                ),
+                                            ),
+                                        },
+                                    },
+                                },
+                            },
+                            body: Block(
+                                SemanticBlock {
+                                    scope_id: ScopeId(
+                                        3,
+                                    ),
+                                    statements: [
+                                        Expr(
+                                            SemanticExpr {
+                                                location: SourceLocation {
+                                                    line: 16,
+                                                    column: 9,
+                                                },
+                                                ty: Int,
+                                                kind: Assign {
+                                                    target: SemanticExpr {
+                                                        location: SourceLocation {
+                                                            line: 16,
+                                                            column: 9,
+                                                        },
+                                                        ty: Int,
+                                                        kind: Ident {
+                                                            name: "total",
+                                                            symbol_id: Some(
+                                                                SymbolId(
+                                                                    27,
+                                                                ),
+                                                            ),
+                                                        },
+                                                    },
+                                                    value: SemanticExpr {
+                                                        location: SourceLocation {
+                                                            line: 16,
+                                                            column: 23,
+                                                        },
+                                                        ty: Int,
+                                                        kind: Binary {
+                                                            op: Add,
+                                                            left: SemanticExpr {
+                                                                location: SourceLocation {
+                                                                    line: 16,
+                                                                    column: 17,
+                                                                },
+                                                                ty: Int,
+                                                                kind: Ident {
+                                                                    name: "total",
+                                                                    symbol_id: Some(
+                                                                        SymbolId(
+                                                                            27,
+                                                                        ),
+                                                                    ),
+                                                                },
+                                                            },
+                                                            right: SemanticExpr {
+                                                                location: SourceLocation {
+                                                                    line: 16,
+                                                                    column: 25,
+                                                                },
+                                                                ty: Int,
+                                                                kind: Index {
+                                                                    array: SemanticExpr {
+                                                                        location: SourceLocation {
+                                                                            line: 16,
+                                                                            column: 25,
+                                                                        },
+                                                                        ty: Array {
+                                                                            element: Int,
+                                                                            rank: 1,
+                                                                        },
+                                                                        kind: Ident {
+                                                                            name: "arr",
+                                                                            symbol_id: Some(
+                                                                                SymbolId(
+                                                                                    24,
+                                                                                ),
+                                                                            ),
+                                                                        },
+                                                                    },
+                                                                    index: SemanticExpr {
+                                                                        location: SourceLocation {
+                                                                            line: 16,
+                                                                            column: 29,
+                                                                        },
+                                                                        ty: Int,
+                                                                        kind: Ident {
+                                                                            name: "i",
+                                                                            symbol_id: Some(
+                                                                                SymbolId(
+                                                                                    26,
+                                                                                ),
+                                                                            ),
+                                                                        },
+                                                                    },
+                                                                },
+                                                            },
+                                                        },
+                                                    },
+                                                },
+                                            },
+                                        ),
+                                        Expr(
+                                            SemanticExpr {
+                                                location: SourceLocation {
+                                                    line: 17,
+                                                    column: 9,
+                                                },
+                                                ty: Int,
+                                                kind: Assign {
+                                                    target: SemanticExpr {
+                                                        location: SourceLocation {
+                                                            line: 17,
+                                                            column: 9,
+                                                        },
+                                                        ty: Int,
+                                                        kind: Ident {
+                                                            name: "i",
+                                                            symbol_id: Some(
+                                                                SymbolId(
+                                                                    26,
+                                                                ),
+                                                            ),
+                                                        },
+                                                    },
+                                                    value: SemanticExpr {
+                                                        location: SourceLocation {
+                                                            line: 17,
+                                                            column: 15,
+                                                        },
+                                                        ty: Int,
+                                                        kind: Binary {
+                                                            op: Add,
+                                                            left: SemanticExpr {
+                                                                location: SourceLocation {
+                                                                    line: 17,
+                                                                    column: 13,
+                                                                },
+                                                                ty: Int,
+                                                                kind: Ident {
+                                                                    name: "i",
+                                                                    symbol_id: Some(
+                                                                        SymbolId(
+                                                                            26,
+                                                                        ),
+                                                                    ),
+                                                                },
+                                                            },
+                                                            right: SemanticExpr {
+                                                                location: SourceLocation {
+                                                                    line: 17,
+                                                                    column: 17,
+                                                                },
+                                                                ty: Int,
+                                                                kind: IntLiteral(
+                                                                    "1",
+                                                                ),
+                                                            },
+                                                        },
+                                                    },
+                                                },
+                                            },
+                                        ),
+                                    ],
+                                },
+                            ),
+                        },
+                        Return(
+                            Some(
+                                SemanticExpr {
+                                    location: SourceLocation {
+                                        line: 19,
+                                        column: 12,
+                                    },
+                                    ty: Int,
+                                    kind: Ident {
+                                        name: "total",
+                                        symbol_id: Some(
+                                            SymbolId(
+                                                27,
+                                            ),
+                                        ),
+                                    },
+                                },
+                            ),
+                        ),
+                    ],
+                },
+            },
+        ),
+        Function(
+            SemanticFunction {
+                symbol_id: Some(
+                    SymbolId(
+                        20,
+                    ),
+                ),
+                return_type: Void,
+                name: "fill",
+                params: [
+                    SemanticParam {
+                        symbol_id: Some(
+                            SymbolId(
+                                28,
+                            ),
+                        ),
+                        ty: Array {
+                            element: Int,
+                            rank: 1,
+                        },
+                        name: "arr",
+                        dimensions: [
+                            None,
+                        ],
+                    },
+                    SemanticParam {
+                        symbol_id: Some(
+                            SymbolId(
+                                29,
+                            ),
+                        ),
+                        ty: Int,
+                        name: "n",
+                        dimensions: [],
+                    },
+                ],
+                scope_id: ScopeId(
+                    4,
+                ),
+                body: SemanticBlock {
+                    scope_id: ScopeId(
+                        4,
+                    ),
+                    statements: [
+                        VarDecl(
+                            [
+                                SemanticVarDecl {
+                                    symbol_id: Some(
+                                        SymbolId(
+                                            30,
+                                        ),
+                                    ),
+                                    is_const: false,
+                                    ty: Int,
+                                    name: "i",
+                                    dimensions: [],
+                                    init: None,
+                                },
+                            ],
+                        ),
+                        For {
+                            scope_id: None,
+                            init: Some(
+                                Expr(
+                                    SemanticExpr {
+                                        location: SourceLocation {
+                                            line: 24,
+                                            column: 10,
+                                        },
+                                        ty: Int,
+                                        kind: Assign {
+                                            target: SemanticExpr {
+                                                location: SourceLocation {
+                                                    line: 24,
+                                                    column: 10,
+                                                },
+                                                ty: Int,
+                                                kind: Ident {
+                                                    name: "i",
+                                                    symbol_id: Some(
+                                                        SymbolId(
+                                                            30,
+                                                        ),
+                                                    ),
+                                                },
+                                            },
+                                            value: SemanticExpr {
+                                                location: SourceLocation {
+                                                    line: 24,
+                                                    column: 14,
+                                                },
+                                                ty: Int,
+                                                kind: IntLiteral(
+                                                    "0",
+                                                ),
+                                            },
+                                        },
+                                    },
+                                ),
+                            ),
+                            condition: Some(
+                                SemanticExpr {
+                                    location: SourceLocation {
+                                        line: 24,
+                                        column: 19,
+                                    },
+                                    ty: Int,
+                                    kind: Binary {
+                                        op: Lt,
+                                        left: SemanticExpr {
+                                            location: SourceLocation {
+                                                line: 24,
+                                                column: 17,
+                                            },
+                                            ty: Int,
+                                            kind: Ident {
+                                                name: "i",
+                                                symbol_id: Some(
+                                                    SymbolId(
+                                                        30,
+                                                    ),
+                                                ),
+                                            },
+                                        },
+                                        right: SemanticExpr {
+                                            location: SourceLocation {
+                                                line: 24,
+                                                column: 21,
+                                            },
+                                            ty: Int,
+                                            kind: Ident {
+                                                name: "n",
+                                                symbol_id: Some(
+                                                    SymbolId(
+                                                        29,
+                                                    ),
+                                                ),
+                                            },
+                                        },
+                                    },
+                                },
+                            ),
+                            update: Some(
+                                SemanticExpr {
+                                    location: SourceLocation {
+                                        line: 24,
+                                        column: 24,
+                                    },
+                                    ty: Int,
+                                    kind: Assign {
+                                        target: SemanticExpr {
+                                            location: SourceLocation {
+                                                line: 24,
+                                                column: 24,
+                                            },
+                                            ty: Int,
+                                            kind: Ident {
+                                                name: "i",
+                                                symbol_id: Some(
+                                                    SymbolId(
+                                                        30,
+                                                    ),
+                                                ),
+                                            },
+                                        },
+                                        value: SemanticExpr {
+                                            location: SourceLocation {
+                                                line: 24,
+                                                column: 30,
+                                            },
+                                            ty: Int,
+                                            kind: Binary {
+                                                op: Add,
+                                                left: SemanticExpr {
+                                                    location: SourceLocation {
+                                                        line: 24,
+                                                        column: 28,
+                                                    },
+                                                    ty: Int,
+                                                    kind: Ident {
+                                                        name: "i",
+                                                        symbol_id: Some(
+                                                            SymbolId(
+                                                                30,
+                                                            ),
+                                                        ),
+                                                    },
+                                                },
+                                                right: SemanticExpr {
+                                                    location: SourceLocation {
+                                                        line: 24,
+                                                        column: 32,
+                                                    },
+                                                    ty: Int,
+                                                    kind: IntLiteral(
+                                                        "1",
+                                                    ),
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            ),
+                            body: Block(
+                                SemanticBlock {
+                                    scope_id: ScopeId(
+                                        5,
+                                    ),
+                                    statements: [
+                                        If {
+                                            condition: SemanticExpr {
+                                                location: SourceLocation {
+                                                    line: 25,
+                                                    column: 19,
+                                                },
+                                                ty: Int,
+                                                kind: Binary {
+                                                    op: Eq,
+                                                    left: SemanticExpr {
+                                                        location: SourceLocation {
+                                                            line: 25,
+                                                            column: 15,
+                                                        },
+                                                        ty: Int,
+                                                        kind: Binary {
+                                                            op: Mod,
+                                                            left: SemanticExpr {
+                                                                location: SourceLocation {
+                                                                    line: 25,
+                                                                    column: 13,
+                                                                },
+                                                                ty: Int,
+                                                                kind: Ident {
+                                                                    name: "i",
+                                                                    symbol_id: Some(
+                                                                        SymbolId(
+                                                                            30,
+                                                                        ),
+                                                                    ),
+                                                                },
+                                                            },
+                                                            right: SemanticExpr {
+                                                                location: SourceLocation {
+                                                                    line: 25,
+                                                                    column: 17,
+                                                                },
+                                                                ty: Int,
+                                                                kind: IntLiteral(
+                                                                    "2",
+                                                                ),
+                                                            },
+                                                        },
+                                                    },
+                                                    right: SemanticExpr {
+                                                        location: SourceLocation {
+                                                            line: 25,
+                                                            column: 22,
+                                                        },
+                                                        ty: Int,
+                                                        kind: IntLiteral(
+                                                            "0",
+                                                        ),
+                                                    },
+                                                },
+                                            },
+                                            then_branch: Block(
+                                                SemanticBlock {
+                                                    scope_id: ScopeId(
+                                                        6,
+                                                    ),
+                                                    statements: [
+                                                        Expr(
+                                                            SemanticExpr {
+                                                                location: SourceLocation {
+                                                                    line: 26,
+                                                                    column: 13,
+                                                                },
+                                                                ty: Int,
+                                                                kind: Assign {
+                                                                    target: SemanticExpr {
+                                                                        location: SourceLocation {
+                                                                            line: 26,
+                                                                            column: 13,
+                                                                        },
+                                                                        ty: Int,
+                                                                        kind: Index {
+                                                                            array: SemanticExpr {
+                                                                                location: SourceLocation {
+                                                                                    line: 26,
+                                                                                    column: 13,
+                                                                                },
+                                                                                ty: Array {
+                                                                                    element: Int,
+                                                                                    rank: 1,
+                                                                                },
+                                                                                kind: Ident {
+                                                                                    name: "arr",
+                                                                                    symbol_id: Some(
+                                                                                        SymbolId(
+                                                                                            28,
+                                                                                        ),
+                                                                                    ),
+                                                                                },
+                                                                            },
+                                                                            index: SemanticExpr {
+                                                                                location: SourceLocation {
+                                                                                    line: 26,
+                                                                                    column: 17,
+                                                                                },
+                                                                                ty: Int,
+                                                                                kind: Ident {
+                                                                                    name: "i",
+                                                                                    symbol_id: Some(
+                                                                                        SymbolId(
+                                                                                            30,
+                                                                                        ),
+                                                                                    ),
+                                                                                },
+                                                                            },
+                                                                        },
+                                                                    },
+                                                                    value: SemanticExpr {
+                                                                        location: SourceLocation {
+                                                                            line: 26,
+                                                                            column: 22,
+                                                                        },
+                                                                        ty: Int,
+                                                                        kind: Call {
+                                                                            callee: SemanticExpr {
+                                                                                location: SourceLocation {
+                                                                                    line: 26,
+                                                                                    column: 22,
+                                                                                },
+                                                                                ty: Function {
+                                                                                    return_type: Int,
+                                                                                    params: [],
+                                                                                },
+                                                                                kind: Ident {
+                                                                                    name: "getint",
+                                                                                    symbol_id: Some(
+                                                                                        SymbolId(
+                                                                                            0,
+                                                                                        ),
+                                                                                    ),
+                                                                                },
+                                                                            },
+                                                                            args: [],
+                                                                            function_symbol: Some(
+                                                                                SymbolId(
+                                                                                    0,
+                                                                                ),
+                                                                            ),
+                                                                        },
+                                                                    },
+                                                                },
+                                                            },
+                                                        ),
+                                                    ],
+                                                },
+                                            ),
+                                            else_branch: Some(
+                                                Block(
+                                                    SemanticBlock {
+                                                        scope_id: ScopeId(
+                                                            7,
+                                                        ),
+                                                        statements: [
+                                                            Expr(
+                                                                SemanticExpr {
+                                                                    location: SourceLocation {
+                                                                        line: 28,
+                                                                        column: 13,
+                                                                    },
+                                                                    ty: Int,
+                                                                    kind: Assign {
+                                                                        target: SemanticExpr {
+                                                                            location: SourceLocation {
+                                                                                line: 28,
+                                                                                column: 13,
+                                                                            },
+                                                                            ty: Int,
+                                                                            kind: Index {
+                                                                                array: SemanticExpr {
+                                                                                    location: SourceLocation {
+                                                                                        line: 28,
+                                                                                        column: 13,
+                                                                                    },
+                                                                                    ty: Array {
+                                                                                        element: Int,
+                                                                                        rank: 1,
+                                                                                    },
+                                                                                    kind: Ident {
+                                                                                        name: "arr",
+                                                                                        symbol_id: Some(
+                                                                                            SymbolId(
+                                                                                                28,
+                                                                                            ),
+                                                                                        ),
+                                                                                    },
+                                                                                },
+                                                                                index: SemanticExpr {
+                                                                                    location: SourceLocation {
+                                                                                        line: 28,
+                                                                                        column: 17,
+                                                                                    },
+                                                                                    ty: Int,
+                                                                                    kind: Ident {
+                                                                                        name: "i",
+                                                                                        symbol_id: Some(
+                                                                                            SymbolId(
+                                                                                                30,
+                                                                                            ),
+                                                                                        ),
+                                                                                    },
+                                                                                },
+                                                                            },
+                                                                        },
+                                                                        value: SemanticExpr {
+                                                                            location: SourceLocation {
+                                                                                line: 28,
+                                                                                column: 22,
+                                                                            },
+                                                                            ty: Int,
+                                                                            kind: Call {
+                                                                                callee: SemanticExpr {
+                                                                                    location: SourceLocation {
+                                                                                        line: 28,
+                                                                                        column: 22,
+                                                                                    },
+                                                                                    ty: Function {
+                                                                                        return_type: Int,
+                                                                                        params: [
+                                                                                            Int,
+                                                                                            Int,
+                                                                                        ],
+                                                                                    },
+                                                                                    kind: Ident {
+                                                                                        name: "add",
+                                                                                        symbol_id: Some(
+                                                                                            SymbolId(
+                                                                                                18,
+                                                                                            ),
+                                                                                        ),
+                                                                                    },
+                                                                                },
+                                                                                args: [
+                                                                                    SemanticExpr {
+                                                                                        location: SourceLocation {
+                                                                                            line: 28,
+                                                                                            column: 26,
+                                                                                        },
+                                                                                        ty: Int,
+                                                                                        kind: Index {
+                                                                                            array: SemanticExpr {
+                                                                                                location: SourceLocation {
+                                                                                                    line: 28,
+                                                                                                    column: 26,
+                                                                                                },
+                                                                                                ty: Array {
+                                                                                                    element: Int,
+                                                                                                    rank: 1,
+                                                                                                },
+                                                                                                kind: Ident {
+                                                                                                    name: "arr",
+                                                                                                    symbol_id: Some(
+                                                                                                        SymbolId(
+                                                                                                            28,
+                                                                                                        ),
+                                                                                                    ),
+                                                                                                },
+                                                                                            },
+                                                                                            index: SemanticExpr {
+                                                                                                location: SourceLocation {
+                                                                                                    line: 28,
+                                                                                                    column: 32,
+                                                                                                },
+                                                                                                ty: Int,
+                                                                                                kind: Binary {
+                                                                                                    op: Sub,
+                                                                                                    left: SemanticExpr {
+                                                                                                        location: SourceLocation {
+                                                                                                            line: 28,
+                                                                                                            column: 30,
+                                                                                                        },
+                                                                                                        ty: Int,
+                                                                                                        kind: Ident {
+                                                                                                            name: "i",
+                                                                                                            symbol_id: Some(
+                                                                                                                SymbolId(
+                                                                                                                    30,
+                                                                                                                ),
+                                                                                                            ),
+                                                                                                        },
+                                                                                                    },
+                                                                                                    right: SemanticExpr {
+                                                                                                        location: SourceLocation {
+                                                                                                            line: 28,
+                                                                                                            column: 34,
+                                                                                                        },
+                                                                                                        ty: Int,
+                                                                                                        kind: IntLiteral(
+                                                                                                            "1",
+                                                                                                        ),
+                                                                                                    },
+                                                                                                },
+                                                                                            },
+                                                                                        },
+                                                                                    },
+                                                                                    SemanticExpr {
+                                                                                        location: SourceLocation {
+                                                                                            line: 28,
+                                                                                            column: 38,
+                                                                                        },
+                                                                                        ty: Int,
+                                                                                        kind: IntLiteral(
+                                                                                            "1",
+                                                                                        ),
+                                                                                    },
+                                                                                ],
+                                                                                function_symbol: Some(
+                                                                                    SymbolId(
+                                                                                        18,
+                                                                                    ),
+                                                                                ),
+                                                                            },
+                                                                        },
+                                                                    },
+                                                                },
+                                                            ),
+                                                        ],
+                                                    },
+                                                ),
+                                            ),
+                                        },
+                                        If {
+                                            condition: SemanticExpr {
+                                                location: SourceLocation {
+                                                    line: 31,
+                                                    column: 20,
+                                                },
+                                                ty: Int,
+                                                kind: Binary {
+                                                    op: Gt,
+                                                    left: SemanticExpr {
+                                                        location: SourceLocation {
+                                                            line: 31,
+                                                            column: 13,
+                                                        },
+                                                        ty: Int,
+                                                        kind: Index {
+                                                            array: SemanticExpr {
+                                                                location: SourceLocation {
+                                                                    line: 31,
+                                                                    column: 13,
+                                                                },
+                                                                ty: Array {
+                                                                    element: Int,
+                                                                    rank: 1,
+                                                                },
+                                                                kind: Ident {
+                                                                    name: "arr",
+                                                                    symbol_id: Some(
+                                                                        SymbolId(
+                                                                            28,
+                                                                        ),
+                                                                    ),
+                                                                },
+                                                            },
+                                                            index: SemanticExpr {
+                                                                location: SourceLocation {
+                                                                    line: 31,
+                                                                    column: 17,
+                                                                },
+                                                                ty: Int,
+                                                                kind: Ident {
+                                                                    name: "i",
+                                                                    symbol_id: Some(
+                                                                        SymbolId(
+                                                                            30,
+                                                                        ),
+                                                                    ),
+                                                                },
+                                                            },
+                                                        },
+                                                    },
+                                                    right: SemanticExpr {
+                                                        location: SourceLocation {
+                                                            line: 31,
+                                                            column: 22,
+                                                        },
+                                                        ty: Int,
+                                                        kind: Ident {
+                                                            name: "max_value",
+                                                            symbol_id: Some(
+                                                                SymbolId(
+                                                                    14,
+                                                                ),
+                                                            ),
+                                                        },
+                                                    },
+                                                },
+                                            },
+                                            then_branch: Block(
+                                                SemanticBlock {
+                                                    scope_id: ScopeId(
+                                                        8,
+                                                    ),
+                                                    statements: [
+                                                        Break,
+                                                    ],
+                                                },
+                                            ),
+                                            else_branch: None,
+                                        },
+                                    ],
+                                },
+                            ),
+                        },
+                        Return(
+                            None,
+                        ),
+                    ],
+                },
+            },
+        ),
+        Function(
+            SemanticFunction {
+                symbol_id: Some(
+                    SymbolId(
+                        21,
+                    ),
+                ),
+                return_type: Int,
+                name: "main",
+                params: [],
+                scope_id: ScopeId(
+                    9,
+                ),
+                body: SemanticBlock {
+                    scope_id: ScopeId(
+                        9,
+                    ),
+                    statements: [
+                        VarDecl(
+                            [
+                                SemanticVarDecl {
+                                    symbol_id: Some(
+                                        SymbolId(
+                                            31,
+                                        ),
+                                    ),
+                                    is_const: false,
+                                    ty: Array {
+                                        element: Int,
+                                        rank: 1,
+                                    },
+                                    name: "local",
+                                    dimensions: [
+                                        Some(
+                                            SemanticExpr {
+                                                location: SourceLocation {
+                                                    line: 39,
+                                                    column: 15,
+                                                },
+                                                ty: Int,
+                                                kind: IntLiteral(
+                                                    "3",
+                                                ),
+                                            },
+                                        ),
+                                    ],
+                                    init: Some(
+                                        List(
+                                            [
+                                                Expr(
+                                                    SemanticExpr {
+                                                        location: SourceLocation {
+                                                            line: 39,
+                                                            column: 21,
+                                                        },
+                                                        ty: Int,
+                                                        kind: IntLiteral(
+                                                            "0",
+                                                        ),
+                                                    },
+                                                ),
+                                                Expr(
+                                                    SemanticExpr {
+                                                        location: SourceLocation {
+                                                            line: 39,
+                                                            column: 24,
+                                                        },
+                                                        ty: Int,
+                                                        kind: IntLiteral(
+                                                            "1",
+                                                        ),
+                                                    },
+                                                ),
+                                                Expr(
+                                                    SemanticExpr {
+                                                        location: SourceLocation {
+                                                            line: 39,
+                                                            column: 27,
+                                                        },
+                                                        ty: Int,
+                                                        kind: IntLiteral(
+                                                            "2",
+                                                        ),
+                                                    },
+                                                ),
+                                            ],
+                                        ),
+                                    ),
+                                },
+                            ],
+                        ),
+                        VarDecl(
+                            [
+                                SemanticVarDecl {
+                                    symbol_id: Some(
+                                        SymbolId(
+                                            32,
+                                        ),
+                                    ),
+                                    is_const: true,
+                                    ty: Int,
+                                    name: "local_limit",
+                                    dimensions: [],
+                                    init: Some(
+                                        Expr(
+                                            SemanticExpr {
+                                                location: SourceLocation {
+                                                    line: 40,
+                                                    column: 29,
+                                                },
+                                                ty: Int,
+                                                kind: IntLiteral(
+                                                    "3",
+                                                ),
+                                            },
+                                        ),
+                                    ),
+                                },
+                            ],
+                        ),
+                        VarDecl(
+                            [
+                                SemanticVarDecl {
+                                    symbol_id: Some(
+                                        SymbolId(
+                                            33,
+                                        ),
+                                    ),
+                                    is_const: true,
+                                    ty: Array {
+                                        element: Int,
+                                        rank: 1,
+                                    },
+                                    name: "adjust",
+                                    dimensions: [
+                                        Some(
+                                            SemanticExpr {
+                                                location: SourceLocation {
+                                                    line: 41,
+                                                    column: 22,
+                                                },
+                                                ty: Int,
+                                                kind: IntLiteral(
+                                                    "3",
+                                                ),
+                                            },
+                                        ),
+                                    ],
+                                    init: Some(
+                                        List(
+                                            [
+                                                Expr(
+                                                    SemanticExpr {
+                                                        location: SourceLocation {
+                                                            line: 41,
+                                                            column: 28,
+                                                        },
+                                                        ty: Int,
+                                                        kind: IntLiteral(
+                                                            "1",
+                                                        ),
+                                                    },
+                                                ),
+                                                Expr(
+                                                    SemanticExpr {
+                                                        location: SourceLocation {
+                                                            line: 41,
+                                                            column: 31,
+                                                        },
+                                                        ty: Int,
+                                                        kind: IntLiteral(
+                                                            "0",
+                                                        ),
+                                                    },
+                                                ),
+                                                Expr(
+                                                    SemanticExpr {
+                                                        location: SourceLocation {
+                                                            line: 41,
+                                                            column: 35,
+                                                        },
+                                                        ty: Int,
+                                                        kind: Unary {
+                                                            op: Minus,
+                                                            expr: SemanticExpr {
+                                                                location: SourceLocation {
+                                                                    line: 41,
+                                                                    column: 35,
+                                                                },
+                                                                ty: Int,
+                                                                kind: IntLiteral(
+                                                                    "1",
+                                                                ),
+                                                            },
+                                                        },
+                                                    },
+                                                ),
+                                            ],
+                                        ),
+                                    ),
+                                },
+                            ],
+                        ),
+                        VarDecl(
+                            [
+                                SemanticVarDecl {
+                                    symbol_id: Some(
+                                        SymbolId(
+                                            34,
+                                        ),
+                                    ),
+                                    is_const: true,
+                                    ty: Int,
+                                    name: "base",
+                                    dimensions: [],
+                                    init: Some(
+                                        Expr(
+                                            SemanticExpr {
+                                                location: SourceLocation {
+                                                    line: 42,
+                                                    column: 22,
+                                                },
+                                                ty: Int,
+                                                kind: Index {
+                                                    array: SemanticExpr {
+                                                        location: SourceLocation {
+                                                            line: 42,
+                                                            column: 22,
+                                                        },
+                                                        ty: Array {
+                                                            element: Int,
+                                                            rank: 1,
+                                                        },
+                                                        kind: Ident {
+                                                            name: "offsets",
+                                                            symbol_id: Some(
+                                                                SymbolId(
+                                                                    16,
+                                                                ),
+                                                            ),
+                                                        },
+                                                    },
+                                                    index: SemanticExpr {
+                                                        location: SourceLocation {
+                                                            line: 42,
+                                                            column: 30,
+                                                        },
+                                                        ty: Int,
+                                                        kind: IntLiteral(
+                                                            "1",
+                                                        ),
+                                                    },
+                                                },
+                                            },
+                                        ),
+                                    ),
+                                },
+                            ],
+                        ),
+                        VarDecl(
+                            [
+                                SemanticVarDecl {
+                                    symbol_id: Some(
+                                        SymbolId(
+                                            35,
+                                        ),
+                                    ),
+                                    is_const: false,
+                                    ty: Int,
+                                    name: "i",
+                                    dimensions: [],
+                                    init: Some(
+                                        Expr(
+                                            SemanticExpr {
+                                                location: SourceLocation {
+                                                    line: 43,
+                                                    column: 13,
+                                                },
+                                                ty: Int,
+                                                kind: IntLiteral(
+                                                    "0",
+                                                ),
+                                            },
+                                        ),
+                                    ),
+                                },
+                            ],
+                        ),
+                        VarDecl(
+                            [
+                                SemanticVarDecl {
+                                    symbol_id: Some(
+                                        SymbolId(
+                                            36,
+                                        ),
+                                    ),
+                                    is_const: false,
+                                    ty: Int,
+                                    name: "total",
+                                    dimensions: [],
+                                    init: Some(
+                                        Expr(
+                                            SemanticExpr {
+                                                location: SourceLocation {
+                                                    line: 44,
+                                                    column: 17,
+                                                },
+                                                ty: Int,
+                                                kind: IntLiteral(
+                                                    "0",
+                                                ),
+                                            },
+                                        ),
+                                    ),
+                                },
+                            ],
+                        ),
+                        Expr(
+                            SemanticExpr {
+                                location: SourceLocation {
+                                    line: 46,
+                                    column: 5,
+                                },
+                                ty: Void,
+                                kind: Call {
+                                    callee: SemanticExpr {
+                                        location: SourceLocation {
+                                            line: 46,
+                                            column: 5,
+                                        },
+                                        ty: Function {
+                                            return_type: Void,
+                                            params: [
+                                                Array {
+                                                    element: Int,
+                                                    rank: 1,
+                                                },
+                                                Int,
+                                            ],
+                                        },
+                                        kind: Ident {
+                                            name: "fill",
+                                            symbol_id: Some(
+                                                SymbolId(
+                                                    20,
+                                                ),
+                                            ),
+                                        },
+                                    },
+                                    args: [
+                                        SemanticExpr {
+                                            location: SourceLocation {
+                                                line: 46,
+                                                column: 10,
+                                            },
+                                            ty: Array {
+                                                element: Int,
+                                                rank: 1,
+                                            },
+                                            kind: Ident {
+                                                name: "local",
+                                                symbol_id: Some(
+                                                    SymbolId(
+                                                        31,
+                                                    ),
+                                                ),
+                                            },
+                                        },
+                                        SemanticExpr {
+                                            location: SourceLocation {
+                                                line: 46,
+                                                column: 17,
+                                            },
+                                            ty: Int,
+                                            kind: Ident {
+                                                name: "local_limit",
+                                                symbol_id: Some(
+                                                    SymbolId(
+                                                        32,
+                                                    ),
+                                                ),
+                                            },
+                                        },
+                                    ],
+                                    function_symbol: Some(
+                                        SymbolId(
+                                            20,
+                                        ),
+                                    ),
+                                },
+                            },
+                        ),
+                        Expr(
+                            SemanticExpr {
+                                location: SourceLocation {
+                                    line: 48,
+                                    column: 14,
+                                },
+                                ty: Int,
+                                kind: Binary {
+                                    op: Add,
+                                    left: SemanticExpr {
+                                        location: SourceLocation {
+                                            line: 48,
+                                            column: 5,
+                                        },
+                                        ty: Int,
+                                        kind: Index {
+                                            array: SemanticExpr {
+                                                location: SourceLocation {
+                                                    line: 48,
+                                                    column: 5,
+                                                },
+                                                ty: Array {
+                                                    element: Int,
+                                                    rank: 1,
+                                                },
+                                                kind: Ident {
+                                                    name: "local",
+                                                    symbol_id: Some(
+                                                        SymbolId(
+                                                            31,
+                                                        ),
+                                                    ),
+                                                },
+                                            },
+                                            index: SemanticExpr {
+                                                location: SourceLocation {
+                                                    line: 48,
+                                                    column: 11,
+                                                },
+                                                ty: Int,
+                                                kind: IntLiteral(
+                                                    "0",
+                                                ),
+                                            },
+                                        },
+                                    },
+                                    right: SemanticExpr {
+                                        location: SourceLocation {
+                                            line: 48,
+                                            column: 16,
+                                        },
+                                        ty: Int,
+                                        kind: Ident {
+                                            name: "base",
+                                            symbol_id: Some(
+                                                SymbolId(
+                                                    34,
+                                                ),
+                                            ),
+                                        },
+                                    },
+                                },
+                            },
+                        ),
+                        For {
+                            scope_id: None,
+                            init: Some(
+                                Expr(
+                                    SemanticExpr {
+                                        location: SourceLocation {
+                                            line: 50,
+                                            column: 10,
+                                        },
+                                        ty: Int,
+                                        kind: Assign {
+                                            target: SemanticExpr {
+                                                location: SourceLocation {
+                                                    line: 50,
+                                                    column: 10,
+                                                },
+                                                ty: Int,
+                                                kind: Ident {
+                                                    name: "i",
+                                                    symbol_id: Some(
+                                                        SymbolId(
+                                                            35,
+                                                        ),
+                                                    ),
+                                                },
+                                            },
+                                            value: SemanticExpr {
+                                                location: SourceLocation {
+                                                    line: 50,
+                                                    column: 14,
+                                                },
+                                                ty: Int,
+                                                kind: IntLiteral(
+                                                    "0",
+                                                ),
+                                            },
+                                        },
+                                    },
+                                ),
+                            ),
+                            condition: Some(
+                                SemanticExpr {
+                                    location: SourceLocation {
+                                        line: 50,
+                                        column: 19,
+                                    },
+                                    ty: Int,
+                                    kind: Binary {
+                                        op: Lt,
+                                        left: SemanticExpr {
+                                            location: SourceLocation {
+                                                line: 50,
+                                                column: 17,
+                                            },
+                                            ty: Int,
+                                            kind: Ident {
+                                                name: "i",
+                                                symbol_id: Some(
+                                                    SymbolId(
+                                                        35,
+                                                    ),
+                                                ),
+                                            },
+                                        },
+                                        right: SemanticExpr {
+                                            location: SourceLocation {
+                                                line: 50,
+                                                column: 21,
+                                            },
+                                            ty: Int,
+                                            kind: Ident {
+                                                name: "local_limit",
+                                                symbol_id: Some(
+                                                    SymbolId(
+                                                        32,
+                                                    ),
+                                                ),
+                                            },
+                                        },
+                                    },
+                                },
+                            ),
+                            update: Some(
+                                SemanticExpr {
+                                    location: SourceLocation {
+                                        line: 50,
+                                        column: 34,
+                                    },
+                                    ty: Int,
+                                    kind: Assign {
+                                        target: SemanticExpr {
+                                            location: SourceLocation {
+                                                line: 50,
+                                                column: 34,
+                                            },
+                                            ty: Int,
+                                            kind: Ident {
+                                                name: "i",
+                                                symbol_id: Some(
+                                                    SymbolId(
+                                                        35,
+                                                    ),
+                                                ),
+                                            },
+                                        },
+                                        value: SemanticExpr {
+                                            location: SourceLocation {
+                                                line: 50,
+                                                column: 40,
+                                            },
+                                            ty: Int,
+                                            kind: Binary {
+                                                op: Add,
+                                                left: SemanticExpr {
+                                                    location: SourceLocation {
+                                                        line: 50,
+                                                        column: 38,
+                                                    },
+                                                    ty: Int,
+                                                    kind: Ident {
+                                                        name: "i",
+                                                        symbol_id: Some(
+                                                            SymbolId(
+                                                                35,
+                                                            ),
+                                                        ),
+                                                    },
+                                                },
+                                                right: SemanticExpr {
+                                                    location: SourceLocation {
+                                                        line: 50,
+                                                        column: 42,
+                                                    },
+                                                    ty: Int,
+                                                    kind: IntLiteral(
+                                                        "1",
+                                                    ),
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            ),
+                            body: Block(
+                                SemanticBlock {
+                                    scope_id: ScopeId(
+                                        10,
+                                    ),
+                                    statements: [
+                                        If {
+                                            condition: SemanticExpr {
+                                                location: SourceLocation {
+                                                    line: 51,
+                                                    column: 22,
+                                                },
+                                                ty: Int,
+                                                kind: Binary {
+                                                    op: Gt,
+                                                    left: SemanticExpr {
+                                                        location: SourceLocation {
+                                                            line: 51,
+                                                            column: 13,
+                                                        },
+                                                        ty: Int,
+                                                        kind: Index {
+                                                            array: SemanticExpr {
+                                                                location: SourceLocation {
+                                                                    line: 51,
+                                                                    column: 13,
+                                                                },
+                                                                ty: Array {
+                                                                    element: Int,
+                                                                    rank: 1,
+                                                                },
+                                                                kind: Ident {
+                                                                    name: "local",
+                                                                    symbol_id: Some(
+                                                                        SymbolId(
+                                                                            31,
+                                                                        ),
+                                                                    ),
+                                                                },
+                                                            },
+                                                            index: SemanticExpr {
+                                                                location: SourceLocation {
+                                                                    line: 51,
+                                                                    column: 19,
+                                                                },
+                                                                ty: Int,
+                                                                kind: Ident {
+                                                                    name: "i",
+                                                                    symbol_id: Some(
+                                                                        SymbolId(
+                                                                            35,
+                                                                        ),
+                                                                    ),
+                                                                },
+                                                            },
+                                                        },
+                                                    },
+                                                    right: SemanticExpr {
+                                                        location: SourceLocation {
+                                                            line: 51,
+                                                            column: 24,
+                                                        },
+                                                        ty: Int,
+                                                        kind: IntLiteral(
+                                                            "10",
+                                                        ),
+                                                    },
+                                                },
+                                            },
+                                            then_branch: Block(
+                                                SemanticBlock {
+                                                    scope_id: ScopeId(
+                                                        11,
+                                                    ),
+                                                    statements: [
+                                                        Continue,
+                                                    ],
+                                                },
+                                            ),
+                                            else_branch: Some(
+                                                Block(
+                                                    SemanticBlock {
+                                                        scope_id: ScopeId(
+                                                            12,
+                                                        ),
+                                                        statements: [
+                                                            Expr(
+                                                                SemanticExpr {
+                                                                    location: SourceLocation {
+                                                                        line: 54,
+                                                                        column: 13,
+                                                                    },
+                                                                    ty: Int,
+                                                                    kind: Assign {
+                                                                        target: SemanticExpr {
+                                                                            location: SourceLocation {
+                                                                                line: 54,
+                                                                                column: 13,
+                                                                            },
+                                                                            ty: Int,
+                                                                            kind: Ident {
+                                                                                name: "total",
+                                                                                symbol_id: Some(
+                                                                                    SymbolId(
+                                                                                        36,
+                                                                                    ),
+                                                                                ),
+                                                                            },
+                                                                        },
+                                                                        value: SemanticExpr {
+                                                                            location: SourceLocation {
+                                                                                line: 54,
+                                                                                column: 50,
+                                                                            },
+                                                                            ty: Int,
+                                                                            kind: Binary {
+                                                                                op: Add,
+                                                                                left: SemanticExpr {
+                                                                                    location: SourceLocation {
+                                                                                        line: 54,
+                                                                                        column: 38,
+                                                                                    },
+                                                                                    ty: Int,
+                                                                                    kind: Binary {
+                                                                                        op: Add,
+                                                                                        left: SemanticExpr {
+                                                                                            location: SourceLocation {
+                                                                                                line: 54,
+                                                                                                column: 27,
+                                                                                            },
+                                                                                            ty: Int,
+                                                                                            kind: Binary {
+                                                                                                op: Add,
+                                                                                                left: SemanticExpr {
+                                                                                                    location: SourceLocation {
+                                                                                                        line: 54,
+                                                                                                        column: 21,
+                                                                                                    },
+                                                                                                    ty: Int,
+                                                                                                    kind: Ident {
+                                                                                                        name: "total",
+                                                                                                        symbol_id: Some(
+                                                                                                            SymbolId(
+                                                                                                                36,
+                                                                                                            ),
+                                                                                                        ),
+                                                                                                    },
+                                                                                                },
+                                                                                                right: SemanticExpr {
+                                                                                                    location: SourceLocation {
+                                                                                                        line: 54,
+                                                                                                        column: 29,
+                                                                                                    },
+                                                                                                    ty: Int,
+                                                                                                    kind: Index {
+                                                                                                        array: SemanticExpr {
+                                                                                                            location: SourceLocation {
+                                                                                                                line: 54,
+                                                                                                                column: 29,
+                                                                                                            },
+                                                                                                            ty: Array {
+                                                                                                                element: Int,
+                                                                                                                rank: 1,
+                                                                                                            },
+                                                                                                            kind: Ident {
+                                                                                                                name: "local",
+                                                                                                                symbol_id: Some(
+                                                                                                                    SymbolId(
+                                                                                                                        31,
+                                                                                                                    ),
+                                                                                                                ),
+                                                                                                            },
+                                                                                                        },
+                                                                                                        index: SemanticExpr {
+                                                                                                            location: SourceLocation {
+                                                                                                                line: 54,
+                                                                                                                column: 35,
+                                                                                                            },
+                                                                                                            ty: Int,
+                                                                                                            kind: Ident {
+                                                                                                                name: "i",
+                                                                                                                symbol_id: Some(
+                                                                                                                    SymbolId(
+                                                                                                                        35,
+                                                                                                                    ),
+                                                                                                                ),
+                                                                                                            },
+                                                                                                        },
+                                                                                                    },
+                                                                                                },
+                                                                                            },
+                                                                                        },
+                                                                                        right: SemanticExpr {
+                                                                                            location: SourceLocation {
+                                                                                                line: 54,
+                                                                                                column: 40,
+                                                                                            },
+                                                                                            ty: Int,
+                                                                                            kind: Index {
+                                                                                                array: SemanticExpr {
+                                                                                                    location: SourceLocation {
+                                                                                                        line: 54,
+                                                                                                        column: 40,
+                                                                                                    },
+                                                                                                    ty: Array {
+                                                                                                        element: Int,
+                                                                                                        rank: 1,
+                                                                                                    },
+                                                                                                    kind: Ident {
+                                                                                                        name: "adjust",
+                                                                                                        symbol_id: Some(
+                                                                                                            SymbolId(
+                                                                                                                33,
+                                                                                                            ),
+                                                                                                        ),
+                                                                                                    },
+                                                                                                },
+                                                                                                index: SemanticExpr {
+                                                                                                    location: SourceLocation {
+                                                                                                        line: 54,
+                                                                                                        column: 47,
+                                                                                                    },
+                                                                                                    ty: Int,
+                                                                                                    kind: Ident {
+                                                                                                        name: "i",
+                                                                                                        symbol_id: Some(
+                                                                                                            SymbolId(
+                                                                                                                35,
+                                                                                                            ),
+                                                                                                        ),
+                                                                                                    },
+                                                                                                },
+                                                                                            },
+                                                                                        },
+                                                                                    },
+                                                                                },
+                                                                                right: SemanticExpr {
+                                                                                    location: SourceLocation {
+                                                                                        line: 54,
+                                                                                        column: 52,
+                                                                                    },
+                                                                                    ty: Int,
+                                                                                    kind: Ident {
+                                                                                        name: "base",
+                                                                                        symbol_id: Some(
+                                                                                            SymbolId(
+                                                                                                34,
+                                                                                            ),
+                                                                                        ),
+                                                                                    },
+                                                                                },
+                                                                            },
+                                                                        },
+                                                                    },
+                                                                },
+                                                            ),
+                                                        ],
+                                                    },
+                                                ),
+                                            ),
+                                        },
+                                    ],
+                                },
+                            ),
+                        },
+                        Expr(
+                            SemanticExpr {
+                                location: SourceLocation {
+                                    line: 58,
+                                    column: 5,
+                                },
+                                ty: Void,
+                                kind: Call {
+                                    callee: SemanticExpr {
+                                        location: SourceLocation {
+                                            line: 58,
+                                            column: 5,
+                                        },
+                                        ty: Function {
+                                            return_type: Void,
+                                            params: [
+                                                Int,
+                                            ],
+                                        },
+                                        kind: Ident {
+                                            name: "putint",
+                                            symbol_id: Some(
+                                                SymbolId(
+                                                    5,
+                                                ),
+                                            ),
+                                        },
+                                    },
+                                    args: [
+                                        SemanticExpr {
+                                            location: SourceLocation {
+                                                line: 58,
+                                                column: 12,
+                                            },
+                                            ty: Int,
+                                            kind: Ident {
+                                                name: "total",
+                                                symbol_id: Some(
+                                                    SymbolId(
+                                                        36,
+                                                    ),
+                                                ),
+                                            },
+                                        },
+                                    ],
+                                    function_symbol: Some(
+                                        SymbolId(
+                                            5,
+                                        ),
+                                    ),
+                                },
+                            },
+                        ),
+                        Expr(
+                            SemanticExpr {
+                                location: SourceLocation {
+                                    line: 59,
+                                    column: 5,
+                                },
+                                ty: Void,
+                                kind: Call {
+                                    callee: SemanticExpr {
+                                        location: SourceLocation {
+                                            line: 59,
+                                            column: 5,
+                                        },
+                                        ty: Function {
+                                            return_type: Void,
+                                            params: [
+                                                Float,
+                                            ],
+                                        },
+                                        kind: Ident {
+                                            name: "putfloat",
+                                            symbol_id: Some(
+                                                SymbolId(
+                                                    7,
+                                                ),
+                                            ),
+                                        },
+                                    },
+                                    args: [
+                                        SemanticExpr {
+                                            location: SourceLocation {
+                                                line: 59,
+                                                column: 20,
+                                            },
+                                            ty: Float,
+                                            kind: Binary {
+                                                op: Add,
+                                                left: SemanticExpr {
+                                                    location: SourceLocation {
+                                                        line: 59,
+                                                        column: 14,
+                                                    },
+                                                    ty: Float,
+                                                    kind: Ident {
+                                                        name: "scale",
+                                                        symbol_id: Some(
+                                                            SymbolId(
+                                                                13,
+                                                            ),
+                                                        ),
+                                                    },
+                                                },
+                                                right: SemanticExpr {
+                                                    location: SourceLocation {
+                                                        line: 59,
+                                                        column: 22,
+                                                    },
+                                                    ty: Float,
+                                                    kind: Ident {
+                                                        name: "default_bias",
+                                                        symbol_id: Some(
+                                                            SymbolId(
+                                                                15,
+                                                            ),
+                                                        ),
+                                                    },
+                                                },
+                                            },
+                                        },
+                                    ],
+                                    function_symbol: Some(
+                                        SymbolId(
+                                            7,
+                                        ),
+                                    ),
+                                },
+                            },
+                        ),
+                        Return(
+                            Some(
+                                SemanticExpr {
+                                    location: SourceLocation {
+                                        line: 60,
+                                        column: 34,
+                                    },
+                                    ty: Int,
+                                    kind: Binary {
+                                        op: Add,
+                                        left: SemanticExpr {
+                                            location: SourceLocation {
+                                                line: 60,
+                                                column: 12,
+                                            },
+                                            ty: Int,
+                                            kind: Call {
+                                                callee: SemanticExpr {
+                                                    location: SourceLocation {
+                                                        line: 60,
+                                                        column: 12,
+                                                    },
+                                                    ty: Function {
+                                                        return_type: Int,
+                                                        params: [
+                                                            Array {
+                                                                element: Int,
+                                                                rank: 1,
+                                                            },
+                                                            Int,
+                                                        ],
+                                                    },
+                                                    kind: Ident {
+                                                        name: "sum_array",
+                                                        symbol_id: Some(
+                                                            SymbolId(
+                                                                19,
+                                                            ),
+                                                        ),
+                                                    },
+                                                },
+                                                args: [
+                                                    SemanticExpr {
+                                                        location: SourceLocation {
+                                                            line: 60,
+                                                            column: 22,
+                                                        },
+                                                        ty: Array {
+                                                            element: Int,
+                                                            rank: 1,
+                                                        },
+                                                        kind: Ident {
+                                                            name: "numbers",
+                                                            symbol_id: Some(
+                                                                SymbolId(
+                                                                    17,
+                                                                ),
+                                                            ),
+                                                        },
+                                                    },
+                                                    SemanticExpr {
+                                                        location: SourceLocation {
+                                                            line: 60,
+                                                            column: 31,
+                                                        },
+                                                        ty: Int,
+                                                        kind: IntLiteral(
+                                                            "3",
+                                                        ),
+                                                    },
+                                                ],
+                                                function_symbol: Some(
+                                                    SymbolId(
+                                                        19,
+                                                    ),
+                                                ),
+                                            },
+                                        },
+                                        right: SemanticExpr {
+                                            location: SourceLocation {
+                                                line: 60,
+                                                column: 36,
+                                            },
+                                            ty: Int,
+                                            kind: Ident {
+                                                name: "global_count",
+                                                symbol_id: Some(
+                                                    SymbolId(
+                                                        12,
+                                                    ),
+                                                ),
+                                            },
+                                        },
+                                    },
+                                },
+                            ),
+                        ),
+                    ],
+                },
+            },
+        ),
+    ],
+    symbols: [
+        Symbol {
+            id: SymbolId(
+                0,
+            ),
+            name: "getint",
+            kind: Function,
+            is_const: false,
+            ty: Function {
+                return_type: Int,
+                params: [],
+            },
+            scope_id: ScopeId(
+                0,
+            ),
+        },
+        Symbol {
+            id: SymbolId(
+                1,
+            ),
+            name: "getch",
+            kind: Function,
+            is_const: false,
+            ty: Function {
+                return_type: Int,
+                params: [],
+            },
+            scope_id: ScopeId(
+                0,
+            ),
+        },
+        Symbol {
+            id: SymbolId(
+                2,
+            ),
+            name: "getfloat",
+            kind: Function,
+            is_const: false,
+            ty: Function {
+                return_type: Float,
+                params: [],
+            },
+            scope_id: ScopeId(
+                0,
+            ),
+        },
+        Symbol {
+            id: SymbolId(
+                3,
+            ),
+            name: "getarray",
+            kind: Function,
+            is_const: false,
+            ty: Function {
+                return_type: Int,
+                params: [
+                    Array {
+                        element: Int,
+                        rank: 1,
+                    },
+                ],
+            },
+            scope_id: ScopeId(
+                0,
+            ),
+        },
+        Symbol {
+            id: SymbolId(
+                4,
+            ),
+            name: "getfarray",
+            kind: Function,
+            is_const: false,
+            ty: Function {
+                return_type: Int,
+                params: [
+                    Array {
+                        element: Float,
+                        rank: 1,
+                    },
+                ],
+            },
+            scope_id: ScopeId(
+                0,
+            ),
+        },
+        Symbol {
+            id: SymbolId(
+                5,
+            ),
+            name: "putint",
+            kind: Function,
+            is_const: false,
+            ty: Function {
+                return_type: Void,
+                params: [
+                    Int,
+                ],
+            },
+            scope_id: ScopeId(
+                0,
+            ),
+        },
+        Symbol {
+            id: SymbolId(
+                6,
+            ),
+            name: "putch",
+            kind: Function,
+            is_const: false,
+            ty: Function {
+                return_type: Void,
+                params: [
+                    Int,
+                ],
+            },
+            scope_id: ScopeId(
+                0,
+            ),
+        },
+        Symbol {
+            id: SymbolId(
+                7,
+            ),
+            name: "putfloat",
+            kind: Function,
+            is_const: false,
+            ty: Function {
+                return_type: Void,
+                params: [
+                    Float,
+                ],
+            },
+            scope_id: ScopeId(
+                0,
+            ),
+        },
+        Symbol {
+            id: SymbolId(
+                8,
+            ),
+            name: "putarray",
+            kind: Function,
+            is_const: false,
+            ty: Function {
+                return_type: Void,
+                params: [
+                    Int,
+                    Array {
+                        element: Int,
+                        rank: 1,
+                    },
+                ],
+            },
+            scope_id: ScopeId(
+                0,
+            ),
+        },
+        Symbol {
+            id: SymbolId(
+                9,
+            ),
+            name: "putfarray",
+            kind: Function,
+            is_const: false,
+            ty: Function {
+                return_type: Void,
+                params: [
+                    Int,
+                    Array {
+                        element: Float,
+                        rank: 1,
+                    },
+                ],
+            },
+            scope_id: ScopeId(
+                0,
+            ),
+        },
+        Symbol {
+            id: SymbolId(
+                10,
+            ),
+            name: "starttime",
+            kind: Function,
+            is_const: false,
+            ty: Function {
+                return_type: Void,
+                params: [],
+            },
+            scope_id: ScopeId(
+                0,
+            ),
+        },
+        Symbol {
+            id: SymbolId(
+                11,
+            ),
+            name: "stoptime",
+            kind: Function,
+            is_const: false,
+            ty: Function {
+                return_type: Void,
+                params: [],
+            },
+            scope_id: ScopeId(
+                0,
+            ),
+        },
+        Symbol {
+            id: SymbolId(
+                12,
+            ),
+            name: "global_count",
+            kind: Variable,
+            is_const: false,
+            ty: Int,
+            scope_id: ScopeId(
+                0,
+            ),
+        },
+        Symbol {
+            id: SymbolId(
+                13,
+            ),
+            name: "scale",
+            kind: Variable,
+            is_const: false,
+            ty: Float,
+            scope_id: ScopeId(
+                0,
+            ),
+        },
+        Symbol {
+            id: SymbolId(
+                14,
+            ),
+            name: "max_value",
+            kind: Variable,
+            is_const: true,
+            ty: Int,
+            scope_id: ScopeId(
+                0,
+            ),
+        },
+        Symbol {
+            id: SymbolId(
+                15,
+            ),
+            name: "default_bias",
+            kind: Variable,
+            is_const: true,
+            ty: Float,
+            scope_id: ScopeId(
+                0,
+            ),
+        },
+        Symbol {
+            id: SymbolId(
+                16,
+            ),
+            name: "offsets",
+            kind: Variable,
+            is_const: true,
+            ty: Array {
+                element: Int,
+                rank: 1,
+            },
+            scope_id: ScopeId(
+                0,
+            ),
+        },
+        Symbol {
+            id: SymbolId(
+                17,
+            ),
+            name: "numbers",
+            kind: Variable,
+            is_const: false,
+            ty: Array {
+                element: Int,
+                rank: 1,
+            },
+            scope_id: ScopeId(
+                0,
+            ),
+        },
+        Symbol {
+            id: SymbolId(
+                18,
+            ),
+            name: "add",
+            kind: Function,
+            is_const: false,
+            ty: Function {
+                return_type: Int,
+                params: [
+                    Int,
+                    Int,
+                ],
+            },
+            scope_id: ScopeId(
+                0,
+            ),
+        },
+        Symbol {
+            id: SymbolId(
+                19,
+            ),
+            name: "sum_array",
+            kind: Function,
+            is_const: false,
+            ty: Function {
+                return_type: Int,
+                params: [
+                    Array {
+                        element: Int,
+                        rank: 1,
+                    },
+                    Int,
+                ],
+            },
+            scope_id: ScopeId(
+                0,
+            ),
+        },
+        Symbol {
+            id: SymbolId(
+                20,
+            ),
+            name: "fill",
+            kind: Function,
+            is_const: false,
+            ty: Function {
+                return_type: Void,
+                params: [
+                    Array {
+                        element: Int,
+                        rank: 1,
+                    },
+                    Int,
+                ],
+            },
+            scope_id: ScopeId(
+                0,
+            ),
+        },
+        Symbol {
+            id: SymbolId(
+                21,
+            ),
+            name: "main",
+            kind: Function,
+            is_const: false,
+            ty: Function {
+                return_type: Int,
+                params: [],
+            },
+            scope_id: ScopeId(
+                0,
+            ),
+        },
+        Symbol {
+            id: SymbolId(
+                22,
+            ),
+            name: "lhs",
+            kind: Parameter,
+            is_const: false,
+            ty: Int,
+            scope_id: ScopeId(
+                1,
+            ),
+        },
+        Symbol {
+            id: SymbolId(
+                23,
+            ),
+            name: "rhs",
+            kind: Parameter,
+            is_const: false,
+            ty: Int,
+            scope_id: ScopeId(
+                1,
+            ),
+        },
+        Symbol {
+            id: SymbolId(
+                24,
+            ),
+            name: "arr",
+            kind: Parameter,
+            is_const: false,
+            ty: Array {
+                element: Int,
+                rank: 1,
+            },
+            scope_id: ScopeId(
+                2,
+            ),
+        },
+        Symbol {
+            id: SymbolId(
+                25,
+            ),
+            name: "n",
+            kind: Parameter,
+            is_const: false,
+            ty: Int,
+            scope_id: ScopeId(
+                2,
+            ),
+        },
+        Symbol {
+            id: SymbolId(
+                26,
+            ),
+            name: "i",
+            kind: Variable,
+            is_const: false,
+            ty: Int,
+            scope_id: ScopeId(
+                2,
+            ),
+        },
+        Symbol {
+            id: SymbolId(
+                27,
+            ),
+            name: "total",
+            kind: Variable,
+            is_const: false,
+            ty: Int,
+            scope_id: ScopeId(
+                2,
+            ),
+        },
+        Symbol {
+            id: SymbolId(
+                28,
+            ),
+            name: "arr",
+            kind: Parameter,
+            is_const: false,
+            ty: Array {
+                element: Int,
+                rank: 1,
+            },
+            scope_id: ScopeId(
+                4,
+            ),
+        },
+        Symbol {
+            id: SymbolId(
+                29,
+            ),
+            name: "n",
+            kind: Parameter,
+            is_const: false,
+            ty: Int,
+            scope_id: ScopeId(
+                4,
+            ),
+        },
+        Symbol {
+            id: SymbolId(
+                30,
+            ),
+            name: "i",
+            kind: Variable,
+            is_const: false,
+            ty: Int,
+            scope_id: ScopeId(
+                4,
+            ),
+        },
+        Symbol {
+            id: SymbolId(
+                31,
+            ),
+            name: "local",
+            kind: Variable,
+            is_const: false,
+            ty: Array {
+                element: Int,
+                rank: 1,
+            },
+            scope_id: ScopeId(
+                9,
+            ),
+        },
+        Symbol {
+            id: SymbolId(
+                32,
+            ),
+            name: "local_limit",
+            kind: Variable,
+            is_const: true,
+            ty: Int,
+            scope_id: ScopeId(
+                9,
+            ),
+        },
+        Symbol {
+            id: SymbolId(
+                33,
+            ),
+            name: "adjust",
+            kind: Variable,
+            is_const: true,
+            ty: Array {
+                element: Int,
+                rank: 1,
+            },
+            scope_id: ScopeId(
+                9,
+            ),
+        },
+        Symbol {
+            id: SymbolId(
+                34,
+            ),
+            name: "base",
+            kind: Variable,
+            is_const: true,
+            ty: Int,
+            scope_id: ScopeId(
+                9,
+            ),
+        },
+        Symbol {
+            id: SymbolId(
+                35,
+            ),
+            name: "i",
+            kind: Variable,
+            is_const: false,
+            ty: Int,
+            scope_id: ScopeId(
+                9,
+            ),
+        },
+        Symbol {
+            id: SymbolId(
+                36,
+            ),
+            name: "total",
+            kind: Variable,
+            is_const: false,
+            ty: Int,
+            scope_id: ScopeId(
+                9,
+            ),
+        },
+    ],
+    scopes: [
+        ScopeInfo {
+            id: ScopeId(
+                0,
+            ),
+            parent: None,
+            symbols: {
+                "getfloat": SymbolId(
+                    2,
+                ),
+                "getch": SymbolId(
+                    1,
+                ),
+                "scale": SymbolId(
+                    13,
+                ),
+                "putint": SymbolId(
+                    5,
+                ),
+                "putarray": SymbolId(
+                    8,
+                ),
+                "getfarray": SymbolId(
+                    4,
+                ),
+                "putch": SymbolId(
+                    6,
+                ),
+                "add": SymbolId(
+                    18,
+                ),
+                "getint": SymbolId(
+                    0,
+                ),
+                "numbers": SymbolId(
+                    17,
+                ),
+                "main": SymbolId(
+                    21,
+                ),
+                "offsets": SymbolId(
+                    16,
+                ),
+                "starttime": SymbolId(
+                    10,
+                ),
+                "default_bias": SymbolId(
+                    15,
+                ),
+                "stoptime": SymbolId(
+                    11,
+                ),
+                "max_value": SymbolId(
+                    14,
+                ),
+                "getarray": SymbolId(
+                    3,
+                ),
+                "sum_array": SymbolId(
+                    19,
+                ),
+                "putfarray": SymbolId(
+                    9,
+                ),
+                "fill": SymbolId(
+                    20,
+                ),
+                "putfloat": SymbolId(
+                    7,
+                ),
+                "global_count": SymbolId(
+                    12,
+                ),
+            },
+        },
+        ScopeInfo {
+            id: ScopeId(
+                1,
+            ),
+            parent: Some(
+                ScopeId(
+                    0,
+                ),
+            ),
+            symbols: {
+                "lhs": SymbolId(
+                    22,
+                ),
+                "rhs": SymbolId(
+                    23,
+                ),
+            },
+        },
+        ScopeInfo {
+            id: ScopeId(
+                2,
+            ),
+            parent: Some(
+                ScopeId(
+                    0,
+                ),
+            ),
+            symbols: {
+                "total": SymbolId(
+                    27,
+                ),
+                "i": SymbolId(
+                    26,
+                ),
+                "arr": SymbolId(
+                    24,
+                ),
+                "n": SymbolId(
+                    25,
+                ),
+            },
+        },
+        ScopeInfo {
+            id: ScopeId(
+                3,
+            ),
+            parent: Some(
+                ScopeId(
+                    2,
+                ),
+            ),
+            symbols: {},
+        },
+        ScopeInfo {
+            id: ScopeId(
+                4,
+            ),
+            parent: Some(
+                ScopeId(
+                    0,
+                ),
+            ),
+            symbols: {
+                "i": SymbolId(
+                    30,
+                ),
+                "n": SymbolId(
+                    29,
+                ),
+                "arr": SymbolId(
+                    28,
+                ),
+            },
+        },
+        ScopeInfo {
+            id: ScopeId(
+                5,
+            ),
+            parent: Some(
+                ScopeId(
+                    4,
+                ),
+            ),
+            symbols: {},
+        },
+        ScopeInfo {
+            id: ScopeId(
+                6,
+            ),
+            parent: Some(
+                ScopeId(
+                    5,
+                ),
+            ),
+            symbols: {},
+        },
+        ScopeInfo {
+            id: ScopeId(
+                7,
+            ),
+            parent: Some(
+                ScopeId(
+                    5,
+                ),
+            ),
+            symbols: {},
+        },
+        ScopeInfo {
+            id: ScopeId(
+                8,
+            ),
+            parent: Some(
+                ScopeId(
+                    5,
+                ),
+            ),
+            symbols: {},
+        },
+        ScopeInfo {
+            id: ScopeId(
+                9,
+            ),
+            parent: Some(
+                ScopeId(
+                    0,
+                ),
+            ),
+            symbols: {
+                "local_limit": SymbolId(
+                    32,
+                ),
+                "adjust": SymbolId(
+                    33,
+                ),
+                "base": SymbolId(
+                    34,
+                ),
+                "total": SymbolId(
+                    36,
+                ),
+                "i": SymbolId(
+                    35,
+                ),
+                "local": SymbolId(
+                    31,
+                ),
+            },
+        },
+        ScopeInfo {
+            id: ScopeId(
+                10,
+            ),
+            parent: Some(
+                ScopeId(
+                    9,
+                ),
+            ),
+            symbols: {},
+        },
+        ScopeInfo {
+            id: ScopeId(
+                11,
+            ),
+            parent: Some(
+                ScopeId(
+                    10,
+                ),
+            ),
+            symbols: {},
+        },
+        ScopeInfo {
+            id: ScopeId(
+                12,
+            ),
+            parent: Some(
+                ScopeId(
+                    10,
+                ),
+            ),
+            symbols: {},
+        },
+    ],
+}
