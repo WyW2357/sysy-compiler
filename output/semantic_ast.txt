@@ -2990,68 +2990,68 @@ SemanticProgram {
                 "putint": SymbolId(
                     5,
                 ),
-                "getarray": SymbolId(
-                    3,
+                "max_value": SymbolId(
+                    14,
                 ),
-                "putarray": SymbolId(
-                    8,
-                ),
-                "getfarray": SymbolId(
-                    4,
-                ),
-                "putch": SymbolId(
-                    6,
-                ),
-                "putfarray": SymbolId(
-                    9,
-                ),
-                "starttime": SymbolId(
-                    10,
-                ),
-                "add": SymbolId(
-                    18,
-                ),
-                "main": SymbolId(
-                    21,
-                ),
-                "global_count": SymbolId(
-                    12,
+                "getch": SymbolId(
+                    1,
                 ),
                 "default_bias": SymbolId(
                     15,
                 ),
+                "offsets": SymbolId(
+                    16,
+                ),
+                "starttime": SymbolId(
+                    10,
+                ),
                 "numbers": SymbolId(
                     17,
                 ),
-                "fill": SymbolId(
-                    20,
+                "add": SymbolId(
+                    18,
                 ),
-                "max_value": SymbolId(
-                    14,
-                ),
-                "getint": SymbolId(
-                    0,
-                ),
-                "scale": SymbolId(
-                    13,
-                ),
-                "stoptime": SymbolId(
-                    11,
-                ),
-                "getfloat": SymbolId(
-                    2,
-                ),
-                "putfloat": SymbolId(
-                    7,
-                ),
-                "offsets": SymbolId(
-                    16,
+                "getarray": SymbolId(
+                    3,
                 ),
                 "sum_array": SymbolId(
                     19,
                 ),
-                "getch": SymbolId(
-                    1,
+                "main": SymbolId(
+                    21,
+                ),
+                "getfloat": SymbolId(
+                    2,
+                ),
+                "getfarray": SymbolId(
+                    4,
+                ),
+                "fill": SymbolId(
+                    20,
+                ),
+                "putarray": SymbolId(
+                    8,
+                ),
+                "getint": SymbolId(
+                    0,
+                ),
+                "putch": SymbolId(
+                    6,
+                ),
+                "putfloat": SymbolId(
+                    7,
+                ),
+                "stoptime": SymbolId(
+                    11,
+                ),
+                "global_count": SymbolId(
+                    12,
+                ),
+                "scale": SymbolId(
+                    13,
+                ),
+                "putfarray": SymbolId(
+                    9,
                 ),
             },
         },
@@ -3065,11 +3065,11 @@ SemanticProgram {
                 ),
             ),
             symbols: {
-                "lhs": SymbolId(
-                    22,
-                ),
                 "rhs": SymbolId(
                     23,
+                ),
+                "lhs": SymbolId(
+                    22,
                 ),
             },
         },
@@ -3086,14 +3086,14 @@ SemanticProgram {
                 "total": SymbolId(
                     27,
                 ),
+                "arr": SymbolId(
+                    24,
+                ),
                 "n": SymbolId(
                     25,
                 ),
                 "i": SymbolId(
                     26,
-                ),
-                "arr": SymbolId(
-                    24,
                 ),
             },
         },
@@ -3118,14 +3118,14 @@ SemanticProgram {
                 ),
             ),
             symbols: {
-                "arr": SymbolId(
-                    28,
+                "i": SymbolId(
+                    30,
                 ),
                 "n": SymbolId(
                     29,
                 ),
-                "i": SymbolId(
-                    30,
+                "arr": SymbolId(
+                    28,
                 ),
             },
         },
@@ -3183,23 +3183,23 @@ SemanticProgram {
                 ),
             ),
             symbols: {
-                "local": SymbolId(
-                    31,
-                ),
-                "local_limit": SymbolId(
-                    32,
-                ),
                 "adjust": SymbolId(
                     33,
-                ),
-                "base": SymbolId(
-                    34,
                 ),
                 "i": SymbolId(
                     35,
                 ),
+                "local_limit": SymbolId(
+                    32,
+                ),
                 "total": SymbolId(
                     36,
+                ),
+                "local": SymbolId(
+                    31,
+                ),
+                "base": SymbolId(
+                    34,
                 ),
             },
         },
