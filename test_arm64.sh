@@ -6,10 +6,9 @@ cd "$SCRIPT_DIR"
 
 LLVM_PREFIX="${LLVM_SYS_181_PREFIX:-/usr/lib/llvm-18}"
 INPUT_FILE="${1:-}"
-DEFAULT_INPUT_FILE="input/.test_input_default.txt"
-FALLBACK_INPUT_FILE="input/test_input.txt"
 
 mkdir -p input output
+rm -f output/*
 
 require_command() {
     if ! command -v "$1" >/dev/null 2>&1; then
@@ -45,17 +44,16 @@ if [[ -n "$INPUT_FILE" ]]; then
         echo "input file not found: $INPUT_FILE" >&2
         exit 1
     fi
-elif [[ -f "$FALLBACK_INPUT_FILE" ]]; then
-    INPUT_FILE="$FALLBACK_INPUT_FILE"
-else
-    printf '1\n3\n' > "$DEFAULT_INPUT_FILE"
-    INPUT_FILE="$DEFAULT_INPUT_FILE"
 fi
 
 echo "[4/4] run with qemu-aarch64"
-echo "input file: $INPUT_FILE"
 set +e
-qemu-aarch64 -L /usr/aarch64-linux-gnu ./output/sysy_arm64 < "$INPUT_FILE"
+if [[ -n "$INPUT_FILE" ]]; then
+    echo "input file: $INPUT_FILE"
+    qemu-aarch64 -L /usr/aarch64-linux-gnu ./output/sysy_arm64 < "$INPUT_FILE"
+else
+    qemu-aarch64 -L /usr/aarch64-linux-gnu ./output/sysy_arm64
+fi
 status=$?
 set -e
 

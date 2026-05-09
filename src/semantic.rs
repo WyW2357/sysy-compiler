@@ -266,6 +266,14 @@ impl Analyzer {
             ),
             ("putint", TypeName::Void, vec![SemanticType::Int]),
             ("putch", TypeName::Void, vec![SemanticType::Int]),
+            (
+                "putstr",
+                TypeName::Void,
+                vec![SemanticType::Array {
+                    element: TypeName::Int,
+                    rank: 1,
+                }],
+            ),
             ("putfloat", TypeName::Void, vec![SemanticType::Float]),
             (
                 "putarray",

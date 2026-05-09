@@ -1,4 +1,8 @@
 #include <stdio.h>
+#include <time.h>
+
+static struct timespec g_timer_start;
+static int g_timer_started = 0;
 
 int getint(void) {
     int value = 0;
@@ -38,11 +42,19 @@ int getfarray(float a[]) {
 }
 
 void putint(int x) {
-    printf("%d\n", x);
+    printf("%d", x);
 }
 
 void putch(int x) {
     putchar(x);
+}
+
+void putstr(int s[]) {
+    int i = 0;
+    while (s[i] != 0) {
+        putchar(s[i]);
+        i = i + 1;
+    }
 }
 
 void putfloat(float x) {
@@ -65,6 +77,31 @@ void putfarray(int n, float a[]) {
     putchar('\n');
 }
 
-void starttime(void) {}
+void starttime(void) {
+    clock_gettime(CLOCK_MONOTONIC, &g_timer_start);
+    g_timer_started = 1;
+}
 
-void stoptime(void) {}
+void stoptime(void) {
+    struct timespec end;
+    long sec;
+    long nsec;
+    double ms;
+
+    if (!g_timer_started) {
+        printf("[timer] starttime not called\n");
+        return;
+    }
+
+    clock_gettime(CLOCK_MONOTONIC, &end);
+    sec = end.tv_sec - g_timer_start.tv_sec;
+    nsec = end.tv_nsec - g_timer_start.tv_nsec;
+    if (nsec < 0) {
+        sec = sec - 1;
+        nsec = nsec + 1000000000L;
+    }
+
+    ms = (double)sec * 1000.0 + (double)nsec / 1000000.0;
+    printf("[timer] %.3f ms\n", ms);
+    g_timer_started = 0;
+}

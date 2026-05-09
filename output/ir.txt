@@ -1,49 +1,54 @@
 globals:
-  @global_count : int = 3
-  @scale : float = 1.500000
-  @max_value : int const = 100
-  @default_bias : float const = 0.250000
-  @offsets : int[rank=1] const = [2, 4, 6]
-  @numbers : int[rank=1] = [1, 2, 3, 4, 5]
+  @g_scalar : int = 7
+  @g_const : int const = 11
+  @g_arr : int[rank=1] = [1, 3, 5, 7, 9]
+  @g_f : float = 1.250000
+  @g_fc : float const = 0.750000
+  @msg_begin : int[rank=1] = [66, 69, 71, 73, 78, 95, 84, 69, 83, 84, 83, 10, 0]
+  @msg_test : int[rank=1] = [84, 69, 83, 84, 95, 0]
+  @msg_pass : int[rank=1] = [58, 80, 65, 83, 83, 33, 10, 0]
+  @msg_fail : int[rank=1] = [58, 70, 65, 73, 76, 33, 10, 0]
 
-fn add(int lhs, int rhs) -> int {
+fn add3(int a, int b, int c) -> int {
 entry:
-  %t0 = load lhs
-  %t1 = load rhs
+  %t0 = load a
+  %t1 = load b
   %t2 = Add %t0, %t1
-  return %t2
+  %t3 = load c
+  %t4 = Add %t2, %t3
+  return %t4
 }
 
-fn sum_array(int[rank=1] arr, int n) -> int {
+fn passthrough_int(int x) -> int {
+entry:
+  %t0 = load x
+  return %t0
+}
+
+fn passthrough_float(float x) -> float {
+entry:
+  %t0 = load x
+  return %t0
+}
+
+fn clamp_nonneg(int x) -> int {
+entry:
+  %t0 = load x
+  %t1 = Gt %t0, 0
+  branch %t1 ? if_then.0 : if_else.1
+if_then.0:
+  %t2 = load x
+  return %t2
+if_else.1:
+  return 0
+if_end.2:
+  return 0
+}
+
+fn fill_linear(int[rank=1] arr, int n, int start) -> void {
 entry:
   decl int i
   store 0 -> i
-  decl int total
-  store 0 -> total
-  jump while_cond.0
-while_cond.0:
-  %t0 = load i
-  %t1 = load n
-  %t2 = Lt %t0, %t1
-  branch %t2 ? while_body.1 : while_end.2
-while_body.1:
-  %t3 = load total
-  %t4 = load i
-  %t5 = load arr[%t4]
-  %t6 = Add %t3, %t5
-  store %t6 -> total
-  %t7 = load i
-  %t8 = Add %t7, 1
-  store %t8 -> i
-  jump while_cond.0
-while_end.2:
-  %t9 = load total
-  return %t9
-}
-
-fn fill(int[rank=1] arr, int n) -> void {
-entry:
-  decl int i
   store 0 -> i
   jump for_cond.0
 for_cond.0:
@@ -53,104 +58,862 @@ for_cond.0:
   branch %t2 ? for_body.1 : for_end.3
 for_body.1:
   %t3 = load i
-  %t4 = Mod %t3, 2
-  %t5 = Eq %t4, 0
-  branch %t5 ? if_then.4 : if_else.5
-if_then.4:
-  %t6 = load i
-  %t7 = call getint()
-  store %t7 -> arr[%t6]
-  jump if_end.6
-if_else.5:
-  %t8 = load i
-  %t9 = load i
-  %t10 = Sub %t9, 1
-  %t11 = load arr[%t10]
-  %t12 = call add(%t11, 1)
-  store %t12 -> arr[%t8]
-  jump if_end.6
-if_end.6:
-  %t13 = load i
-  %t14 = load arr[%t13]
-  %t15 = Gt %t14, 100
-  branch %t15 ? if_then.7 : if_else.8
-if_then.7:
-  jump for_end.3
-if_else.8:
-  jump if_end.9
-if_end.9:
+  %t4 = load start
+  %t5 = load i
+  %t6 = Mul %t5, 2
+  %t7 = Add %t4, %t6
+  store %t7 -> arr[%t3]
   jump for_update.2
 for_update.2:
-  %t16 = load i
-  %t17 = Add %t16, 1
-  store %t17 -> i
+  %t8 = load i
+  %t9 = Add %t8, 1
+  store %t9 -> i
   jump for_cond.0
 for_end.3:
   return
 }
 
-fn main() -> int {
+fn print_case_result(int case_id, int value) -> void {
 entry:
-  decl int[rank=1] local[3]
-  store 0 -> local[0]
-  store 1 -> local[1]
-  store 2 -> local[2]
-  decl const int local_limit
-  store 3 -> local_limit
-  decl const int[rank=1] adjust[3]
-  store 1 -> adjust[0]
-  store 0 -> adjust[1]
-  store -1 -> adjust[2]
-  decl const int base
-  store 4 -> base
+  call putstr(&msg_test)
+  %t0 = load case_id
+  call putint(%t0)
+  %t1 = load value
+  branch %t1 ? if_then.0 : if_else.1
+if_then.0:
+  call putstr(&msg_pass)
+  jump if_end.2
+if_else.1:
+  call putstr(&msg_fail)
+  jump if_end.2
+if_end.2:
+  return
+}
+
+fn test_arith_and_assign() -> int {
+entry:
+  decl int flag
+  store 0 -> flag
+  decl int x
+  store 14 -> x
+  %t0 = load x
+  %t1 = Eq %t0, 14
+  branch %t1 ? if_then.0 : if_else.1
+if_then.0:
+  %t2 = load flag
+  %t3 = Add %t2, 1
+  store %t3 -> flag
+  jump if_end.2
+if_else.1:
+  jump if_end.2
+if_end.2:
+  %t4 = load x
+  %t5 = Sub %t4, 5
+  %t6 = Div %t5, 3
+  store %t6 -> x
+  %t7 = load x
+  %t8 = Eq %t7, 3
+  branch %t8 ? if_then.3 : if_else.4
+if_then.3:
+  %t9 = load flag
+  %t10 = Add %t9, 1
+  store %t10 -> flag
+  jump if_end.5
+if_else.4:
+  jump if_end.5
+if_end.5:
+  %t11 = load x
+  %t12 = Mod %t11, 2
+  store %t12 -> x
+  %t13 = load x
+  %t14 = Eq %t13, 1
+  branch %t14 ? if_then.6 : if_else.7
+if_then.6:
+  %t15 = load flag
+  %t16 = Add %t15, 1
+  store %t16 -> flag
+  jump if_end.8
+if_else.7:
+  jump if_end.8
+if_end.8:
+  %t17 = load flag
+  %t18 = Eq %t17, 3
+  return %t18
+}
+
+fn test_unary_and_empty_stmt() -> int {
+entry:
+  decl int a
+  store 3 -> a
+  decl int b
+  %t0 = load a
+  %t1 = Minus %t0
+  store %t1 -> b
+  decl int c
+  %t2 = load b
+  %t3 = Plus %t2
+  store %t3 -> c
+  decl int ok
+  store 0 -> ok
+  %t4 = load ok
+  %t5 = Not %t4
+  branch %t5 ? if_then.0 : if_else.1
+if_then.0:
+  %t6 = load ok
+  %t7 = Add %t6, 1
+  store %t7 -> ok
+  jump if_end.2
+if_else.1:
+  jump if_end.2
+if_end.2:
+  %t8 = load a
+  %t9 = Eq %t8, 3
+  %t10 = load b
+  %t11 = Eq %t10, -3
+  %t12 = And %t9, %t11
+  %t13 = load c
+  %t14 = Eq %t13, -3
+  %t15 = And %t12, %t14
+  %t16 = load ok
+  %t17 = Eq %t16, 1
+  %t18 = And %t15, %t17
+  return %t18
+}
+
+fn test_if_else_logic() -> int {
+entry:
+  decl int flag
+  store 0 -> flag
+  decl int a
+  store -3 -> a
+  decl int b
+  %t0 = load a
+  %t1 = call clamp_nonneg(%t0)
+  store %t1 -> b
+  %t2 = load a
+  %t3 = Lt %t2, 0
+  %t4 = load b
+  %t5 = Eq %t4, 0
+  %t6 = And %t3, %t5
+  branch %t6 ? if_then.0 : if_else.1
+if_then.0:
+  %t7 = load flag
+  %t8 = Add %t7, 1
+  store %t8 -> flag
+  jump if_end.2
+if_else.1:
+  jump if_end.2
+if_end.2:
+  %t9 = load a
+  %t10 = Gt %t9, 0
+  %t11 = load b
+  %t12 = Eq %t11, 0
+  %t13 = Or %t10, %t12
+  branch %t13 ? if_then.3 : if_else.4
+if_then.3:
+  %t14 = load flag
+  %t15 = Add %t14, 1
+  store %t15 -> flag
+  jump if_end.5
+if_else.4:
+  jump if_end.5
+if_end.5:
+  %t16 = load a
+  %t17 = Eq %t16, 0
+  %t18 = Not %t17
+  branch %t18 ? if_then.6 : if_else.7
+if_then.6:
+  %t19 = load flag
+  %t20 = Add %t19, 1
+  store %t20 -> flag
+  jump if_end.8
+if_else.7:
+  jump if_end.8
+if_end.8:
+  %t21 = load flag
+  %t22 = Eq %t21, 3
+  return %t22
+}
+
+fn test_nested_branch() -> int {
+entry:
+  decl int a
+  store 2 -> a
+  decl int b
+  store 5 -> b
+  decl int result
+  store 0 -> result
+  %t0 = load a
+  %t1 = load b
+  %t2 = Lt %t0, %t1
+  branch %t2 ? if_then.0 : if_else.1
+if_then.0:
+  %t3 = load a
+  %t4 = load b
+  %t5 = Add %t3, %t4
+  %t6 = Eq %t5, 7
+  branch %t6 ? if_then.3 : if_else.4
+if_then.3:
+  store 1 -> result
+  jump if_end.5
+if_else.4:
+  store 100 -> result
+  jump if_end.5
+if_end.5:
+  jump if_end.2
+if_else.1:
+  store 100 -> result
+  jump if_end.2
+if_end.2:
+  %t7 = load result
+  %t8 = Eq %t7, 1
+  return %t8
+}
+
+fn test_while_break_continue() -> int {
+entry:
   decl int i
   store 0 -> i
-  decl int total
-  store 0 -> total
-  call fill(&local, 3)
-  %t0 = load local[0]
-  %t1 = Add %t0, 4
+  decl int sum
+  store 0 -> sum
+  jump while_cond.0
+while_cond.0:
+  %t0 = load i
+  %t1 = Lt %t0, 8
+  branch %t1 ? while_body.1 : while_end.2
+while_body.1:
+  %t2 = load i
+  %t3 = Add %t2, 1
+  store %t3 -> i
+  %t4 = load i
+  %t5 = Mod %t4, 2
+  %t6 = Eq %t5, 0
+  branch %t6 ? if_then.3 : if_else.4
+if_then.3:
+  jump while_cond.0
+if_else.4:
+  jump if_end.5
+if_end.5:
+  %t7 = load sum
+  %t8 = load i
+  %t9 = Add %t7, %t8
+  store %t9 -> sum
+  %t10 = load sum
+  %t11 = Gt %t10, 10
+  branch %t11 ? if_then.6 : if_else.7
+if_then.6:
+  jump while_end.2
+if_else.7:
+  jump if_end.8
+if_end.8:
+  jump while_cond.0
+while_end.2:
+  %t12 = load sum
+  %t13 = Eq %t12, 16
+  return %t13
+}
+
+fn test_for_zero_iteration() -> int {
+entry:
+  decl int i
+  store 0 -> i
+  decl int sum
+  store 0 -> sum
   store 0 -> i
   jump for_cond.0
 for_cond.0:
-  %t2 = load i
-  %t3 = Lt %t2, 3
-  branch %t3 ? for_body.1 : for_end.3
+  %t0 = load i
+  %t1 = Lt %t0, 0
+  branch %t1 ? for_body.1 : for_end.3
 for_body.1:
+  %t2 = load sum
+  %t3 = Add %t2, 1
+  store %t3 -> sum
+  jump for_update.2
+for_update.2:
   %t4 = load i
-  %t5 = load local[%t4]
-  %t6 = Gt %t5, 10
-  branch %t6 ? if_then.4 : if_else.5
+  %t5 = Add %t4, 1
+  store %t5 -> i
+  jump for_cond.0
+for_end.3:
+  %t6 = load sum
+  %t7 = Eq %t6, 0
+  return %t7
+}
+
+fn test_for_break_continue() -> int {
+entry:
+  decl int i
+  store 0 -> i
+  decl int acc
+  store 0 -> acc
+  store 0 -> i
+  jump for_cond.0
+for_cond.0:
+  %t0 = load i
+  %t1 = Lt %t0, 10
+  branch %t1 ? for_body.1 : for_end.3
+for_body.1:
+  %t2 = load i
+  %t3 = Eq %t2, 2
+  branch %t3 ? if_then.4 : if_else.5
 if_then.4:
   jump for_update.2
 if_else.5:
-  %t7 = load total
-  %t8 = load i
-  %t9 = load local[%t8]
-  %t10 = Add %t7, %t9
-  %t11 = load i
-  %t12 = load adjust[%t11]
-  %t13 = Add %t10, %t12
-  %t14 = Add %t13, 4
-  store %t14 -> total
   jump if_end.6
 if_end.6:
+  %t4 = load i
+  %t5 = Eq %t4, 7
+  branch %t5 ? if_then.7 : if_else.8
+if_then.7:
+  jump for_end.3
+if_else.8:
+  jump if_end.9
+if_end.9:
+  %t6 = load acc
+  %t7 = load i
+  %t8 = Add %t6, %t7
+  store %t8 -> acc
   jump for_update.2
 for_update.2:
-  %t15 = load i
-  %t16 = Add %t15, 1
-  store %t16 -> i
+  %t9 = load i
+  %t10 = Add %t9, 1
+  store %t10 -> i
   jump for_cond.0
 for_end.3:
+  %t11 = load acc
+  %t12 = Eq %t11, 19
+  return %t12
+}
+
+fn test_array() -> int {
+entry:
+  decl int[rank=1] local[4]
+  store 0 -> local[0]
+  store 0 -> local[1]
+  store 0 -> local[2]
+  store 0 -> local[3]
+  decl int i
+  store 0 -> i
+  decl int sum
+  store 0 -> sum
+  call fill_linear(&local, 4, 3)
+  jump while_cond.0
+while_cond.0:
+  %t0 = load i
+  %t1 = Lt %t0, 4
+  branch %t1 ? while_body.1 : while_end.2
+while_body.1:
+  %t2 = load sum
+  %t3 = load i
+  %t4 = load local[%t3]
+  %t5 = Add %t2, %t4
+  store %t5 -> sum
+  %t6 = load i
+  %t7 = Add %t6, 1
+  store %t7 -> i
+  jump while_cond.0
+while_end.2:
+  %t8 = load sum
+  %t9 = Eq %t8, 24
+  %t10 = load local[2]
+  %t11 = Eq %t10, 7
+  %t12 = And %t9, %t11
+  return %t12
+}
+
+fn test_prefix_postfix() -> int {
+entry:
+  decl int x
+  store 5 -> x
+  decl int y
+  store 0 -> y
+  %t0 = load x
+  %t1 = Add %t0, 1
+  store %t1 -> x
+  store %t0 -> y
+  %t2 = load y
+  %t3 = load x
+  %t4 = Add %t3, 1
+  store %t4 -> x
+  %t5 = Add %t2, %t4
+  store %t5 -> y
+  %t6 = load y
+  %t7 = load x
+  %t8 = Sub %t7, 1
+  store %t8 -> x
+  %t9 = Add %t6, %t7
+  store %t9 -> y
+  %t10 = load y
+  %t11 = load x
+  %t12 = Sub %t11, 1
+  store %t12 -> x
+  %t13 = Add %t10, %t12
+  store %t13 -> y
+  %t14 = load x
+  %t15 = Eq %t14, 5
+  %t16 = load y
+  %t17 = Eq %t16, 24
+  %t18 = And %t15, %t17
+  return %t18
+}
+
+fn test_scope_and_call() -> int {
+entry:
+  decl int x
+  store 10 -> x
+  decl int x
+  store 3 -> x
+  %t0 = load x
+  %t1 = Add %t0, 2
+  store %t1 -> x
+  %t2 = load x
+  %t3 = Neq %t2, 5
+  branch %t3 ? if_then.0 : if_else.1
+if_then.0:
+  return 0
+if_else.1:
+  jump if_end.2
+if_end.2:
+  %t4 = load x
+  %t5 = load g_scalar
+  %t6 = call add3(%t4, %t5, 11)
+  %t7 = Eq %t6, 28
+  return %t7
+}
+
+fn test_float_expr() -> int {
+entry:
+  decl float v
+  %t0 = load g_f
+  %t1 = Add %t0, 0.750000
+  store %t1 -> v
+  %t2 = load v
+  %t3 = Gt %t2, 1.900000
+  %t4 = load v
+  %t5 = Lt %t4, 2.100000
+  %t6 = And %t3, %t5
+  branch %t6 ? if_then.0 : if_else.1
+if_then.0:
+  return 1
+if_else.1:
+  jump if_end.2
+if_end.2:
+  return 0
+}
+
+fn test_float_arith_extended() -> int {
+entry:
+  decl float a
+  store 1.500000 -> a
+  decl float b
+  store 2.000000 -> b
+  decl float c
+  %t0 = load a
+  %t1 = load b
+  %t2 = Mul %t0, %t1
+  %t3 = load b
+  %t4 = load a
+  %t5 = Div %t3, %t4
+  %t6 = Add %t2, %t5
+  %t7 = Sub %t6, 1.000000
+  store %t7 -> c
+  %t8 = load c
+  %t9 = Gt %t8, 3.300000
+  %t10 = load c
+  %t11 = Lt %t10, 3.400000
+  %t12 = And %t9, %t11
+  branch %t12 ? if_then.0 : if_else.1
+if_then.0:
+  return 1
+if_else.1:
+  jump if_end.2
+if_end.2:
+  return 0
+}
+
+fn test_forced_conversion() -> int {
+entry:
+  decl int i
+  store 5 -> i
+  decl float f
+  store 2.600000 -> f
+  decl float to_float
+  %t0 = load i
+  store %t0 -> to_float
+  decl int to_int
+  %t1 = load f
+  store %t1 -> to_int
+  decl int mixed_assign
+  %t2 = load i
+  %t3 = load f
+  %t4 = Add %t2, %t3
+  store %t4 -> mixed_assign
+  decl int via_call_int
+  %t5 = load f
+  %t6 = call passthrough_int(%t5)
+  store %t6 -> via_call_int
+  decl float via_call_float
+  %t7 = load i
+  %t8 = call passthrough_float(%t7)
+  store %t8 -> via_call_float
+  decl int ok
+  store 0 -> ok
+  %t9 = load to_float
+  %t10 = Gt %t9, 4.900000
+  %t11 = load to_float
+  %t12 = Lt %t11, 5.100000
+  %t13 = And %t10, %t12
+  branch %t13 ? if_then.0 : if_else.1
+if_then.0:
+  %t14 = load ok
+  %t15 = Add %t14, 1
+  store %t15 -> ok
+  jump if_end.2
+if_else.1:
+  jump if_end.2
+if_end.2:
+  %t16 = load to_int
+  %t17 = Eq %t16, 2
+  branch %t17 ? if_then.3 : if_else.4
+if_then.3:
+  %t18 = load ok
+  %t19 = Add %t18, 1
+  store %t19 -> ok
+  jump if_end.5
+if_else.4:
+  jump if_end.5
+if_end.5:
+  %t20 = load mixed_assign
+  %t21 = Eq %t20, 7
+  branch %t21 ? if_then.6 : if_else.7
+if_then.6:
+  %t22 = load ok
+  %t23 = Add %t22, 1
+  store %t23 -> ok
+  jump if_end.8
+if_else.7:
+  jump if_end.8
+if_end.8:
+  %t24 = load via_call_int
+  %t25 = Eq %t24, 2
+  branch %t25 ? if_then.9 : if_else.10
+if_then.9:
+  %t26 = load ok
+  %t27 = Add %t26, 1
+  store %t27 -> ok
+  jump if_end.11
+if_else.10:
+  jump if_end.11
+if_end.11:
+  %t28 = load via_call_float
+  %t29 = Gt %t28, 4.900000
+  %t30 = load via_call_float
+  %t31 = Lt %t30, 5.100000
+  %t32 = And %t29, %t31
+  branch %t32 ? if_then.12 : if_else.13
+if_then.12:
+  %t33 = load ok
+  %t34 = Add %t33, 1
+  store %t34 -> ok
+  jump if_end.14
+if_else.13:
+  jump if_end.14
+if_end.14:
+  %t35 = load ok
+  %t36 = Eq %t35, 5
+  return %t36
+}
+
+fn test_multidim_row_major() -> int {
+entry:
+  decl int[rank=2] m[2][3]
+  decl int i
+  store 0 -> i
+  decl int j
+  store 0 -> j
+  decl int k
+  store 1 -> k
+  store 0 -> i
+  jump for_cond.0
+for_cond.0:
+  %t0 = load i
+  %t1 = Lt %t0, 2
+  branch %t1 ? for_body.1 : for_end.3
+for_body.1:
+  store 0 -> j
+  jump for_cond.4
+for_cond.4:
+  %t2 = load j
+  %t3 = Lt %t2, 3
+  branch %t3 ? for_body.5 : for_end.7
+for_body.5:
+  %t4 = load j
+  %t5 = load i
+  %t6 = load k
+  store %t6 -> m[%t5][%t4]
+  %t7 = load k
+  %t8 = Add %t7, 1
+  store %t8 -> k
+  jump for_update.6
+for_update.6:
+  %t9 = load j
+  %t10 = Add %t9, 1
+  store %t10 -> j
+  jump for_cond.4
+for_end.7:
+  jump for_update.2
+for_update.2:
+  %t11 = load i
+  %t12 = Add %t11, 1
+  store %t12 -> i
+  jump for_cond.0
+for_end.3:
+  %t13 = load m[0][0]
+  %t14 = Eq %t13, 1
+  %t15 = load m[0][1]
+  %t16 = Eq %t15, 2
+  %t17 = And %t14, %t16
+  %t18 = load m[0][2]
+  %t19 = Eq %t18, 3
+  %t20 = And %t17, %t19
+  %t21 = load m[1][0]
+  %t22 = Eq %t21, 4
+  %t23 = And %t20, %t22
+  %t24 = load m[1][1]
+  %t25 = Eq %t24, 5
+  %t26 = And %t23, %t25
+  %t27 = load m[1][2]
+  %t28 = Eq %t27, 6
+  %t29 = And %t26, %t28
+  return %t29
+}
+
+fn test_const_and_global_index() -> int {
+entry:
+  decl const int idx
+  store 3 -> idx
+  decl int v
+  %t0 = load g_arr[2]
+  store %t0 -> v
+  %t1 = load v
+  %t2 = Eq %t1, 5
+  %t3 = And %t2, 1
+  return %t3
+}
+
+fn integrated_test() -> int {
+entry:
+  decl int[rank=1] buf[5]
+  store 0 -> buf[0]
+  store 0 -> buf[1]
+  store 0 -> buf[2]
+  store 0 -> buf[3]
+  store 0 -> buf[4]
+  decl int i
+  store 0 -> i
+  decl int k
+  store 0 -> k
+  decl int total
+  store 0 -> total
+  call fill_linear(&buf, 5, 1)
+  store 0 -> i
+  jump for_cond.0
+for_cond.0:
+  %t0 = load i
+  %t1 = Lt %t0, 5
+  branch %t1 ? for_body.1 : for_end.3
+for_body.1:
+  %t2 = load total
+  %t3 = load i
+  %t4 = load buf[%t3]
+  %t5 = load i
+  %t6 = Sub 4, %t5
+  %t7 = load g_arr[%t6]
+  %t8 = Mul %t4, %t7
+  %t9 = Add %t2, %t8
+  store %t9 -> total
+  jump for_update.2
+for_update.2:
+  %t10 = load i
+  %t11 = Add %t10, 1
+  store %t11 -> i
+  jump for_cond.0
+for_end.3:
+  %t12 = load total
+  %t13 = Eq %t12, 85
+  branch %t13 ? if_then.4 : if_else.5
+if_then.4:
+  %t14 = load total
+  %t15 = call add3(1, 2, 3)
+  %t16 = Add %t14, %t15
+  store %t16 -> total
+  jump if_end.6
+if_else.5:
   %t17 = load total
-  call putint(%t17)
-  %t18 = load scale
-  %t19 = Add %t18, 0.250000
-  call putfloat(%t19)
-  %t20 = call sum_array(&numbers, 3)
-  %t21 = load global_count
-  %t22 = Add %t20, %t21
-  return %t22
+  %t18 = Sub %t17, 100
+  store %t18 -> total
+  jump if_end.6
+if_end.6:
+  jump while_cond.7
+while_cond.7:
+  %t19 = load k
+  %t20 = Lt %t19, 3
+  branch %t20 ? while_body.8 : while_end.9
+while_body.8:
+  %t21 = load total
+  %t22 = load k
+  %t23 = Add %t22, 1
+  %t24 = load g_arr[%t23]
+  %t25 = Add %t21, %t24
+  store %t25 -> total
+  %t26 = load k
+  %t27 = Add %t26, 1
+  store %t27 -> k
+  jump while_cond.7
+while_end.9:
+  %t28 = load total
+  %t29 = Eq %t28, 106
+  return %t29
+}
+
+fn main() -> int {
+entry:
+  decl int failed
+  store 16 -> failed
+  decl int result
+  store 0 -> result
+  call putstr(&msg_begin)
+  %t0 = call test_arith_and_assign()
+  store %t0 -> result
+  %t1 = load result
+  call print_case_result(1, %t1)
+  %t2 = load failed
+  %t3 = load result
+  %t4 = Sub %t2, %t3
+  store %t4 -> failed
+  %t5 = call test_unary_and_empty_stmt()
+  store %t5 -> result
+  %t6 = load result
+  call print_case_result(2, %t6)
+  %t7 = load failed
+  %t8 = load result
+  %t9 = Sub %t7, %t8
+  store %t9 -> failed
+  %t10 = call test_if_else_logic()
+  store %t10 -> result
+  %t11 = load result
+  call print_case_result(3, %t11)
+  %t12 = load failed
+  %t13 = load result
+  %t14 = Sub %t12, %t13
+  store %t14 -> failed
+  %t15 = call test_nested_branch()
+  store %t15 -> result
+  %t16 = load result
+  call print_case_result(4, %t16)
+  %t17 = load failed
+  %t18 = load result
+  %t19 = Sub %t17, %t18
+  store %t19 -> failed
+  %t20 = call test_while_break_continue()
+  store %t20 -> result
+  %t21 = load result
+  call print_case_result(5, %t21)
+  %t22 = load failed
+  %t23 = load result
+  %t24 = Sub %t22, %t23
+  store %t24 -> failed
+  %t25 = call test_for_zero_iteration()
+  store %t25 -> result
+  %t26 = load result
+  call print_case_result(6, %t26)
+  %t27 = load failed
+  %t28 = load result
+  %t29 = Sub %t27, %t28
+  store %t29 -> failed
+  %t30 = call test_for_break_continue()
+  store %t30 -> result
+  %t31 = load result
+  call print_case_result(7, %t31)
+  %t32 = load failed
+  %t33 = load result
+  %t34 = Sub %t32, %t33
+  store %t34 -> failed
+  %t35 = call test_array()
+  store %t35 -> result
+  %t36 = load result
+  call print_case_result(8, %t36)
+  %t37 = load failed
+  %t38 = load result
+  %t39 = Sub %t37, %t38
+  store %t39 -> failed
+  %t40 = call test_prefix_postfix()
+  store %t40 -> result
+  %t41 = load result
+  call print_case_result(9, %t41)
+  %t42 = load failed
+  %t43 = load result
+  %t44 = Sub %t42, %t43
+  store %t44 -> failed
+  %t45 = call test_scope_and_call()
+  store %t45 -> result
+  %t46 = load result
+  call print_case_result(10, %t46)
+  %t47 = load failed
+  %t48 = load result
+  %t49 = Sub %t47, %t48
+  store %t49 -> failed
+  %t50 = call test_float_expr()
+  store %t50 -> result
+  %t51 = load result
+  call print_case_result(11, %t51)
+  %t52 = load failed
+  %t53 = load result
+  %t54 = Sub %t52, %t53
+  store %t54 -> failed
+  %t55 = call test_float_arith_extended()
+  store %t55 -> result
+  %t56 = load result
+  call print_case_result(12, %t56)
+  %t57 = load failed
+  %t58 = load result
+  %t59 = Sub %t57, %t58
+  store %t59 -> failed
+  %t60 = call test_forced_conversion()
+  store %t60 -> result
+  %t61 = load result
+  call print_case_result(13, %t61)
+  %t62 = load failed
+  %t63 = load result
+  %t64 = Sub %t62, %t63
+  store %t64 -> failed
+  %t65 = call test_multidim_row_major()
+  store %t65 -> result
+  %t66 = load result
+  call print_case_result(14, %t66)
+  %t67 = load failed
+  %t68 = load result
+  %t69 = Sub %t67, %t68
+  store %t69 -> failed
+  %t70 = call test_const_and_global_index()
+  store %t70 -> result
+  %t71 = load result
+  call print_case_result(15, %t71)
+  %t72 = load failed
+  %t73 = load result
+  %t74 = Sub %t72, %t73
+  store %t74 -> failed
+  %t75 = call integrated_test()
+  store %t75 -> result
+  %t76 = load result
+  call print_case_result(16, %t76)
+  %t77 = load failed
+  %t78 = load result
+  %t79 = Sub %t77, %t78
+  store %t79 -> failed
+  %t80 = load failed
+  return %t80
 }
 
 

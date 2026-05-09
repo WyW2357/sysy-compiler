@@ -1,7 +1,7 @@
 IR optimization report
 constant_folds: 0
-cse_eliminations: 2
-dead_code_eliminations: 2
-instructions_before: 135
-instructions_after: 131
-removed_instructions: 4
+cse_eliminations: 8
+dead_code_eliminations: 0
+instructions_before: 838
+instructions_after: 830
+removed_instructions: 8

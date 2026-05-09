@@ -23,7 +23,7 @@ use std::io::{BufWriter, Write};
 fn main() {
     fs::create_dir_all("input").expect("failed to create input directory");
     fs::create_dir_all("output").expect("failed to create output directory");
-    let src = fs::read_to_string("input/sysy.c").expect("failed to read input/sysy.c");
+    let src = fs::read_to_string("input/sysy.c").expect("failed to read inputfile");
 
     let tokens = tokenize(&src);
     write_tokens(&tokens);

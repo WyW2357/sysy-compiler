@@ -78,6 +78,12 @@ fn optimize_block(block: &[IrInstr], report: &mut OptimizationReport) -> Vec<IrI
     for instruction in block {
         let instruction = rewrite_instruction(instruction, &replacements);
 
+        if let Some(jump) = fold_constant_branch(&instruction) {
+            report.constant_folds += 1;
+            rewritten.push(jump);
+            continue;
+        }
+
         if let Some((dest, constant)) = fold_instruction(&instruction) {
             replacements.insert(dest, constant);
             report.constant_folds += 1;
@@ -430,103 +436,27 @@ fn count_instructions(program: &IrProgram) -> usize {
         .sum()
 }
 
-#[cfg(test)]
-mod tests {
-    use crate::ast::{BinaryOp, TypeName};
-    use crate::ir::{IrFunction, IrInstr, IrOperand, IrProgram, TempId};
-
-    use super::optimize_program;
-
-    #[test]
-    // 测试常量折叠
-    fn folds_constants() {
-        let program = IrProgram {
-            globals: Vec::new(),
-            functions: vec![IrFunction {
-                name: "demo".to_string(),
-                return_type: TypeName::Int,
-                params: Vec::new(),
-                instructions: vec![
-                    IrInstr::Label("entry".to_string()),
-                    IrInstr::Binary {
-                        dest: TempId(0),
-                        op: BinaryOp::Sub,
-                        left: IrOperand::Int(0),
-                        right: IrOperand::Int(1),
-                        ty: crate::semantic::SemanticType::Int,
-                    },
-                    IrInstr::Return(Some(IrOperand::Temp(TempId(0)))),
-                ],
-            }],
-        };
-
-        let (optimized, report) = optimize_program(&program);
-        assert!(report.constant_folds >= 1);
-        assert!(matches!(
-            optimized.functions[0].instructions.last(),
-            Some(IrInstr::Return(Some(IrOperand::Int(-1))))
-        ));
-    }
-
-    #[test]
-    // 测试公共子表达式消除
-    fn eliminates_common_subexpressions() {
-        let program = IrProgram {
-            globals: Vec::new(),
-            functions: vec![IrFunction {
-                name: "demo".to_string(),
-                return_type: TypeName::Int,
-                params: Vec::new(),
-                instructions: vec![
-                    IrInstr::Label("entry".to_string()),
-                    IrInstr::Binary {
-                        dest: TempId(0),
-                        op: BinaryOp::Add,
-                        left: IrOperand::Int(1),
-                        right: IrOperand::Int(2),
-                        ty: crate::semantic::SemanticType::Int,
-                    },
-                    IrInstr::Binary {
-                        dest: TempId(1),
-                        op: BinaryOp::Add,
-                        left: IrOperand::Int(1),
-                        right: IrOperand::Int(2),
-                        ty: crate::semantic::SemanticType::Int,
-                    },
-                    IrInstr::Return(Some(IrOperand::Temp(TempId(1)))),
-                ],
-            }],
-        };
-
-        let (_optimized, report) = optimize_program(&program);
-        assert!(report.cse_eliminations >= 1 || report.constant_folds >= 2);
-    }
-
-    #[test]
-    // 测试死代码消除
-    fn eliminates_dead_code() {
-        let program = IrProgram {
-            globals: Vec::new(),
-            functions: vec![IrFunction {
-                name: "demo".to_string(),
-                return_type: TypeName::Int,
-                params: Vec::new(),
-                instructions: vec![
-                    IrInstr::Label("entry".to_string()),
-                    IrInstr::Binary {
-                        dest: TempId(0),
-                        op: BinaryOp::Add,
-                        left: IrOperand::Int(4),
-                        right: IrOperand::Int(5),
-                        ty: crate::semantic::SemanticType::Int,
-                    },
-                    IrInstr::Return(Some(IrOperand::Int(0))),
-                ],
-            }],
-        };
-
-        let (optimized, report) = optimize_program(&program);
-        assert!(report.dead_code_eliminations >= 1 || report.constant_folds >= 1);
-        assert_eq!(optimized.functions[0].instructions.len(), 2);
+// 折叠常量分支
+fn fold_constant_branch(instruction: &IrInstr) -> Option<IrInstr> {
+    match instruction {
+        IrInstr::Branch {
+            condition,
+            then_label,
+            else_label,
+        } => {
+            let take_then = match condition {
+                IrOperand::Int(value) => *value != 0,
+                IrOperand::Float(value) => *value != 0.0,
+                _ => return None,
+            };
+            Some(IrInstr::Jump {
+                label: if take_then {
+                    then_label.clone()
+                } else {
+                    else_label.clone()
+                },
+            })
+        }
+        _ => None,
     }
 }

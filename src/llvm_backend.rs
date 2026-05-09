@@ -132,6 +132,7 @@ impl<'ctx, 'm> Codegen<'ctx, 'm> {
         self.add_runtime("getfarray", i32_type.fn_type(&[ptr_type.into()], false));
         self.add_runtime("putint", void_type.fn_type(&[i32_type.into()], false));
         self.add_runtime("putch", void_type.fn_type(&[i32_type.into()], false));
+        self.add_runtime("putstr", void_type.fn_type(&[ptr_type.into()], false));
         self.add_runtime("putfloat", void_type.fn_type(&[f32_type.into()], false));
         self.add_runtime(
             "putarray",
@@ -278,9 +279,9 @@ impl<'ctx, 'm> Codegen<'ctx, 'm> {
 
     // 构造数组 LLVM 类型
     fn array_type(&self, element: TypeName, dimensions: &[usize]) -> Result<inkwell::types::ArrayType<'ctx>, String> {
-        let first = *dimensions.first().ok_or_else(|| "array dimensions missing".to_string())? as u32;
-        let mut any = AnyTypeEnum::ArrayType(self.element_basic_type(element).array_type(first));
-        for dim in dimensions.iter().skip(1) {
+        let last = *dimensions.last().ok_or_else(|| "array dimensions missing".to_string())? as u32;
+        let mut any = AnyTypeEnum::ArrayType(self.element_basic_type(element).array_type(last));
+        for dim in dimensions.iter().rev().skip(1) {
             any = match any {
                 AnyTypeEnum::ArrayType(array) => AnyTypeEnum::ArrayType(array.array_type(*dim as u32)),
                 _ => unreachable!(),
@@ -359,9 +360,9 @@ impl<'ctx, 'm> Codegen<'ctx, 'm> {
         element_type: BasicTypeEnum<'ctx>,
         dimensions: &[usize],
     ) -> Result<inkwell::types::ArrayType<'ctx>, String> {
-        let first = *dimensions.first().ok_or_else(|| "missing inner dimensions".to_string())? as u32;
-        let mut any = AnyTypeEnum::ArrayType(element_type.array_type(first));
-        for dim in dimensions.iter().skip(1) {
+        let last = *dimensions.last().ok_or_else(|| "missing inner dimensions".to_string())? as u32;
+        let mut any = AnyTypeEnum::ArrayType(element_type.array_type(last));
+        for dim in dimensions.iter().rev().skip(1) {
             any = match any {
                 AnyTypeEnum::ArrayType(array) => AnyTypeEnum::ArrayType(array.array_type(*dim as u32)),
                 _ => unreachable!(),
@@ -980,9 +981,9 @@ impl<'ctx, 'm> FunctionCodegen<'ctx, 'm> {
 
     // 构造数组 LLVM 类型
     fn array_type(&self, element: TypeName, dimensions: &[usize]) -> Result<inkwell::types::ArrayType<'ctx>, String> {
-        let first = *dimensions.first().ok_or_else(|| "array dimensions missing".to_string())? as u32;
-        let mut any = AnyTypeEnum::ArrayType(self.element_basic_type(element).array_type(first));
-        for dim in dimensions.iter().skip(1) {
+        let last = *dimensions.last().ok_or_else(|| "array dimensions missing".to_string())? as u32;
+        let mut any = AnyTypeEnum::ArrayType(self.element_basic_type(element).array_type(last));
+        for dim in dimensions.iter().rev().skip(1) {
             any = match any {
                 AnyTypeEnum::ArrayType(array) => AnyTypeEnum::ArrayType(array.array_type(*dim as u32)),
                 _ => unreachable!(),
